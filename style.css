@@ -1,0 +1,209 @@
+/* May 7, 2013 3_37p*/
+
+* {
+	margin:0;
+	padding:0;
+}
+
+body{
+	font: 1em "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	height: 100%;
+}
+
+html {
+	height: 100%;
+}
+
+p{
+	font-size:1em;
+	text-indent:20px;
+}
+
+h3 {
+	font-size:1em;
+}
+
+#graphContainer {
+	width: 500px;
+	height: 250px;
+	overflow:auto;
+}
+
+#wrapper{
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+	margin-bottom:0px;
+}
+
+#wrapper h1{
+	color:#FFF;
+	text-align:center;
+	margin-bottom:0px;
+}
+
+#wrapper a{
+	display:block;
+	font-size:1.2em;
+	color:#FFF;
+	text-decoration:none;
+	text-align:center;
+}
+
+.graph {
+	width:75%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+	float:left;	
+	overflow:auto;
+}
+
+.zoom {
+	display:none;
+	position: fixed;
+	top: 0;
+	opacity: 0.85;
+	z-index: 2;
+	background: #fff;
+	border: solid #ccc;
+	border-width: 0 1px 1px 0;
+}
+
+fieldset {
+	font-size: 1em;
+	margin: 0.5em;
+	padding: 0.5em;
+	text-align: center;
+	border: solid #ccc;
+	border-width: 1px 1px 1px 1px;
+}
+
+input.little_button 
+{
+	font-size: 2.5em;
+	height:.5em;
+	width: 1em;
+}
+
+#footer {
+	background-color:#2e2e2e;
+	height:25px;
+	text-align:left;
+	float:left;
+	margin-top:0px;
+	position:absolute;
+   	bottom:0;
+   	width:100%; 
+}
+
+#myCanvas {
+	width:100%; 
+	height:100%;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px; 
+	
+} 
+
+#tabContainer {
+	width:23%;
+	height:100%;
+	padding:10px;
+	margin:0px;
+	float: right;
+	background-color:#2e2e2e;
+}
+
+#tabs{
+	overflow:hidden;
+}
+
+#tabs > ul{
+	font: 2em;
+	list-style:none;
+}
+
+#tabs > ul > li{
+	margin:0 2px 0 0;
+	padding:7px 10px;
+	display:block;
+	float:left;
+	color:#FFF;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	-moz-border-radius-bottomright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+	border-top-left-radius:4px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px; 
+	background: #C9C9C9; /* old browsers */
+	background: -moz-linear-gradient(top, #0C91EC 0%, #257AB6 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0C91EC), color-stop(100%,#257AB6)); /* webkit */
+}
+
+#tabs > ul > li:hover{
+	background: #FFFFFF; /* old browsers */
+	background: -moz-linear-gradient(top, #FFFFFF 0%, #F3F3F3 10%, #F3F3F3 50%, #FFFFFF 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(10%,#F3F3F3), color-stop(50%,#F3F3F3), color-stop(100%,#FFFFFF)); /* webkit */
+	cursor:pointer;
+	color: #333;
+}
+
+#tabs > ul > li.tabActiveHeader{
+	background: #FFFFFF; /* old browsers */
+	background: -moz-linear-gradient(top, #FFFFFF 0%, #F3F3F3 10%, #F3F3F3 50%, #FFFFFF 100%); /* firefox */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(10%,#F3F3F3), color-stop(50%,#F3F3F3), color-stop(100%,#FFFFFF)); /* webkit */
+	cursor:pointer;
+	color: #333;
+}
+
+#tabscontent {
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px; 
+	padding:10px 10px 25px;
+	background: #FFFFFF; 
+	background: -moz-linear-gradient(top, #FFFFFF 0%, #FFFFFF 90%, #e4e9ed 100%); 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(90%,#FFFFFF), color-stop(100%,#e4e9ed)); /* webkit */
+	margin:0;
+	color:#333;
+	height:90%;
+	overflow:auto;
+}
+
+.checkbox, .radio {
+	width: 19px;
+	height: 25px;
+	padding: 0 5px 0 0;
+	background: url(checkbox.png) no-repeat;
+	display: block;
+	clear: left;
+	float: left;
+}
+
+.radio {
+	background: url(radio.png) no-repeat;
+}
+
+.select {
+	position: absolute;
+	width: 158px; 
+	height: 21px;
+	padding: 0 24px 0 8px;
+	color: #fff;
+	font: 12px/21px arial,sans-serif;
+	background: url(select.png) no-repeat;
+	overflow: hidden;
+}
