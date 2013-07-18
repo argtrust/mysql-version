@@ -1,0 +1,144 @@
+<argtrust>
+    <domain>
+        <constant> a </constant>
+        <constant> b </constant>
+		<constant> fawzi </constant>
+		<constant> people </constant>
+		<constant> workers </constant>
+
+        <predicate> destination </predicate>
+        <predicate> onRoute </predicate>
+        <predicate> insurgentsOn </predicate>
+        <predicate> unsafe </predicate>
+        <predicate> movementAbove </predicate>
+        <predicate> insurgentsAbove </predicate>
+        <predicate> sniper </predicate>
+        <predicate> patrolAbove </predicate>
+        <predicate> gunfire </predicate>
+        <predicate> workersOn </predicate>
+        <predicate> unreliable </predicate>
+    </domain>
+
+    <trustnet>
+        <agent> Commander </agent>
+        <agent> PoliceChief </agent>
+        <agent> PolicePatrol </agent>
+        <agent> ArmyPatrol </agent>
+        <agent> FK </agent>
+        <agent> TIGR </agent>
+        <agent> Sensor </agent>
+  
+        <trust>
+            <truster> Commander </truster>
+            <trustee> TIGR </trustee>
+            <level> 0.8 </level>
+        </trust>
+        <trust>
+            <truster> Commander </truster>
+            <trustee> ArmyPatrol </trustee>
+            <level> 0.9 </level>
+        </trust>
+        <trust>
+            <truster> Commander </truster>
+            <trustee> MK </trustee>
+            <level> 0.7 </level>
+        </trust>
+        <trust>
+            <truster> Commander </truster>
+            <trustee> PoliceChief </trustee>
+            <level> 0.3 </level>
+        </trust>
+        <trust>
+            <truster> Commander </truster>
+            <trustee> TIGR </trustee>
+            <level> 0.8 </level>
+        </trust>
+        <trust>
+            <truster> TIGR </truster>
+            <trustee> Sensor </trustee>
+            <level> 0.5 </level>
+        </trust>
+        <trust>
+            <truster> MK </truster>
+            <trustee> FK </trustee>
+            <level> 0.7 </level>
+        </trust>
+    </trustnet>
+
+    <beliefbase>
+        <belief>
+            <agent> Commander </agent>
+            <fact> destination(fawzi) </fact>
+            <level> 1.0 </level>
+        </belief>
+        <belief>
+            <agent> Commander </agent>
+            <fact> NOT patrolAbove(a) </fact>
+            <level> 1.0 </level>
+        </belief>
+        <belief>
+            <agent> Commander </agent>
+            <fact> NOT patrolAbove(b) </fact>
+            <level> 1.0 </level>
+        </belief>
+        <belief>
+            <agent> PolicePatrol</agent>
+            <fact> onRoute(a, people) </fact>
+            <level> 1.0 </level>
+        </belief>
+        <belief>
+            <agent> ArmyPatrol </agent>
+            <fact> gunfire(b) </fact>
+            <level> 1.0 </level>
+        </belief>
+        <belief>
+            <agent> FK </agent>
+            <fact> onRoute(a, workers) </fact>
+            <level> 1.0 </level>
+        </belief>
+        <belief>
+            <agent> Sensor </agent>
+            <fact> movementAbove(b) </fact>
+            <level> 1.0 </level>
+        </belief>
+
+        <belief>
+            <agent> Commander </agent>
+            <rule>
+                <premise> onRoute(x, people) </premise>
+                <conclusion> insurgentsOn(x) </conclusion>
+            </rule>
+            <level> 0.7 </level>
+        </belief>
+        <belief>
+            <agent> Commander </agent>
+            <rule>
+                <premise> onRoute(x, workers) </premise>
+                <conclusion> insurgentsOn(x) </conclusion>
+            </rule>
+            <level> 0.3 </level>
+        </belief>
+        <belief>
+            <agent> Commander </agent>
+            <rule>
+                <premise> gunfire(x) </premise>
+                <conclusion> insurgentsOn(x) </conclusion>
+            </rule>
+            <level> 0.9 </level>
+        </belief>
+        <belief>
+            <agent> Commander </agent>
+            <rule>
+                <premise> movementAbove(x) </premise>
+                <conclusion> sniper(x) </conclusion>
+            </rule>
+            <level> 0.9 </level>
+        </belief>
+    </beliefbase>
+
+    <query>
+       <agent> Commander </agent>
+       <question> insurgentsOn(a) </question>
+    </query>
+</argtrust>
+

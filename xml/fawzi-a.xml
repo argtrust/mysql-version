@@ -1,0 +1,376 @@
+<argtrust>
+	
+	<domain>
+		<constant> A </constant>
+		<constant> B </constant>
+
+		<predicate> Take </predicate>
+		<predicate> People </predicate>
+		<predicate> ReliablePeople </predicate>
+		<predicate> Insurgents </predicate>
+		<predicate> Mortar </predicate>
+		<predicate> Safe </predicate>
+		<predicate> Gunfire </predicate>
+		<predicate> Movement </predicate>
+		<predicate> Snipers </predicate>
+		<predicate> ArmyNear </predicate>
+
+
+	</domain>
+
+	<trustnet>
+		<agent> Commander </agent>
+		<agent> PreviousCommander </agent>
+		<agent> PreviousUnit </agent>
+		<agent> PoliceChief </agent>
+		<agent> PolicePatrol </agent>
+		<agent> ArmyPatrol </agent>
+		<agent> Informant </agent>
+		<agent> Contractor </agent>
+		<agent> Drivers </agent>
+		<agent> Gunners </agent>
+		<agent> TIGR </agent>
+		<agent> Sensor </agent>
+		<agent> History </agent>
+		<agent> UAV </agent>
+		<agent> Jammer </agent>
+		<agent> Comms </agent>
+
+		<!--  Commander's trust -->
+
+		<trust>
+			<truster> Commander </truster>
+			<trustee> Drivers </trustee>
+			<level> 1 </level>
+		</trust>
+	
+		<trust>
+			<truster> Commander </truster>
+			<trustee> Gunners </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Commander </truster>
+			<trustee> Jammer </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Commander </truster>
+			<trustee> Comms </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Commander </truster>
+			<trustee> UAV </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Commander </truster>
+			<trustee> PoliceChief </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<trust>
+			<truster> Commander </truster>
+			<trustee> Sensor </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<trust>
+			<truster> Commander </truster>
+			<trustee> History </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<trust>
+			<truster> Commander </truster>
+			<trustee> Informant </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<trust>
+			<truster> Commander </truster>
+			<trustee> TIGR </trustee>
+			<level> 1 </level>
+		</trust>	
+		
+		<trust>
+			<truster> Commander </truster>
+			<trustee> ArmyPatrol </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Commander </truster>
+			<trustee> PreviousCommander </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<!-- previous commander's trust -->
+		<trust>
+			<truster> PreviousCommander </truster>
+			<trustee> PoliceChief </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<trust>
+			<truster> PreviousCommander </truster>
+			<trustee> PreviousUnit </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<!--  Police chief's trust -->
+		<trust>
+			<truster> PoliceChief </truster>
+			<trustee> PolicePatrol </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<!--  TIGR's trust -->
+		<trust>
+			<truster> TIGR </truster>
+			<trustee> PreviousUnit </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<!--  informant's trust -->
+		<trust>
+			<truster> Informant </truster>
+			<trustee> Contractor </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<!--  History's trust -->
+		<trust>
+			<truster> History </truster>
+			<trustee> Sensor </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<!--  Comms' trust -->
+		<trust>
+			<truster> Comms </truster>
+			<trustee> Sensor </trustee>
+			<level> 1 </level>
+		</trust>
+		
+		<trust>
+			<truster> Comms </truster>
+			<trustee> UAV </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<!-- Driver's trust -->
+		<trust>
+			<truster> Drivers </truster>
+			<trustee> Gunners </trustee>
+			<level> 1 </level>
+		</trust>
+
+	</trustnet>
+
+	<beliefbase>
+		<!--  Commander's beliefs -->
+
+		<!--  if unknown people are on a route, insurgants are on a route -->
+
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> People(x) </premise>
+				<conclusion> Insurgents(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> ReliablePeople(x) </premise>
+				<conclusion> NOT Insurgents(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<!--  insurgants + mortar = unsafe -->
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> Insurgents(x) </premise>
+				<premise> Mortar(x) </premise>
+				<conclusion> NOT Safe(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<!--  if gunfire heard, unsafe -->
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> Gunfire(x) </premise>
+				<conclusion> NOT Safe(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<!--  if movement, then insurgents -->
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> Movement(x) </premise>
+				<conclusion> Insurgents(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<!--  insurgents -> snipers -->
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> Insurgents(x) </premise>
+				<conclusion> Snipers(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<!--  army near = no insurgents -->
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> ArmyNear(x) </premise>
+				<conclusion> NOT Insurgents(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<!--  army near = safe -->
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> ArmyNear(x) </premise>
+				<conclusion> Safe(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<!--  army is not currently near -->
+		<belief>
+			<agent> Commander </agent>
+			<fact> NOT ArmyNear(A) </fact>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> Commander </agent>
+			<fact> NOT ArmyNear(B) </fact>
+			<level> 1 </level>
+		</belief>
+		<!--  if a route is safe, take it -->
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> Safe(x) </premise>
+				<conclusion> Take(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<!--  if a route is unsafe, don't take it -->
+		<belief>
+			<agent> Commander </agent>
+			<rule>
+				<premise> NOT Safe(x) </premise>
+				<conclusion> NOT Take(x) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+	
+		<!--  police patrol's beliefs -->
+		<belief>
+			<agent> PolicePatrol </agent>
+			<fact> People(A) </fact>
+			<level> 1 </level>
+		</belief>
+		
+		<!--  army patrol's beliefs -->
+		<belief>
+			<agent> ArmyPatrol </agent>
+			<fact> Gunfire(B) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<!--  contractor's beliefs -->
+		<belief>
+			<agent> Contractor </agent>
+			<fact> ReliablePeople(A) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<!--  the sensor's beliefs -->
+		<belief>
+			<agent> Sensor </agent>
+			<fact> Movement(B) </fact>
+			<level> 1 </level>
+		</belief>
+		
+		<!--  history's beliefs -->
+		<belief>
+			<agent> History </agent>
+			<fact> Mortar(A) </fact>
+			<level> 1 </level>
+		</belief>
+
+<belief>
+	<agent> Commander </agent>
+	<rule>
+		<premise> Take(A) </premise>
+		<conclusion> NOT Take(B) </conclusion>
+	</rule>
+	<level> 1 </level>
+</belief>
+
+<belief>
+	<agent> Commander </agent>
+	<rule>
+		<premise> Take(B) </premise>
+		<conclusion> NOT Take(A) </conclusion>
+	</rule>
+	<level> 1 </level>
+</belief>
+<belief>
+	<agent> Commander </agent>
+	<rule>
+		<premise> NOT Take(A) </premise>
+		<conclusion> Take(B) </conclusion>
+	</rule>
+	<level> 1 </level>
+</belief>
+<belief>
+	<agent> Commander </agent>
+	<rule>
+		<premise> NOT Take(B) </premise>
+		<conclusion> Take(A) </conclusion>
+	</rule>
+	<level> 1 </level>
+</belief>
+
+<belief>
+	<agent> Commander </agent>
+	<fact> Take(A) </fact>
+	<level> .001 </level>
+</belief>
+
+<belief>
+	<agent> Commander </agent>
+	<fact> Take(B) </fact>
+	<level> .001 </level>
+</belief>
+
+	
+		
+		
+
+
+
+	</beliefbase>
+	<query>
+		<agent> Commander </agent>
+		<question> Take(A) </question>
+	</query>
+
+
+</argtrust>

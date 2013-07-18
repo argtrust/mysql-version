@@ -1,0 +1,129 @@
+<argtrust>
+	
+	<domain>
+                <constant>Enemy</constant>
+                <constant>HVT</constant>
+                <constant>Mission</constant>
+                <constant>Campfires</constant>
+		<constant>Vehicles</constant>
+		<predicate> InArea </predicate>
+		<predicate> Many </predicate>
+		<predicate> Safe </predicate>
+		<predicate> Proceed </predicate>
+
+	</domain>
+
+	<trustnet>
+		<agent> Me </agent>
+		<agent> UAV </agent>
+		<agent> Recon </agent>
+		<agent> Informant </agent>
+
+		<!--  my trust -->
+
+		
+		<trust>
+			<truster> Me </truster>
+			<trustee> Recon </trustee>
+			<level> 0.95 </level>
+		</trust>
+		
+	
+		<trust>
+			<truster> Me </truster>
+			<trustee> UAV </trustee>
+			<level> 0.5 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Informant </trustee>
+			<level> 0.3 </level>
+		</trust>
+	</trustnet>
+
+
+	<beliefbase>
+		<!--  my beliefs -->
+		<belief>
+			<agent> Me </agent>
+			<fact> Safe(Mission) </fact>
+			<level> 0.8 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> InArea(Enemy) </premise>
+				<conclusion> InArea(HVT) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> InArea(Enemy) </premise>
+				<premise> Many(Enemy) </premise>
+				<conclusion> NOT Safe(Mission) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> InArea(HVT) </premise>
+				<premise> Safe(Mission) </premise>
+				<conclusion> Proceed(Mission) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> InArea(Campfires) </premise>
+				<conclusion> InArea(Enemy) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> NOT InArea(Vehicles) </premise>
+				<conclusion> NOT InArea(Enemy) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> InArea(Vehicles) </premise>
+				<conclusion> InArea(Enemy) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> UAV </agent>
+			<fact> InArea(Campfires) </fact>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> Informant </agent>
+			<fact> Many(Enemy) </fact>
+			<level> 1 </level>
+		</belief>
+		<belief>
+			<agent> Recon </agent>
+			<fact> Many(Enemy) </fact>
+			<level> 1 </level>
+		</belief>
+
+
+	</beliefbase>
+
+	<query>
+		<agent> Me </agent>
+		<question> Proceed(Mission) </question>
+	</query>
+
+
+</argtrust>

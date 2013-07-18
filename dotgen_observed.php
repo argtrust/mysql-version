@@ -1,346 +1,265 @@
 digraph g {
-	graph [size="11,8.5", ratio=fill, overlap=false, splines=true, page="12.222222,9.444444", margin="0.617284,0.277778"];
-	node [label="\N"];
-	graph [bb="0 0 1478 1142"];
-	subgraph cluster_trust_net {
-		graph [bb=""];
-		node [shape=circle,
-			style=filled,
-			fillcolor=lavender,
-			fontname=arial];
-		edge [color=blue];
-		subgraph cluster_0 {
-			graph [style="rounded,filled",
-				fillcolor=whitesmoke];
+    graph [size="11,8.5", ratio=fill, overlap=false, splines=true, page="12.222222,9.444444", margin="0.617284,0.277778"];
+    node [label="\N"];
+    graph [bb="0 0 1478 1142"];
+    subgraph cluster_trust_net {
+        graph [bb=""];
+        node [shape=circle,
+            style=filled,
+            fillcolor=lavender,
+            fontname=arial];
+        edge [color=blue];
+        subgraph cluster_0 {
+            graph [style="rounded,filled",
+                fillcolor=whitesmoke];
 <?php
-$sql = "select distinct a.agentID, a.agentName
-		from agents a
-		inner join agent_has_beliefs ab on ab.agentID = a.agentID
-		where ab.sessionID = '".$sessionID."' and ab.timestep = ".$timestep." and ab.beliefID = ".$beliefID.";";	
- $result=mysqli_query($link,$sql);
- if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	printf ("agent%s [label=%s, fontsize=80, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1]);
-  }
-}
-mysqli_free_result($result);
-
-/*
-* Create arrows between agents
-*/
-$sql="select concat('agent',trustingAgent), concat('agent',trustedAgent) from agent_trust where sessionID = '".$sessionID."' and timestep=".$timestep."
-and trustedAgent in (
-                        select distinct a.agentID
-                        from agents a
-                        inner join agent_has_beliefs ab on ab.agentID = a.agentID
-                        where ab.sessionID = '".$sessionID."' and ab.timestep = ".$timestep." and ab.beliefID = ".$beliefID."
-                       )";
-$result=mysqli_query($link,$sql);
-if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	printf ("%s -> %s [color=yellow, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1]);
-  }
-}
-mysqli_free_result($result);
+/** @page dotgen_observed_impl Implementation Details: dotgen_observed.php
+ * dotgen_observed.php: 
+ * File that generates dot file highlighting all the elements associated with
+ * the user selected fact within the "Observed Knowledge" radio elements.
+ *
+ * Generates dot file highlighting all the elements associated with the user
+ * selected fact or observed knowledge starting from agent posing question
+ * using data structures defined in file datagen_db.php. Those elements not
+ * fully contained in the selected fact/observed knowledge are greyed out.
+ */
 
 
-/*
-* Create fact nodes that aren't ends of arguments
-*/
- $sql="select distinct b.beliefID, CASE               
-        WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, level
-		from beliefs b
-		inner join agent_has_beliefs ab on b.beliefID = ab.beliefID
-		inner join predicate_has_constant pc on pc.predicateConstantID = b.conclusionID
-		inner join predicates p on p.predicateID = pc.predicateID
-		inner join constants c on pc.constantID = c.constantID 
-		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-		where ab.agentID = 1 and b.isRule = 0 and a.isSupported = 1
-		and ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep."
-		and b.beliefID = ".$beliefID.";";
- $result=mysqli_query($link,$sql);
- if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	printf ("fact%s [label=\"%s:%s\", shape=box, fillcolor=lightcyan, fontsize=60, height=\"1.5\", width=9.5, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1],$row[2]);
-  }
-}
-mysqli_free_result($result);
+$agentIDs = array_keys($agents);
+/** @page dotgen_observed_impl
+ *
+ * * Use $agents_assoc_qagnt_facts to obtain all agents that have this fact ID
+ * ($beliefID) as part of their beliefs either directly or indirectly. Populate
+ * $agents_not_assoc_beliefID with those agents that don't have this fact as
+ * part of their direct or indirect beliefs.
+ */
+$agents_not_assoc_beliefID = array_diff($agentIDs,
+                                        $agents_assoc_qagnt_facts[$beliefID]);
 
-/*
-* Create arrows between agents and their direct beliefs
-*/
-$sql="select distinct concat('agent',ab.agentID), case when isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l
-	from agent_has_beliefs ab
-	inner join beliefs b on ab.beliefID = b.beliefID 
-	inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
-	inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-	where isInferred = 0 and a.isSupported = 1 and b.isRule = 0
-	and a.sessionID = '".$sessionID."' and a.timestep=".$timestep." and b.beliefID = ".$beliefID;
-$result=mysqli_query($link,$sql);
-if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	printf ("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1]);
-  }
-}
-mysqli_free_result($result);
+/** @page dotgen_observed_impl
+ *
+ * * Draw all elements that lead to this fact or observed knowledge
+ * ($beliefID)
+ */
 
-				?>
-		}
-<?php
-//Agents not displayed above
-$sql = "select distinct a.agentID, a.agentName
-		from agents a
-		inner join agent_has_beliefs ab on ab.agentID = a.agentID
-		where ab.sessionID = '".$sessionID."' and ab.timestep = ".$timestep." and a.agentID NOT IN (
-			select distinct a.agentID
-			from agents a
-			inner join agent_has_beliefs ab on ab.agentID = a.agentID
-			where ab.sessionID = '".$sessionID."' and ab.timestep = ".$timestep." and ab.beliefID = ".$beliefID.") ;";	
- $result=mysqli_query($link,$sql);
- if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	printf ("agent%s [label=%s, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1]);
-  }
+/** @page dotgen_observed_impl
+ *
+ *  + Create agents associated (even indirectly) with this $beliefID (which
+ * is a fact)
+ */
+foreach ($agents_assoc_qagnt_facts[$beliefID] as $id) {
+    printf("%s [label=%s, fontsize=80, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+           $agents[$id]["dot_label"], $agents[$id]["name"]);
 }
-mysqli_free_result($result);
 
-/*
-* Create rule nodes that aren't argument ends
-*/
-$sql="select distinct b.beliefID, CASE 
-        WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, level
-		from beliefs b
-		inner join agent_has_beliefs ab on b.beliefID = ab.beliefID  
-		inner join predicate_has_constant pc on pc.predicateConstantID = b.conclusionID
-		inner join predicates p on p.predicateID = pc.predicateID
-		inner join constants c on pc.constantID = c.constantID 
-		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-		where ab.agentID = 1 and b.isRule = 1 and a.isSupported=1
-		and ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep."
-		and b.beliefID NOT IN (select distinct b.beliefID 
-								from arguments a 
-								inner join beliefs b on b.beliefID = a.beliefID 
-								inner join parent_argument pa on pa.argumentID = a.argumentID 
-											and pa.sessionID = a.sessionID 
-											and pa.timestep = a.timestep 
-								where a.sessionID = '".$sessionID."' and a.timestep=".$timestep.")";
- $result=mysqli_query($link,$sql);
- if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	$sql="select CASE 
-        WHEN isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate
-		from belief_has_premises b
-		inner join predicate_has_constant pc on pc.predicateConstantID = b.premiseID
-		inner join predicates p on p.predicateID = pc.predicateID
-		inner join constants c on pc.constantID = c.constantID 
-		where beliefID = ".$row[0].";";
-  	$return=mysqli_query($link,$sql);
-  	$premise='';
-  	$count=0;
-  	while($innerrow = mysqli_fetch_array($return)) {
-  		if($count > 0){ 
-  			$premise .= ", ";}
-  		$premise .= $innerrow[0];	
-  		$count++;
-  	}
-  	mysqli_free_result($return);
-  	printf ("rule%s [label=\"%s :- %s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1],$premise,$row[2]);
-  	printf ("inference%s [label=\"%s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1]);
-	printf ("rule%s -> inference%s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[0]);
-  }
+/** @page dotgen_observed_impl
+ *
+ *  + Create arrows between agents so that the trusted agents are part of
+ * the agents that have this fact in their beliefs
+ */
+foreach ($agent_arrows_to as $to=>$info) {
+    if (in_array($to, $agents_assoc_qagnt_facts[$beliefID])) {
+        foreach ($info as $from => $from_to_arrow) {
+            printf("%s -> %s [color=yellow, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n", 
+                   $from_to_arrow["from_dot_label"],
+                   $from_to_arrow["to_dot_label"]);
+        }
+    }
 }
-mysqli_free_result($result);
-/*
-* Create rule nodes that are argument conclusions
-*/
- $sql="select distinct b.beliefID, CASE               
-        WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, ab.level, max(pa.status), count(distinct pa.status) as argStatus 
-		from beliefs b
-		inner join agent_has_beliefs ab on b.beliefID = ab.beliefID
-		inner join predicate_has_constant pc on pc.predicateConstantID = b.conclusionID
-		inner join predicates p on p.predicateID = pc.predicateID
-		inner join constants c on pc.constantID = c.constantID 
-		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-		inner join parent_argument pa on pa.argumentID = a.argumentID and pa.sessionID = a.sessionID and pa.timestep = a.timestep 
-		where ab.agentID = 1 and b.isRule = 1 and a.isSupported = 1
-		and ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep."
-		group by b.beliefID, b.isNegated, p.name, c.name, ab.level";
- $result=mysqli_query($link,$sql);
- if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-	$sql="select CASE 
-	WHEN isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-	ELSE concat(p.name,'(',c.name,')') END predicate
-	from belief_has_premises b
-	inner join predicate_has_constant pc on pc.predicateConstantID = b.premiseID
-	inner join predicates p on p.predicateID = pc.predicateID
-	inner join constants c on pc.constantID = c.constantID 
-	where beliefID = ".$row[0].";";
-  	$return=mysqli_query($link,$sql);
-  	$premise='';
-  	$count=0;
-  	while($innerrow = mysqli_fetch_array($return)) {
-  		if($count > 0){ 
-  			$premise .= ", ";}
-  		$premise .= $innerrow[0];	
-  		$count++;
-  	}
-  	mysqli_free_result($return);
-  	printf ("rule%s [label=\"%s :- %s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1],$premise,$row[2]);
-	printf ("rule%s -> inference%s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[0]);
-  	
-  	if($row[3] == "IN" && $row[4] == 1){
-		printf ("inference%s [label=\"%s:%s : %s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1],$row[2],$row[3]);
-  	}else if($row[3] == "OUT" && $row[4] == 1){
-		printf ("inference%s [label=\"%s:%s : %s\", style=\"filled\", fillcolor=grey, shape=box, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1],$row[2],$row[3]);
-  	}else if($row[3] == "UNDEC" && $row[4] == 1){
-		printf ("inference%s [label=\"%s:%s : %s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1],$row[2],$row[3]);
-  	}else{
-  		$statuses = "";
-		$count = 0;
-		$sql = "select status 
-				from parent_argument pa
-				inner join arguments a on pa.argumentID = a.argumentID and pa.sessionID = a.sessionID and a.timestep = pa.timestep
-				inner join beliefs b on a.beliefID = b.beliefID
-				where pa.sessionID = '".$sessionID."' and pa.timestep = ".$timestep." and b.beliefID = ".$row[0];
-		$result2=mysqli_query($link,$sql);
-		if ($result2) {
-			while ($row2 = mysqli_fetch_array($result2)) {
-				if($count > 0)
-					$statuses = $statuses . ", ".$row2[0];
-				else{	
-					$statuses = $row2[0];
-					$count=$count+1;
-				}
-			}
-		}
-		mysqli_free_result($result2);
-		printf ("inference%s [label=\"%s:%s : %s\", style=\"dotted, filled\" shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1],$row[2],$statuses);
-				
-  	}
-  }
-}
-mysqli_free_result($result);
 
-/*
-* Create arrows between beliefs
-*/
-$sql="select distinct case when b1.isRule = 1 then concat('rule',a.beliefID) else concat('fact',a.beliefID) end fromID, 
-	case when b2.isRule = 1 then concat('rule',ab.beliefID) else concat('fact',ab.beliefID) end toID, b1.isRule, a.beliefID
-	from arguments a
-	inner join arguments ab on a.supportsArgumentID = ab.argumentID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
-	inner join beliefs b1 on a.beliefID = b1.beliefID 
-	inner join beliefs b2 on ab.beliefID = b2.beliefID
-	inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-	inner join questions q2 on q2.sessionID = ab.sessionID and q2.timestep = ab.timestep and q2.isSupported = ab.isSupported
-		where a.isSupported = 1 and ab.isSupported = 1
-	and a.sessionID = '".$sessionID."' and a.timestep=".$timestep;
-//	order by a.questionID, a.supportsArgumentID";
- $result=mysqli_query($link,$sql);
- if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	if($row[2] == 0){
-	  	printf ("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1]);
-	}else{
-//	  	printf ("%s -> inference%s [color=darkgreen, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[3]);
-	  	printf ("inference%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[3],$row[1]);
-	}
-  }
+/** @page dotgen_observed_impl
+ *
+ *  + Create this fact node (with id $beliefID) (which can be either an end
+ * or not of an argument)
+ */
+if ($qagnt_facts[$beliefID]["end_argument"] == 0) {
+    printf("%s [label=\"%s:%s\", shape=box, fillcolor=lightcyan, fontsize=60, height=\"1.5\", width=9.5, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+           $qagnt_facts[$beliefID]["dot_label"],
+           $qagnt_facts[$beliefID]["logic_display"],
+           min($qagnt_facts[$beliefID]["levels"]));
+} else {
+    $info = $qagnt_facts[$beliefID];
+    if ($info["num_statuses"] == 1) {
+        if ($info["statuses"][0] == "IN") {
+            printf("%s [label=\"%s:%s : %s\", shape=box, fillcolor=palegreen, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   $info["dot_label"], $info["logic_display"],
+                   min($info["levels"]), $info["statuses"][0]);
+        }else if($info["statuses"][0] == "OUT") {
+            printf("%s [label=\"%s:%s : %s\", style=\"filled\", fillcolor=pink, shape=box, href=\"javascript:void(0)\",
+onclick=\"get_id('\L', '\N')\"];\n",
+                   $info["dot_label"], $info["logic_display"],
+                   min($info["levels"]), $info["statuses"][0]);
+        }else if($info["statuses"][0] == "UNDEC") {
+            printf("%s [label=\"%s:%s : %s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   $info["dot_label"], $info["logic_display"],
+                   min($info["levels"]), $info["statuses"][0]);
+        }
+    } else {
+        $statuses = implode(", ", $info["statuses"]);
+        printf("%s [label=\"%s:%s : %s\", style=\"dotted, filled\" shape=box, fillcolor=lemonchiffon, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+               $info["dot_label"], $info["logic_display"],
+               min($info["levels"]), $statuses);
+    }
 }
-mysqli_free_result($result);
-$sql="select distinct case when b.isRule = 1 then concat('inference',b.beliefID)
-				  else concat('fact',b.beliefID) END fromID,
-			 case when b2.isRule = 1 then concat('inference',b2.beliefID)
-				  else concat('fact',b2.beliefID) END toID, paa.attackType, 
-			 case when b.isRule = 1 and b2.isRule = 1 then 'rebut'
-			 	  when b.isRule = 1 and b2.isRule = 0 then 'undermine'
-			 	  when b.isRule = 0 and b2.isRule = 0 then 'undermine'
-			 	  ELSE 'rebut' END attackTypeOld
-			  from parent_argument_attacks_argument paa
-		inner join parent_argument pa1 on pa1.parentArgumentID = paa.fromParentArgID
-		inner join arguments a on a.argumentID = pa1.argumentID and a.sessionID = pa1.sessionID and a.timestep = pa1.timestep
-		inner join beliefs b on b.beliefID = a.beliefID
-		inner join parent_argument pa2 on pa2.parentArgumentID = paa.toParentArgID
-		inner join arguments a2 on a2.argumentID = pa2.argumentID and a2.sessionID = pa2.sessionID and a2.timestep = pa2.timestep
-		inner join beliefs b2 on b2.beliefID = a2.beliefID
-		where a.sessionID = '".$sessionID."' and a.timestep = ".$timestep;
- $result=mysqli_query($link,$sql);
- if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-	printf ("%s -> %s [label=%s color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1],$row[2]);
-  }
-}
-mysqli_free_result($result);
-		
 
-/*
-* Create arrows between agents and their direct beliefs
-*/
-$sql="select distinct concat('agent',ab.agentID), case when isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l
-	from agent_has_beliefs ab
-	inner join beliefs b on ab.beliefID = b.beliefID 
-	inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
-	inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-	where isInferred = 0 and a.isSupported = 1 and b.isRule = 0
-	and a.sessionID = '".$sessionID."' and a.timestep=".$timestep." and b.beliefID != ".$beliefID;
-$result=mysqli_query($link,$sql);
-if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	printf ("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1]);
-  }
+/** @page dotgen_observed_impl
+ *
+ *  + Create arrows between agents who have as their direct belief this fact
+ * ($beliefID)
+ */
+foreach ($agent_belief_arrows_to[$beliefID] as $from=>$info) {
+    printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+           $info["from_dot_label"], $info["to_dot_label"]);
 }
-mysqli_free_result($result);
-
-
-$sql="select concat('agent',trustingAgent), concat('agent',trustedAgent), level
-from agent_trust at
-where trustedAgent NOT IN (
-                        select distinct a.agentID
-                        from agents a
-                        inner join agent_has_beliefs ab on ab.agentID = a.agentID
-                        where ab.sessionID = '".$sessionID."' and ab.timestep = ".$timestep." and ab.beliefID = ".$beliefID."
-                       )
-and at.sessionID = '".$sessionID."' and at.timestep = ".$timestep.";";
-$result=mysqli_query($link,$sql);
-if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	printf ("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1]);
-  }
-}
-mysqli_free_result($result);
-
-/*
-* Create fact nodes that aren't ends of arguments
-*/
- $sql="select distinct b.beliefID, CASE               
-        WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, level
-		from beliefs b
-		inner join agent_has_beliefs ab on b.beliefID = ab.beliefID
-		inner join predicate_has_constant pc on pc.predicateConstantID = b.conclusionID
-		inner join predicates p on p.predicateID = pc.predicateID
-		inner join constants c on pc.constantID = c.constantID 
-		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-		where ab.agentID = 1 and b.isRule = 0 and a.isSupported = 1
-		and ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep."
-		and b.beliefID != ".$beliefID.";";
- $result=mysqli_query($link,$sql);
- if ($result) {
-  while ($row = mysqli_fetch_array($result)) {
-  	printf ("fact%s [label=\"%s:%s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",$row[0],$row[1],$row[2]);
-  }
-}
-mysqli_free_result($result);
 
 
 ?>
-	}
+        }
+<?php
+/** @page dotgen_observed_impl
+ *
+ * * Draw all elements that have not been drawn. Grey out all these elements.
+ */
+
+/** @page dotgen_observed_impl
+ *
+ *   + Create agents that are not associated with this fact ($beliefID)
+ */
+foreach ($agents_not_assoc_beliefID as $id) {
+    printf("%s [label=%s, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+           $agents[$id]["dot_label"], $agents[$id]["name"]);
+}
+
+/** @page dotgen_observed_impl
+ *
+ *  + Create other fact nodes with id NOT $beliefID (that can be either end
+ * of an argument or not)
+ */
+foreach ($qagnt_facts as $id=>$info) {
+    if ($id != $beliefID) {
+        if ($info["end_argument"] == 0) {
+            printf("%s [label=\"%s:%s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   $info["dot_label"],
+                   $info["logic_display"],
+                   min($info["levels"]));
+        } else {
+            if ($info["num_statuses"] == 1) {
+                printf("%s [label=\"%s:%s : %s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                       $info["dot_label"], $info["logic_display"],
+                       min($info["levels"]), $info["statuses"][0]);
+            } else {
+                $statuses = implode(", ", $info["statuses"]);
+                printf("%s [label=\"%s:%s : %s\", style=\"dotted, filled\" shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                       $info["dot_label"], $info["logic_display"],
+                       min($info["levels"]), $statuses);
+            }
+        }
+    }
+}
+
+/** @page dotgen_observed_impl
+ *
+ *   + Create rule nodes for agentID posing question that aren't argument ends
+ */
+foreach ($qagnt_rules_not_end_argument as $id=>$info) {
+    printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+           $info["rule_dot_label"], $info["rule_display"], $info["level"]);
+    printf("%s [label=\"%s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+           $info["inference_dot_label"], $info["inference_display"]);
+    printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+           $info["rule_dot_label"], $info["inference_dot_label"]);
+}
+
+
+/** @page dotgen_observed_impl
+ *
+ *  + Create rule nodes for agentID posing question that are argument
+ * conclusions
+ */
+foreach ($qagnt_rules_end_argument as $id=>$info) {
+      printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+             $info["rule_dot_label"], $info["rule_display"], $info["level"]);
+    printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+           $info["rule_dot_label"], $info["inference_dot_label"]);
+    if ($info["num_statuses"] == 1) {
+        if($info["statuses"][0] == "IN") {
+            printf("%s [label=\"%s:%s : %s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   $info["inference_dot_label"], $info["inference_display"],
+                   $info["level"], $info["statuses"][0]);
+        } else if ($info["statuses"][0] == "OUT") {
+            printf("%s [label=\"%s:%s : %s\", style=\"filled\", fillcolor=grey, shape=box, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   $info["inference_dot_label"], $info["inference_display"],
+                   $info["level"], $info["statuses"][0]);
+        } else if ($info["statuses"][0] == "UNDEC") {
+            printf("%s [label=\"%s:%s : %s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   $info["inference_dot_label"], $info["inference_display"],
+                   $info["level"], $info["statuses"][0]);
+        }
+    } else {
+        $statuses = implode(", ", $info["statuses"]);
+        printf("%s [label=\"%s:%s : %s\", style=\"dotted, filled\" shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+               $info["inference_dot_label"], $info["inference_display"],
+               $info["level"], $statuses);
+      }
+}
+
+
+/** @page dotgen_observed_impl
+ *
+ *   + Create arrows between beliefs
+ */
+foreach ($belief_arrows as $id=>$info) {
+    // YUP: both if and else arrows are the same code but
+    // $info["from_dot_label"] differ and potentially we can do sthg
+    // different!
+    if ($info["from_rule"] == 0) {
+        printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+               $info["from_dot_label"], $info["to_dot_label"]);
+    } else {
+        printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+               $info["from_dot_label"], $info["to_dot_label"]);
+    }
+}
+
+/** @page dotgen_observed_impl
+ *
+ *   + Create arrows for attacks (rebut and undermine)
+ */
+foreach ($attack_arrows as $id=>$info) {
+    printf("%s -> %s [label=%s color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+           $info["from_dot_label"],$info["to_dot_label"],$info["attack_type"]);
+}
+
+/** @page dotgen_observed_impl
+ *
+ *  + Create arrows between agents and their direct beliefs that do have id
+ * $beliefID
+ */
+foreach ($agent_belief_arrows_to as $id=>$arrow_info) {
+    if ($id != $beliefID) {
+        foreach ($arrow_info as $from=>$info) {
+            printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   $info["from_dot_label"], $info["to_dot_label"]);
+        }
+    }
+}
+
+
+/** @page dotgen_observed_impl
+ *
+ *  + Create arrows between agents with trusted agents that are NOT part of
+ * the agents that have this fact ($beliefID) in their beliefs
+ */
+foreach ($agent_arrows_to as $to=>$info) {
+    if (in_array($to, $agents_not_assoc_beliefID)) {
+        foreach ($info as $from => $from_to_arrow) {
+            printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n", 
+                   $from_to_arrow["from_dot_label"],
+                   $from_to_arrow["to_dot_label"]);
+        }
+    }
+}
+
+?>
+    }
 }

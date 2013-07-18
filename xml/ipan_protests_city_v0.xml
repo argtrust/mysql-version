@@ -1,0 +1,352 @@
+<argtrust>
+
+	<domain>
+		<constant> Tapel </constant>
+		<constant> Sligo </constant>
+		<constant> Waga </constant>
+
+		<predicate> FewProtests </predicate>
+		<predicate> SomeProtests </predicate>
+		<predicate> ManyProtests </predicate>
+
+		<predicate> LittleDisruption </predicate>
+		<predicate> SomeDisruption </predicate>
+		<predicate> MuchDisruption </predicate>
+
+		<predicate> MostReliefDisruptions </predicate>
+
+	</domain>
+
+	<trustnet>
+		<agent> Me </agent>
+		<agent> BricklandMilitary </agent>
+		<agent> GordanianFirstResponder </agent>
+		<agent> Twitter </agent>
+
+		<!-- my trust -->
+		<trust>
+			<truster> Me </truster>
+			<trustee> BricklandMilitary </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> GordanianFirstResponder </trustee>
+			<level> 0.9 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Twitter </trustee>
+			<level> 0.4 </level>
+		</trust>
+
+	</trustnet>
+
+	<beliefbase>
+
+		<!-- My Beliefs -->
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> FewProtests(Tapel) </premise>
+				<conclusion> LittleDisruption(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeProtests(Tapel) </premise>
+				<conclusion> SomeDisruption(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> ManyProtests(Tapel) </premise>
+				<conclusion> MuchDisruption(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> FewProtests(Sligo) </premise>
+				<conclusion> LittleDisruption(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeProtests(Sligo) </premise>
+				<conclusion> SomeDisruption(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> ManyProtests(Sligo) </premise>
+				<conclusion> MuchDisruption(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> FewProtests(Waga) </premise>
+				<conclusion> LittleDisruption(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeProtests(Waga) </premise>
+				<conclusion> SomeDisruption(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> ManyProtests(Waga) </premise>
+				<conclusion> MuchDisruption(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Tapel) </premise>
+				<premise> SomeDisruption(Sligo) </premise>
+				<premise> SomeDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Tapel) </premise>
+				<premise> SomeDisruption(Sligo) </premise>
+				<premise> LittleDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Tapel) </premise>
+				<premise> LittleDisruption(Sligo) </premise>
+				<premise> SomeDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Tapel) </premise>
+				<premise> LittleDisruption(Sligo) </premise>
+				<premise> LittleDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeDisruption(Tapel) </premise>
+				<premise> LittleDisruption(Sligo) </premise>
+				<premise> LittleDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Sligo) </premise>
+				<premise> SomeDisruption(Tapel) </premise>
+				<premise> SomeDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Sligo) </premise>
+				<premise> SomeDisruption(Tapel) </premise>
+				<premise> LittleDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Sligo) </premise>
+				<premise> LittleDisruption(Tapel) </premise>
+				<premise> SomeDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Sligo) </premise>
+				<premise> LittleDisruption(Tapel) </premise>
+				<premise> LittleDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeDisruption(Sligo) </premise>
+				<premise> LittleDisruption(Tapel) </premise>
+				<premise> LittleDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Waga) </premise>
+				<premise> SomeDisruption(Tapel) </premise>
+				<premise> SomeDisruption(Sligo) </premise>
+				<conclusion> MostReliefDisruptions(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Waga) </premise>
+				<premise> SomeDisruption(Tapel) </premise>
+				<premise> LittleDisruption(Sligo) </premise>
+				<conclusion> MostReliefDisruptions(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Waga) </premise>
+				<premise> LittleDisruption(Tapel) </premise>
+				<premise> SomeDisruption(Sligo) </premise>
+				<conclusion> MostReliefDisruptions(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Waga) </premise>
+				<premise> LittleDisruption(Tapel) </premise>
+				<premise> LittleDisruption(Sligo) </premise>
+				<conclusion> MostReliefDisruptions(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeDisruption(Waga) </premise>
+				<premise> LittleDisruption(Tapel) </premise>
+				<premise> LittleDisruption(Sligo) </premise>
+				<conclusion> MostReliefDisruptions(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<!-- Facts -->
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> ManyProtests(Tapel) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> SomeProtests(Sligo) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> FewProtests(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Twitter </agent>
+			<fact> ManyProtests(Tapel) </fact>
+			<level> 0.9 </level>
+		</belief>
+
+		<belief>
+			<agent> Twitter </agent>
+			<fact> FewProtests(Sligo) </fact>
+			<level> 0.9 </level>
+		</belief>
+
+		<belief>
+			<agent> Twitter </agent>
+			<fact> SomeProtests(Waga) </fact>
+			<level> 0.9 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianFirstResponder </agent>
+			<fact> ManyProtests(Tapel) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianFirstResponder </agent>
+			<fact> FewProtests(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+	</beliefbase>
+
+	<query>
+		<agent> Me </agent>
+		<question> MostReliefDisruptions(Tapel) </question>
+	</query>
+
+</argtrust>

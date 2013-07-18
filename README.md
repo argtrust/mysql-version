@@ -1,4 +1,4 @@
-mysql-version
+mysql-version    {#mainpage}
 =============
 
-sql version
+SQL version of the ArgTrust Decision Making System.

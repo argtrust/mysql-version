@@ -1,0 +1,168 @@
+<!-- 
+Query: 
+
+C:\ArgTrust\src>java argtrust.cmd.ArgTrust -i walnut.xml -o out.dot -a commander -q Dispatch(police_patrol)
+
+-->
+<argtrust>
+   <domain>
+        <constant>  pelts </constant>
+        <constant>  kids </constant>
+        <constant>  alice_diner </constant>        
+        <constant>  walnut_st </constant>
+        <constant>  phone_call </constant>
+        <constant>  fire_truck </constant>
+        <constant>  police_patrol </constant>
+        <constant>  sop </constant>
+
+        <predicate> Membership </predicate>
+        <predicate> Location </predicate>
+        <predicate> Dispatch </predicate>
+        <predicate> Follow </predicate>
+        <predicate> Phony </predicate>
+        
+    </domain>
+
+   <trustnet>
+        <agent> commander </agent>
+        <agent> cctv </agent>
+        <agent> tony </agent>
+        <agent> external_source </agent>
+        <agent> oak_st_officers </agent>
+		<agent> local_resident </agent>
+		<agent> manny </agent>
+		
+        <trust>
+            <truster> commander </truster>
+            <trustee> manny </trustee>
+            <level> 1.0 </level>
+        </trust>
+        <trust>
+            <truster> commander </truster>
+            <trustee> oak_st_officers </trustee>
+            <level> 1.0 </level>
+        </trust>
+		
+        <trust>
+            <truster> commander </truster>
+            <trustee> external_source </trustee>
+            <level> 1.0 </level>
+        </trust>
+		
+		
+        <trust>
+            <truster> external_source </truster>
+            <trustee> tony </trustee>
+            <level> 1.0 </level>
+        </trust>
+        <trust>
+            <truster> commander </truster>
+            <trustee> local_resident </trustee>
+            <level> 1.0 </level>
+        </trust>
+
+        <trust>
+            <truster> commander </truster>
+            <trustee> cctv </trustee>
+            <level> 0.0 </level>
+        </trust>
+		
+    </trustnet>
+
+<!-- Belief base --> 
+	
+	<beliefbase>
+
+
+		<belief>
+			<agent> tony </agent>
+			<fact> Location(pelts, walnut_st) </fact>
+			<level> 0.5 </level>
+		</belief>
+
+		<belief>
+			<agent> tony </agent>
+			<fact> NOT Location(pelts, walnut_st) </fact>
+			<level> 0.5 </level>
+		</belief>
+		
+		<belief>
+			<agent> oak_st_officers </agent>
+			<fact> Location(pelts, alice_diner) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> commander </agent>
+			<fact> Phony(phone_call) </fact>
+			<level> 0.5 </level>
+		</belief>
+
+		
+		<belief>
+			<agent> local_resident </agent>
+			<fact> Location(pelts, walnut_st) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> manny </agent>
+			<fact> Location(kids, walnut_st) </fact>
+			<level> 1.0 </level>
+		</belief>
+		
+		<belief>
+			<agent> manny </agent>
+			<fact> NOT Membership(kids, pelts) </fact>
+			<level> 1.0 </level>
+		</belief>
+		
+	
+        <belief>
+            <agent> commander </agent>
+            <rule>
+                <premise> Phony(phone_call)  </premise>
+                <conclusion> NOT Dispatch(fire_truck)  </conclusion>
+            </rule>
+            <level> 1.0 </level>
+        </belief>
+
+        <belief>
+            <agent> commander </agent>
+            <rule>
+                <premise> Phony(phone_call)  </premise>
+                <conclusion> NOT Dispatch(police_patrol)  </conclusion>
+            </rule>
+            <level> 1.0 </level>
+        </belief>
+
+        <belief>
+            <agent> commander </agent>
+            <rule>
+                <premise> Location(pelts, walnut_st)  </premise>
+                <conclusion> NOT Dispatch(police_patrol)  </conclusion>
+            </rule>
+            <level> 1.0 </level>
+        </belief>
+		
+        <belief>
+            <agent> commander </agent>
+            <rule>
+                <premise> Location(kids, walnut_st)  </premise>
+                <premise> NOT Membership(kids, pelts)  </premise>
+                <conclusion> Dispatch(police_patrol)  </conclusion>
+            </rule>
+            <level> 1.0 </level>
+        </belief>		
+
+        <belief>
+            <agent> commander </agent>
+            <rule>
+                <premise> Location(pelts, alice_diner)  </premise>                
+                <conclusion> NOT Location(pelts, walnut_st) </conclusion>
+            </rule>
+            <level> 1.0 </level>
+        </belief>				
+		
+	</beliefbase>
+</argtrust> 
