@@ -107,7 +107,7 @@ onclick=\"get_id('\L', '\N')\"];\n",
  *  + Create arrows between agents who have as their direct belief this fact
  * ($beliefID)
  */
-foreach ($agent_belief_arrows_to[$beliefID] as $from=>$info) {
+foreach ($agent_fact_arrows_to[$beliefID] as $from=>$info) {
     printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"], $info["to_dot_label"]);
 }
@@ -232,10 +232,10 @@ foreach ($attack_arrows as $id=>$info) {
 
 /** @page dotgen_observed_impl
  *
- *  + Create arrows between agents and their direct beliefs that do have id
+ *  + Create arrows between agents and their direct facts that do have id
  * $beliefID
  */
-foreach ($agent_belief_arrows_to as $id=>$arrow_info) {
+foreach ($agent_fact_arrows_to as $id=>$arrow_info) {
     if ($id != $beliefID) {
         foreach ($arrow_info as $from=>$info) {
             printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",

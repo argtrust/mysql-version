@@ -151,12 +151,12 @@ foreach ($agent_arrows as $id=>$info) {
 
 /** @page dotgen_hw_impl
  *
- * * Create arrows between agents and their direct beliefs
+ * * Create arrows between agents and their direct facts
  */
-foreach ($agent_belief_arrows as $id=>$info) {
+foreach ($agent_fact_arrows as $id=>$info) {
     printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"], $info["to_dot_label"]);
-    $num_agent_belief_arrows++;
+    $num_agent_fact_arrows++;
 }
 
 ?>

@@ -235,18 +235,18 @@ foreach ($arg_agentIDs as $id1) {
 
 /** @page dotgen_argument_impl
  *
- *  + Create arrows between agents and their direct beliefs that are part of
- * this argument ($argumentID) and add to $arg_agent_belief_arrows
+ *  + Create arrows between agents and their direct facts that are part of
+ * this argument ($argumentID) and add to $arg_agent_fact_arrows
  */
-$arg_agent_belief_arrows = array();
+$arg_agent_fact_arrows = array();
 foreach ($arg_agentIDs as $id1) {
     foreach ($arg_beliefIDs as $id2) {
         $from_to = $id1."_".$id2;
-        if (array_key_exists($from_to, $agent_belief_arrows)) {
-            $arg_agent_belief_arrows[$from_to] = "Yes";
+        if (array_key_exists($from_to, $agent_fact_arrows)) {
+            $arg_agent_fact_arrows[$from_to] = "Yes";
             printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-                   $agent_belief_arrows[$from_to]["from_dot_label"],
-                   $agent_belief_arrows[$from_to]["to_dot_label"]);
+                   $agent_fact_arrows[$from_to]["from_dot_label"],
+                   $agent_fact_arrows[$from_to]["to_dot_label"]);
         }
     }
 }
@@ -424,12 +424,12 @@ foreach ($agent_arrows as $id=>$info) {
 
 /** @page dotgen_argument_impl
  *
- *  + Create arrows between agents and their direct beliefs that are NOT both
- * part of this argument ($argumentID), i.e., agent to direct belief arrows
- * not in $arg_agent_belief_arrows
+ *  + Create arrows between agents and their direct facts that are NOT both
+ * part of this argument ($argumentID), i.e., agent to direct fact arrows
+ * not in $arg_agent_fact_arrows
  */
-foreach ($agent_belief_arrows as $id=>$info) {
-    if (array_key_exists($id, $arg_agent_belief_arrows) == FALSE) {
+foreach ($agent_fact_arrows as $id=>$info) {
+    if (array_key_exists($id, $arg_agent_fact_arrows) == FALSE) {
         printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
                $info["from_dot_label"], $info["to_dot_label"]);
     }

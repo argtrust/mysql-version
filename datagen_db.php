@@ -261,42 +261,83 @@ $agent_arrows_to = array();
  */
 $num_agent_arrows_to = 0;
 
-/** @brief array $agent_belief_arrows: key=fromID."_".toID stores array of
+/** @brief array $agent_fact_arrows: key=fromID."_".toID stores array of
  *         arrow information connecting agent (with id fromID) to it's direct
- *         beliefs (with id toID).
+ *         facts (with id toID).
  *
- * $agent_belief_arrows[fromID_toID] = array("from_id"=>string,
+ * $agent_fact_arrows[fromID_toID] = array("from_id"=>string,
  *    "from_dot_label"=>string, "from_ref"=>(reference to $agents[fromID]),
  *    "to_id"=>string, "to_dot_label"=>string, "to_rule"=>string(0 or 1),
  *    "to_ref"=>(reference to $qagnt_beliefs[toID]), "level"=>string)
- */
-$agent_belief_arrows = array();
-/** @brief int \$num_agent_belief_arrows: number of entries in 
- *         $agent_belief_arrows. NOTE: not used and can be removed.
- */
-$num_agent_belief_arrows = 0;
-/** @brief array $agent_belief_arrows_from: key=fromID stores array of agent to
- *         belief arrows' information that start from agent ID (fromID).
  *
- * $agent_belief_arrows_from[fromID] = array(toID=>reference to
- *                                     $agent_belief_arrows[fromID."_".toID])
+ * NOTE: "to_rule" is always "0"
  */
-$agent_belief_arrows_from = array();
-/** @brief int \$num_agent_belief_arrows_from: number of entries in 
- *         $agent_belief_arrows_from. NOTE: not used and can be removed.
+$agent_fact_arrows = array();
+/** @brief int \$num_agent_fact_arrows: number of entries in 
+ *         $agent_fact_arrows. NOTE: not used and can be removed.
  */
-$num_agent_belief_arrows_from = 0;
-/** @brief array $agent_belief_arrows_to: key=toID stores array of agent to
- *         belief arrows' information that end at belief ID (toID).
+$num_agent_fact_arrows = 0;
+/** @brief array $agent_fact_arrows_from: key=fromID stores array of agent to
+ *         fact arrows' information that start from agent ID (fromID).
  *
- * $agent_belief_arrows_to[toID] = array(fromID=>reference to
- *                                     $agent_belief_arrows[fromID."_".toID])
+ * $agent_fact_arrows_from[fromID] = array(toID=>reference to
+ *                                     $agent_fact_arrows[fromID."_".toID])
  */
-$agent_belief_arrows_to = array();
-/** @brief int \$num_agent_belief_arrows_to: number of entries in 
- *         $agent_belief_arrows_to. NOTE: not used and can be removed.
+$agent_fact_arrows_from = array();
+/** @brief int \$num_agent_fact_arrows_from: number of entries in 
+ *         $agent_fact_arrows_from. NOTE: not used and can be removed.
  */
-$num_agent_belief_arrows_to = 0;
+$num_agent_fact_arrows_from = 0;
+/** @brief array $agent_fact_arrows_to: key=toID stores array of agent to
+ *         fact arrows' information that end at belief ID (toID).
+ *
+ * $agent_fact_arrows_to[toID] = array(fromID=>reference to
+ *                                     $agent_fact_arrows[fromID."_".toID])
+ */
+$agent_fact_arrows_to = array();
+/** @brief int \$num_agent_fact_arrows_to: number of entries in 
+ *         $agent_fact_arrows_to. NOTE: not used and can be removed.
+ */
+$num_agent_fact_arrows_to = 0;
+
+/** @brief array $agent_rule_arrows: key=fromID."_".toID stores array of
+ *         arrow information connecting agent (with id fromID) to it's direct
+ *         rules (with id toID).
+ *
+ * $agent_rule_arrows[fromID_toID] = array("from_id"=>string,
+ *    "from_dot_label"=>string, "from_ref"=>(reference to $agents[fromID]),
+ *    "to_id"=>string, "to_dot_label"=>string, "to_rule"=>string(0 or 1),
+ *    "to_ref"=>(reference to $qagnt_beliefs[toID]), "level"=>string)
+ *
+ * NOTE: "to_rule" is always "1"
+ */
+$agent_rule_arrows = array();
+/** @brief int \$num_agent_rule_arrows: number of entries in 
+ *         $agent_rule_arrows. NOTE: not used and can be removed.
+ */
+$num_agent_rule_arrows = 0;
+/** @brief array $agent_rule_arrows_from: key=fromID stores array of agent to
+ *         rule arrows' information that start from agent ID (fromID).
+ *
+ * $agent_rule_arrows_from[fromID] = array(toID=>reference to
+ *                                     $agent_rule_arrows[fromID."_".toID])
+ */
+$agent_rule_arrows_from = array();
+/** @brief int \$num_agent_rule_arrows_from: number of entries in 
+ *         $agent_rule_arrows_from. NOTE: not used and can be removed.
+ */
+$num_agent_rule_arrows_from = 0;
+/** @brief array $agent_rule_arrows_to: key=toID stores array of agent to
+ *         rule arrows' information that end at belief ID (toID).
+ *
+ * $agent_rule_arrows_to[toID] = array(fromID=>reference to
+ *                                     $agent_rule_arrows[fromID."_".toID])
+ */
+$agent_rule_arrows_to = array();
+/** @brief int \$num_agent_rule_arrows_to: number of entries in 
+ *         $agent_rule_arrows_to. NOTE: not used and can be removed.
+ */
+$num_agent_rule_arrows_to = 0;
 
 /** @brief array $arguments: key=argument_id stores array of argument
  *         information.
@@ -1062,10 +1103,10 @@ if ($debug) {
 
 /** @page datagen_db_impl
  *
- * * Create data structure for arrows between agents and their direct beliefs:
- * Fill in $agent_belief_arrows, $num_agent_belief_arrows,
- * $agent_belief_arrows_from, $num_agent_belief_arrows_from,
- * $agent_belief_arrows_to, and $num_agent_belief_arrows_to.
+ * * Create data structure for arrows between agents and their direct facts:
+ * Fill in $agent_fact_arrows, $num_agent_fact_arrows,
+ * $agent_fact_arrows_from, $num_agent_fact_arrows_from,
+ * $agent_fact_arrows_to, and $num_agent_fact_arrows_to.
  */
 $sql="select distinct concat('agent',ab.agentID),
     case when isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l,
@@ -1080,14 +1121,14 @@ $result=mysqli_query($link,$sql);
 if ($result) {
     while ($row = mysqli_fetch_array($result)) {
         $from_to = $row[2]."_".$row[4];
-        $agent_belief_arrows[$from_to]["from_dot_label"] = $row[0];
-        $agent_belief_arrows[$from_to]["to_dot_label"] = $row[1];
-        $agent_belief_arrows[$from_to]["from_id"] = $row[2];
-        $agent_belief_arrows[$from_to]["to_rule"] = $row[3];
-        $agent_belief_arrows[$from_to]["to_id"] = $row[4];
-        $agent_belief_arrows[$from_to]["level"] = $row[5];
+        $agent_fact_arrows[$from_to]["from_dot_label"] = $row[0];
+        $agent_fact_arrows[$from_to]["to_dot_label"] = $row[1];
+        $agent_fact_arrows[$from_to]["from_id"] = $row[2];
+        $agent_fact_arrows[$from_to]["to_rule"] = $row[3];
+        $agent_fact_arrows[$from_to]["to_id"] = $row[4];
+        $agent_fact_arrows[$from_to]["level"] = $row[5];
         if (array_key_exists($row[2], $agents)) {
-            $agent_belief_arrows[$from_to]["from_ref"] = & $agents[$row[2]];    
+            $agent_fact_arrows[$from_to]["from_ref"] = & $agents[$row[2]];    
         } else {
             printf("//ERROR: cannot find agent %s\n", $row[2]);
             // TODO: else exit???
@@ -1095,54 +1136,139 @@ if ($result) {
         // TODO: just use qagnt_beliefs
         if ($row[3] == 1) {
             if (array_key_exists($row[4], $qagnt_rules)) {
-                $agent_belief_arrows[$from_to]["to_ref"] = & $qagnt_rules[$row[4]];    
+                $agent_fact_arrows[$from_to]["to_ref"] = & $qagnt_rules[$row[4]];    
             }
             // TODO: else exit???
         } else {
             if (array_key_exists($row[4], $qagnt_facts)) {
-                $agent_belief_arrows[$from_to]["to_ref"] = & $qagnt_facts[$row[4]];    
+                $agent_fact_arrows[$from_to]["to_ref"] = & $qagnt_facts[$row[4]];    
             }
             // TODO: else exit???
         }
-        if (array_key_exists($row[2], $agent_belief_arrows_from)) {
-            $agent_belief_arrows_from[$row[2]][$row[4]] = & $agent_belief_arrows[$from_to];
+        if (array_key_exists($row[2], $agent_fact_arrows_from)) {
+            $agent_fact_arrows_from[$row[2]][$row[4]] = & $agent_fact_arrows[$from_to];
         } else {
-            $agent_belief_arrows_from[$row[2]] = array($row[4] => & $agent_belief_arrows[$from_to]);
-            $num_agent_belief_arrows_from++;
+            $agent_fact_arrows_from[$row[2]] = array($row[4] => & $agent_fact_arrows[$from_to]);
+            $num_agent_fact_arrows_from++;
         }
-        if (array_key_exists($row[4], $agent_belief_arrows_to)) {
-            $agent_belief_arrows_to[$row[4]][$row[2]] = & $agent_belief_arrows[$from_to];
+        if (array_key_exists($row[4], $agent_fact_arrows_to)) {
+            $agent_fact_arrows_to[$row[4]][$row[2]] = & $agent_fact_arrows[$from_to];
         } else {
-            $agent_belief_arrows_to[$row[4]] = array($row[2] => & $agent_belief_arrows[$from_to]);
-            $num_agent_belief_arrows_to++;
+            $agent_fact_arrows_to[$row[4]] = array($row[2] => & $agent_fact_arrows[$from_to]);
+            $num_agent_fact_arrows_to++;
         }
         if ($debug) {
             printf ("//%s(%s:%s) -> %s(%s:%s): level=%s\n",
-                    $agent_belief_arrows[$from_to]["from_dot_label"],
-                    $agent_belief_arrows[$from_to]["from_id"],
-                    $agent_belief_arrows[$from_to]["from_ref"]["name"],
-                    $agent_belief_arrows[$from_to]["to_dot_label"],
-                    $agent_belief_arrows[$from_to]["to_id"],
-                    ($agent_belief_arrows[$from_to]["to_rule"] == 1)?$agent_belief_arrows[$from_to]["to_ref"]["inference_display"]:$agent_belief_arrows[$from_to]["to_ref"]["logic_display"],
-                    $agent_belief_arrows[$from_to]["level"]);
+                    $agent_fact_arrows[$from_to]["from_dot_label"],
+                    $agent_fact_arrows[$from_to]["from_id"],
+                    $agent_fact_arrows[$from_to]["from_ref"]["name"],
+                    $agent_fact_arrows[$from_to]["to_dot_label"],
+                    $agent_fact_arrows[$from_to]["to_id"],
+                    ($agent_fact_arrows[$from_to]["to_rule"] == 1)?$agent_fact_arrows[$from_to]["to_ref"]["inference_display"]:$agent_fact_arrows[$from_to]["to_ref"]["logic_display"],
+                    $agent_fact_arrows[$from_to]["level"]);
         }
-        $num_agent_belief_arrows++;
+        $num_agent_fact_arrows++;
     }
 }
 mysqli_free_result($result);
 if ($debug) {
-    printf("//num_agent_belief_arrows=%d or %d\n", $num_agent_belief_arrows,
-           count($agent_belief_arrows));
-    foreach ($agent_belief_arrows_from as $from => $tos) {
+    printf("//num_agent_fact_arrows=%d or %d\n", $num_agent_fact_arrows,
+           count($agent_fact_arrows));
+    foreach ($agent_fact_arrows_from as $from => $tos) {
         printf("//From(%s): (%s)\n", $from, implode(", ", array_keys($tos)));
     }
-    printf("//num_agent_belief_arrows_from=%d or %d\n",
-           $num_agent_belief_arrows_from, count($agent_belief_arrows_from));
-    foreach ($agent_belief_arrows_to as $to => $froms) {
+    printf("//num_agent_fact_arrows_from=%d or %d\n",
+           $num_agent_fact_arrows_from, count($agent_fact_arrows_from));
+    foreach ($agent_fact_arrows_to as $to => $froms) {
         printf("//To(%s): (%s)\n", $to, implode(", ", array_keys($froms)));
     }
-    printf("//num_agent_belief_arrows_to=%d or %d\n",
-           $num_agent_belief_arrows_to, count($agent_belief_arrows_to));
+    printf("//num_agent_fact_arrows_to=%d or %d\n",
+           $num_agent_fact_arrows_to, count($agent_fact_arrows_to));
+}
+
+/** @page datagen_db_impl
+ *
+ * * Create data structure for arrows between agents and their direct rules:
+ * Fill in $agent_rule_arrows, $num_agent_rule_arrows,
+ * $agent_rule_arrows_from, $num_agent_rule_arrows_from,
+ * $agent_rule_arrows_to, and $num_agent_rule_arrows_to.
+ */
+$sql="select distinct concat('agent',ab.agentID),
+    case when isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l,
+    ab.agentID, isRule, b.beliefID, ab.level
+    from agent_has_beliefs ab
+    inner join beliefs b on ab.beliefID = b.beliefID 
+    inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
+    inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
+    where isInferred = 0 and a.isSupported = 1 and b.isRule = 1
+    and a.sessionID = '".$sessionID."' and a.timestep=".$timestep;
+$result=mysqli_query($link,$sql);
+if ($result) {
+    while ($row = mysqli_fetch_array($result)) {
+        $from_to = $row[2]."_".$row[4];
+        $agent_rule_arrows[$from_to]["from_dot_label"] = $row[0];
+        $agent_rule_arrows[$from_to]["to_dot_label"] = $row[1];
+        $agent_rule_arrows[$from_to]["from_id"] = $row[2];
+        $agent_rule_arrows[$from_to]["to_rule"] = $row[3];
+        $agent_rule_arrows[$from_to]["to_id"] = $row[4];
+        $agent_rule_arrows[$from_to]["level"] = $row[5];
+        if (array_key_exists($row[2], $agents)) {
+            $agent_rule_arrows[$from_to]["from_ref"] = & $agents[$row[2]];    
+        } else {
+            printf("//ERROR: cannot find agent %s\n", $row[2]);
+            // TODO: else exit???
+        }
+        // TODO: just use qagnt_beliefs
+        if ($row[3] == 1) {
+            if (array_key_exists($row[4], $qagnt_rules)) {
+                $agent_rule_arrows[$from_to]["to_ref"] = & $qagnt_rules[$row[4]];    
+            }
+            // TODO: else exit???
+        } else {
+            if (array_key_exists($row[4], $qagnt_facts)) {
+                $agent_rule_arrows[$from_to]["to_ref"] = & $qagnt_facts[$row[4]];    
+            }
+            // TODO: else exit???
+        }
+        if (array_key_exists($row[2], $agent_rule_arrows_from)) {
+            $agent_rule_arrows_from[$row[2]][$row[4]] = & $agent_rule_arrows[$from_to];
+        } else {
+            $agent_rule_arrows_from[$row[2]] = array($row[4] => & $agent_rule_arrows[$from_to]);
+            $num_agent_rule_arrows_from++;
+        }
+        if (array_key_exists($row[4], $agent_rule_arrows_to)) {
+            $agent_rule_arrows_to[$row[4]][$row[2]] = & $agent_rule_arrows[$from_to];
+        } else {
+            $agent_rule_arrows_to[$row[4]] = array($row[2] => & $agent_rule_arrows[$from_to]);
+            $num_agent_rule_arrows_to++;
+        }
+        if ($debug) {
+            printf ("//%s(%s:%s) -> %s(%s:%s): level=%s\n",
+                    $agent_rule_arrows[$from_to]["from_dot_label"],
+                    $agent_rule_arrows[$from_to]["from_id"],
+                    $agent_rule_arrows[$from_to]["from_ref"]["name"],
+                    $agent_rule_arrows[$from_to]["to_dot_label"],
+                    $agent_rule_arrows[$from_to]["to_id"],
+                    ($agent_rule_arrows[$from_to]["to_rule"] == 1)?$agent_rule_arrows[$from_to]["to_ref"]["inference_display"]:$agent_rule_arrows[$from_to]["to_ref"]["logic_display"],
+                    $agent_rule_arrows[$from_to]["level"]);
+        }
+        $num_agent_rule_arrows++;
+    }
+}
+mysqli_free_result($result);
+if ($debug) {
+    printf("//num_agent_rule_arrows=%d or %d\n", $num_agent_rule_arrows,
+           count($agent_rule_arrows));
+    foreach ($agent_rule_arrows_from as $from => $tos) {
+        printf("//From(%s): (%s)\n", $from, implode(", ", array_keys($tos)));
+    }
+    printf("//num_agent_rule_arrows_from=%d or %d\n",
+           $num_agent_rule_arrows_from, count($agent_rule_arrows_from));
+    foreach ($agent_rule_arrows_to as $to => $froms) {
+        printf("//To(%s): (%s)\n", $to, implode(", ", array_keys($froms)));
+    }
+    printf("//num_agent_rule_arrows_to=%d or %d\n",
+           $num_agent_rule_arrows_to, count($agent_rule_arrows_to));
 }
 
 /** @page datagen_db_impl
@@ -1274,12 +1400,18 @@ $store["agent_arrows_from"] = & $agent_arrows_from;
 $store["num_agent_arrows_from"] = $num_agent_arrows_from;
 $store["agent_arrows_to"] = & $agent_arrows_to;
 $store["num_agent_arrows_to"] = $num_agent_arrows_to;
-$store["agent_belief_arrows"] = & $agent_belief_arrows;
-$store["num_agent_belief_arrows"] = $num_agent_belief_arrows;
-$store["agent_belief_arrows_from"] = & $agent_belief_arrows_from;
-$store["num_agent_belief_arrows_from"] = $num_agent_belief_arrows_from;
-$store["agent_belief_arrows_to"] = & $agent_belief_arrows_to;
-$store["num_agent_belief_arrows_to"] = $num_agent_belief_arrows_to;
+$store["agent_fact_arrows"] = & $agent_fact_arrows;
+$store["num_agent_fact_arrows"] = $num_agent_fact_arrows;
+$store["agent_fact_arrows_from"] = & $agent_fact_arrows_from;
+$store["num_agent_fact_arrows_from"] = $num_agent_fact_arrows_from;
+$store["agent_fact_arrows_to"] = & $agent_fact_arrows_to;
+$store["num_agent_fact_arrows_to"] = $num_agent_fact_arrows_to;
+$store["agent_rule_arrows"] = & $agent_rule_arrows;
+$store["num_agent_rule_arrows"] = $num_agent_rule_arrows;
+$store["agent_rule_arrows_from"] = & $agent_rule_arrows_from;
+$store["num_agent_rule_arrows_from"] = $num_agent_rule_arrows_from;
+$store["agent_rule_arrows_to"] = & $agent_rule_arrows_to;
+$store["num_agent_rule_arrows_to"] = $num_agent_rule_arrows_to;
 $store["arguments"] = & $arguments; $store["num_arguments"] = $num_arguments;
 
 $fp = file_put_contents("graphs2/".$sessionID.".vars",  serialize($store));
