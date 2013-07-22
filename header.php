@@ -1,6 +1,6 @@
 <?php
-#$link = mysqli_connect('jsalvitdbinstance.cku3opv9prdt.us-east-1.rds.amazonaws.com','trust_user','trust123', 'trust');
-$link = mysqli_connect('127.0.0.1','root','', 'trust');
+$link = mysqli_connect('jsalvitdbinstance.cku3opv9prdt.us-east-1.rds.amazonaws.com','trust_user','trust123', 'trust');
+#$link = mysqli_connect('127.0.0.1','root','', 'trust');
 if (!$link) {
 	die('Could not connect: ' . mysql_error());
 }
