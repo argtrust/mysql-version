@@ -26,8 +26,9 @@
 			$script = "python addItems.py -s ".$sessionID . " -t ".$timestep2 . " -a ".$_GET['fromAgent'] . " -b ".$_GET['toAgent']. " -l ".$_GET['trust'];
 			exec($script);
 #			echo $script;			
-			header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
-
+                        if(!array_key_exists('headless', $_GET)){
+                                header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+                        }
  	}else if($_GET['type'] == 'fact'){
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
@@ -44,7 +45,9 @@
 			$script = "python addItems.py -s ".$sessionID . " -t ".$timestep2 . " -a ".$_GET['agent'] . " -e \"".$_GET['belief']. "\" -l ".$_GET['trust'];
 			$result = exec($script);
 //			echo $script;
-			header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+                        if(!array_key_exists('headless', $_GET)){
+                                header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+                        }
  	}else if($_GET['type'] == 'rule'){
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
@@ -61,7 +64,9 @@
 			$script = "python addItems.py -s ".$sessionID . " -t ".$timestep2 . " -a ".$_GET['agent'] . " -c \"".$_GET['conclusion']. "\" -l ".$_GET['trust']. " -p \"".$_GET['premise']. "\"";
 			$result = exec($script);
 #			echo $script;			
-			header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+                        if(!array_key_exists('headless', $_GET)){
+                                header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+                        }
  	}else if($_GET['type'] == 'question'){
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
@@ -73,7 +78,9 @@
 
 			$script = "python addItems.py -s ".$sessionID . " -t ".$timestep2 . " -a ".$_GET['agent'] . " -q \"".$_GET['question']."\"";
 			$result = exec($script);
-			header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+                        if(!array_key_exists('headless', $_GET)){
+                                header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+                        }
  	}else{
 			mysqli_close($link);
 			echo "in else";			

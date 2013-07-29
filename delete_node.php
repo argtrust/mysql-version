@@ -34,9 +34,9 @@
  			$result=mysqli_query($link,$sql);
 			mysqli_free_result($result);
 			mysqli_close($link);
-			
-			header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
-
+			if(!array_key_exists('headless', $_GET)){			
+				header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+			}
  	}else if(substr($_GET['nodeID'],0,5) == 'agent'){
  #			echo "" .substr($_GET['nodeID'],5);
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",".substr($_GET['nodeID'],5).");";
@@ -52,7 +52,9 @@
 			mysqli_free_result($result);
 			mysqli_close($link);
 			
-			header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+			if(!array_key_exists('headless', $_GET)){			
+				header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+			}
  	}else if(substr($_GET['nodeID'],0,4) == 'rule'){
  #			echo "" .substr($_GET['nodeID'],5);
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
@@ -68,7 +70,9 @@
 			mysqli_free_result($result);
 			mysqli_close($link);
 			
-			header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+			if(!array_key_exists('headless', $_GET)){
+				header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
+			}
  	}else{
 			mysqli_close($link);
 			
