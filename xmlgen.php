@@ -29,7 +29,7 @@ printf("</agents>\n");
 
 printf("<beliefs>\n");
 foreach ($qagnt_facts_not_end_argument as $id => $info) {
-    printf("<belief id=%s level=%s>%s</belief>" ,min($info["levels"]), $info["dot_label"], $info["logic_display"]);
+    printf("<belief id=%s level=%s>%s</belief>" , $info["dot_label"], min($info["levels"]), $info["logic_display"]);
 }
 
 /** @page dotgen_hw_impl
@@ -39,7 +39,7 @@ foreach ($qagnt_facts_not_end_argument as $id => $info) {
  */
 foreach ($qagnt_facts_end_argument as $id => $info) {
     if ($info["num_statuses"] == 1) {
-	    printf("<belief id=%s level=%s status=%s>%s</belief>" ,min($info["levels"]), $info["dot_label"],  $info["statuses"][0], $info["logic_display"]);
+	    printf("<belief id=%s level=%s status=%s>%s</belief>" ,$info["dot_label"], min($info["levels"]), $info["statuses"][0], $info["logic_display"]);
     } else {
         $statuses = implode(", ", $info["statuses"]);
 	printf("<belief id=%s level=%s status=%s>%s</belief>" ,min($info["levels"]), $info["dot_label"],  $statuses, $info["logic_display"]);
