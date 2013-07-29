@@ -6,15 +6,12 @@
 	$uniqueID = uniqid('uploadfile_').".xml";
 	if (($_FILES["file"]["size"] < 20000) && in_array($extension, $allowedExts)){
 //				echo $_FILES["file"]["tmp_name"]; 
-		      $moved = move_uploaded_file($_FILES["file"]["tmp_name"],
-		      $_SERVER['DOCUMENT_ROOT'] . "/graphs2/".$uniqueID);
+//		$moved = move_uploaded_file($_FILES["file"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/graphs2/".$uniqueID);
+		      $moved = move_uploaded_file($_FILES["file"]["tmp_name"], getcwd()."/graphs2/".$uniqueID);
 		      if($moved){
 //				echo "moved successfully";
-		      $new_xml = "graphs2/" .$uniqueID;
-//		      echo "Stored in: " . "upload/" . $_FILES["file"]["name"];
-//		      echo "Stored in: " . $new_xml;
-		  }
-		  else {
+		      		$new_xml = "graphs2/" .$uniqueID;
+		  } else {
 		  	$new_xml="junk";
 		  }
 	}
@@ -22,5 +19,5 @@
 		echo "Invalid file";
 	}
 	header("Location: index.php?xmlfile=$new_xml");
-//		      $_SERVER['DOCUMENT_ROOT'] . "/trust/graphs2/". $_FILES["file"]["name"]);
+
 ?>
