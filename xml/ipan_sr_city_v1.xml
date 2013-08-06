@@ -1,0 +1,186 @@
+<argtrust>
+
+	<domain>
+		<constant> Tapel </constant>
+		<constant> Sligo </constant>
+		<constant> Waga </constant>
+
+		<predicate> FewSRreq </predicate>
+		<predicate> SomeSRreq </predicate>
+		<predicate> ManySRreq </predicate>
+
+		<predicate> HardlySearched </predicate>
+		<predicate> Abt50percSearched </predicate>
+		<predicate> MostlySearched </predicate>
+
+		<predicate> LessSRneeded </predicate>
+		<predicate> SomeSRneeded </predicate>
+		<predicate> MoreSRneeded </predicate>
+
+		<predicate> MostSRneeded </predicate>
+
+	</domain>
+
+	<trustnet>
+		<agent> Me </agent>
+		<agent> BricklandMilitary </agent>
+		<agent> GordanianMilitary </agent>
+		<agent> GordanianFirstResponder </agent>
+
+		<!-- my trust -->
+		<trust>
+			<truster> Me </truster>
+			<trustee> BricklandMilitary </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> GordanianMilitary </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> GordanianFirstResponder </trustee>
+			<level> 0.9 </level>
+		</trust>
+
+	</trustnet>
+
+	<beliefbase>
+
+		<!-- My Beliefs -->
+		<!-- Tapel -->
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> HardlySearched(Tapel) </premise>
+				<conclusion> MoreSRneeded(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<!-- Sligo -->
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MostlySearched(Sligo) </premise>
+				<premise> FewSRreq(Sligo) </premise>
+				<conclusion> LessSRneeded(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<!-- Waga -->
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> Abt50percSearched(Waga) </premise>
+				<premise> SomeSRreq(Waga) </premise>
+				<conclusion> MoreSRneeded(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> Abt50percSearched(Waga) </premise>
+				<premise> FewSRreq(Waga) </premise>
+				<conclusion> SomeSRneeded(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<!-- Combine to obtain MostSRneeded -->
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MoreSRneeded(Tapel) </premise>
+				<premise> LessSRneeded(Sligo) </premise>
+				<premise> SomeSRneeded(Waga) </premise>
+				<conclusion> MostSRneeded(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MoreSRneeded(Tapel) </premise>
+				<premise> MoreSRneeded(Waga) </premise>
+				<conclusion> NOT MostSRneeded(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<!-- Facts -->
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> ManySRreq(Tapel) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> HardlySearched(Tapel) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> MostlySearched(Sligo) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> FewSRreq(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianFirstResponder </agent>
+			<fact> SomeSRreq(Tapel) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianFirstResponder </agent>
+			<fact> Abt50percSearched(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianFirstResponder </agent>
+			<fact> FewSRreq(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianMilitary </agent>
+			<fact> FewSRreq(Tapel) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianMilitary </agent>
+			<fact> FewSRreq(Sligo) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianMilitary </agent>
+			<fact> SomeSRreq(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+	</beliefbase>
+
+	<query>
+		<agent> Me </agent>
+		<question> MostSRneeded(Tapel) </question>
+	</query>
+
+</argtrust>
