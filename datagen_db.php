@@ -668,10 +668,10 @@ if ($result) {
         $premise='';
         $count=0;
         while($innerrow = mysqli_fetch_array($return)) {
-            $qagnt_rules_not_end_argument[$row[0]]["premises"][count]["logic_display"]=$innerrow[0];
-            $qagnt_rules_not_end_argument[$row[0]]["premises"][count]["predicate"]=$innerrow[1];
-            $qagnt_rules_not_end_argument[$row[0]]["premises"][count]["constant"]=$innerrow[2];
-            $qagnt_rules_not_end_argument[$row[0]]["premises"][count]["is_negated"]=$innerrow[3];
+            $qagnt_rules_not_end_argument[$row[0]]["premises"][$count]["logic_display"]=$innerrow[0];
+            $qagnt_rules_not_end_argument[$row[0]]["premises"][$count]["predicate"]=$innerrow[1];
+            $qagnt_rules_not_end_argument[$row[0]]["premises"][$count]["constant"]=$innerrow[2];
+            $qagnt_rules_not_end_argument[$row[0]]["premises"][$count]["is_negated"]=$innerrow[3];
               if($count > 0){ $premise .= ", "; }
               $premise .= $innerrow[0];
               $count++;
@@ -783,10 +783,10 @@ if ($result) {
         $premise='';
         $count=0;
         while($innerrow = mysqli_fetch_array($return)) {
-            $qagnt_rules_end_argument[$row[0]]["premises"][count]["logic_display"]=$innerrow[0];
-            $qagnt_rules_end_argument[$row[0]]["premises"][count]["predicate"]=$innerrow[1];
-            $qagnt_rules_end_argument[$row[0]]["premises"][count]["constant"]=$innerrow[2];
-            $qagnt_rules_end_argument[$row[0]]["premises"][count]["is_negated"]=$innerrow[3];
+            $qagnt_rules_end_argument[$row[0]]["premises"][$count]["logic_display"]=$innerrow[0];
+            $qagnt_rules_end_argument[$row[0]]["premises"][$count]["predicate"]=$innerrow[1];
+            $qagnt_rules_end_argument[$row[0]]["premises"][$count]["constant"]=$innerrow[2];
+            $qagnt_rules_end_argument[$row[0]]["premises"][$count]["is_negated"]=$innerrow[3];
             if($count > 0){ $premise .= ", ";}
             $premise .= $innerrow[0];    
             $count++;
