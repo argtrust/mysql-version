@@ -72,13 +72,13 @@
 		<belief>
 			<agent> Me </agent>
 			<fact> Phony(PhoneCalls) </fact>
-			<level> 0.5 </level>
+			<level> 0.3 </level>
 		</belief>
 
 		<belief>
 			<agent> Me </agent>
 			<fact> NOT Phony(PhoneCalls) </fact>
-			<level> 0.5 </level>
+			<level> 0.7 </level>
 		</belief>
 
 		<belief>
