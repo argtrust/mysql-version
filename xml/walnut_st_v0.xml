@@ -62,7 +62,7 @@
 
 		<trust>
 			<truster> Me </truster>
-			<trustee> Many </trustee>
+			<trustee> Manny </trustee>
 			<level> 1.0 </level>
 		</trust>
 	</trustnet>
@@ -222,7 +222,7 @@
 				<premise> NOT Membership(Kids_Pelts) </premise>
 				<conclusion> NOT AtLocation(WalnutSt_Pelts) </conclusion>
 			</rule>
-			<level> 0.5 </level>
+			<level> 1.0 </level>
 		</belief>
 
 	</beliefbase>
