@@ -1,0 +1,187 @@
+<argtrust>
+	<domain>
+		<constant> WalnutStLot_Fire </constant>
+		<constant> PhoneCalls </constant>
+		<constant> Pelts </constant>
+		<constant> AliceOnOakSt_Pelts </constant>
+		<constant> WalnutSt_Gang </constant>
+		<constant> WalnutSt_Kids </constant>
+		<constant> WalnutSt_Pelts </constant>
+		<constant> StdOpProc </constant>
+		<constant> Kids_Pelts </constant>
+
+		<predicate> AtLocation </predicate>
+		<predicate> Phony </predicate>
+		<predicate> TonightPlan </predicate>
+		<predicate> Membership </predicate>
+		<predicate> Follow </predicate>
+	</domain>
+
+	<trustnet>
+		<agent> Me </agent>
+		<agent> Report </agent>
+		<agent> Tony </agent>
+		<agent> BeatPatrol </agent>
+		<agent> Resident </agent>
+		<agent> Manny </agent>
+
+		<!-- my trust -->
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Report </trustee>
+			<level> 0.7 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Tony </trustee>
+			<level> 1.0 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> BeatPatrol </trustee>
+			<level> 1.0 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Resident </trustee>
+			<level> 0.8 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Manny </trustee>
+			<level> 1.0 </level>
+		</trust>
+	</trustnet>
+
+	<beliefbase>
+		<!-- facts -->
+		<belief>
+			<agent> Me </agent>
+			<fact> Phony(PhoneCalls) </fact>
+			<level> 0.3 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<fact> NOT Phony(PhoneCalls) </fact>
+			<level> 0.7 </level>
+		</belief>
+
+		<belief>
+			<agent> Report </agent>
+			<fact> AtLocation(WalnutStLot_Fire) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Tony </agent>
+			<fact> TonightPlan(Pelts) </fact>
+			<level> 0.6 </level>
+		</belief>
+
+		<belief>
+			<agent> BeatPatrol </agent>
+			<fact> AtLocation(AliceOnOakSt_Pelts) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Resident </agent>
+			<fact> AtLocation(WalnutSt_Gang) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Manny </agent>
+			<fact> AtLocation(WalnutSt_Kids) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Manny </agent>
+			<fact> NOT Membership(Kids_Pelts) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<!-- rules -->
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> AtLocation(WalnutStLot_Fire) </premise>
+				<premise> Phony(PhoneCalls) </premise>
+				<conclusion> NOT Follow(StdOpProc) </conclusion>
+			</rule>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> AtLocation(WalnutStLot_Fire) </premise>
+				<premise> AtLocation(WalnutSt_Pelts) </premise>
+				<conclusion> NOT Follow(StdOpProc) </conclusion>
+			</rule>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> AtLocation(WalnutStLot_Fire) </premise>
+				<premise> NOT AtLocation(WalnutSt_Pelts) </premise>
+				<premise> NOT Phony(PhoneCalls) </premise>
+				<conclusion> Follow(StdOpProc) </conclusion>
+			</rule>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> TonightPlan(Pelts) </premise>
+				<premise> AtLocation(WalnutStLot_Fire) </premise>
+				<conclusion> AtLocation(WalnutSt_Pelts) </conclusion>
+			</rule>
+			<level> 0.5 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> AtLocation(AliceOnOakSt_Pelts) </premise>
+				<conclusion> NOT AtLocation(WalnutSt_Pelts) </conclusion>
+			</rule>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> AtLocation(WalnutSt_Gang) </premise>
+				<conclusion> AtLocation(WalnutSt_Pelts) </conclusion>
+			</rule>
+			<level> 0.9 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> AtLocation(WalnutSt_Kids) </premise>
+				<premise> NOT Membership(Kids_Pelts) </premise>
+				<conclusion> NOT AtLocation(WalnutSt_Pelts) </conclusion>
+			</rule>
+			<level> 1.0 </level>
+		</belief>
+
+	</beliefbase>
+
+	<query>
+		<agent> Me </agent>
+		<question> Follow(StdOpProc) </question>
+	</query>
+</argtrust>
