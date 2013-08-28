@@ -1,7 +1,6 @@
 <argtrust>
 	<domain>
 		<constant> WalnutStLot_Fire </constant>
-		<constant> WalnutSt_People </constant>
 		<constant> PhoneCalls </constant>
 		<constant> Pelts </constant>
 		<constant> AliceOnOakSt_Pelts </constant>
