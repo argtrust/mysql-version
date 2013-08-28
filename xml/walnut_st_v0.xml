@@ -1,6 +1,6 @@
 <argtrust>
 	<domain>
-		<constant> WalnutStLot, Fire </constant>
+		<constant> WalnutStLot_Fire </constant>
 		<constant> WalnutSt_People </constant>
 		<constant> PhoneCalls </constant>
 		<constant> Pelts </constant>
@@ -83,7 +83,7 @@
 
 		<belief>
 			<agent> Report </agent>
-			<fact> AtLocation(WalnutStLot, Fire) </fact>
+			<fact> AtLocation(WalnutStLot_Fire) </fact>
 			<level> 1.0 </level>
 		</belief>
 
@@ -139,7 +139,7 @@
 		<belief>
 			<agent> Me </agent>
 			<rule>
-				<premise> AtLocation(WalnutStLot, Fire) </premise>
+				<premise> AtLocation(WalnutStLot_Fire) </premise>
 				<premise> Phony(PhoneCalls) </premise>
 				<conclusion> NOT Follow(StdOpProc) </conclusion>
 			</rule>
@@ -169,7 +169,7 @@
 		<belief>
 			<agent> Me </agent>
 			<rule>
-				<premise> AtLocation(WalnutStLot, Fire) </premise>
+				<premise> AtLocation(WalnutStLot_Fire) </premise>
 				<premise> AtLocation(WalnutSt_Pelts) </premise>
 				<conclusion> NOT Follow(StdOpProc) </conclusion>
 			</rule>
@@ -179,7 +179,7 @@
 		<belief>
 			<agent> Me </agent>
 			<rule>
-				<premise> AtLocation(WalnutStLot, Fire) </premise>
+				<premise> AtLocation(WalnutStLot_Fire) </premise>
 				<premise> NOT AtLocation(WalnutSt_Pelts) </premise>
 				<premise> NOT Phony(PhoneCalls) </premise>
 				<conclusion> Follow(StdOpProc) </conclusion>
@@ -191,7 +191,7 @@
 			<agent> Me </agent>
 			<rule>
 				<premise> TonightPlan(Pelts) </premise>
-				<premise> AtLocation(WalnutStLot, Fire) </premise>
+				<premise> AtLocation(WalnutStLot_Fire) </premise>
 				<conclusion> AtLocation(WalnutSt_Pelts) </conclusion>
 			</rule>
 			<level> 0.5 </level>
