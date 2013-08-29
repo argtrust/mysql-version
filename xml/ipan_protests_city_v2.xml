@@ -113,7 +113,7 @@
 				<premise> ManyVehiclesHQ(Waga) </premise>
 				<conclusion> PlanViolence(Waga) </conclusion>
 			</rule>
-			<level> 1 </level>
+			<level> 0.7 </level>
 		</belief>
 
 

@@ -88,7 +88,7 @@
 				<premise> ManyVehiclesHQ(Lion) </premise>
 				<conclusion> PlanViolence(Lion) </conclusion>
 			</rule>
-			<level> 1 </level>
+			<level> 0.7 </level>
 		</belief>
 
 		<belief>
