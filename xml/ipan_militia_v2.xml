@@ -9,7 +9,7 @@
 		<predicate> SomeIncidents </predicate>
 		<predicate> ManyIncidents </predicate>
 		<predicate> ManyVehiclesHQ </predicate>
-		<predicate> IncViolence </predicate>
+		<predicate> IncrViolence </predicate>
 
 		<predicate> PlanViolence </predicate>
 		<predicate> MuchViolence </predicate>
@@ -95,7 +95,7 @@
 			<agent> Me </agent>
 			<rule>
 				<premise> PlanViolence(Lion) </premise>
-				<premise> IncViolence(Lion) </premise>
+				<premise> IncrViolence(Lion) </premise>
 				<conclusion> MuchViolence(Lion) </conclusion>
 			</rule>
 			<level> 1 </level>
@@ -167,7 +167,7 @@
 
 		<belief>
 			<agent> Informants </agent>
-			<fact> IncViolence(Lion) </fact>
+			<fact> IncrViolence(Lion) </fact>
 			<level> 1 </level>
 		</belief>
 

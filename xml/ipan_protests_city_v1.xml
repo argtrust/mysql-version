@@ -9,7 +9,7 @@
 		<predicate> SomeProtests </predicate>
 		<predicate> ManyProtests </predicate>
 		<predicate> ManyVehiclesHQ </predicate>
-		<predicate> IncViolence </predicate>
+		<predicate> IncrViolence </predicate>
 
 		<predicate> LittleDisruption </predicate>
 		<predicate> SomeDisruption </predicate>
@@ -112,7 +112,7 @@
 			<agent> Me </agent>
 			<rule>
 				<premise> ManyVehiclesHQ(Waga) </premise>
-				<premise> IncViolence(Waga) </premise>
+				<premise> IncrViolence(Waga) </premise>
 				<conclusion> MuchDisruption(Waga) </conclusion>
 			</rule>
 			<level> 1 </level>
@@ -241,7 +241,7 @@
 
 		<belief>
 			<agent> Informant </agent>
-			<fact> IncViolence(Waga) </fact>
+			<fact> IncrViolence(Waga) </fact>
 			<level> 1 </level>
 		</belief>
 
