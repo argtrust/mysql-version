@@ -1,0 +1,238 @@
+<argtrust>
+
+	<domain>
+		<constant> Tapel </constant>
+		<constant> Sligo </constant>
+		<constant> Waga </constant>
+
+		<predicate> FewProtests </predicate>
+		<predicate> SomeProtests </predicate>
+		<predicate> ManyProtests </predicate>
+		<predicate> ManyVehiclesHQ </predicate>
+		<predicate> IncrViolence </predicate>
+		<predicate> MilitiaCoopReliefOps </predicate>
+
+		<predicate> SuspendProtests </predicate>
+		<predicate> PlanViolence </predicate>
+		<predicate> MuchDisruption </predicate>
+
+		<predicate> MostReliefDisruptions </predicate>
+
+	</domain>
+
+	<trustnet>
+		<agent> Me </agent>
+		<agent> BricklandMilitary </agent>
+		<agent> GordanianMilitary </agent>
+		<agent> Twitter </agent>
+		<agent> Informant </agent>
+		<agent> GordanianGovt </agent>
+
+		<!-- my trust -->
+		<trust>
+			<truster> Me </truster>
+			<trustee> BricklandMilitary </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> GordanianMilitary </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Twitter </trustee>
+			<level> 0.6 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Informant </trustee>
+			<level> 0.3 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> GordanianGovt </trustee>
+			<level> 1 </level>
+		</trust>
+
+	</trustnet>
+
+	<beliefbase>
+
+		<!-- My Beliefs -->
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> ManyProtests(Tapel) </premise>
+				<conclusion> MuchDisruption(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> FewProtests(Sligo) </premise>
+				<conclusion> NOT MuchDisruption(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeProtests(Sligo) </premise>
+				<conclusion> NOT MuchDisruption(Sligo) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> FewProtests(Waga) </premise>
+				<conclusion> NOT MuchDisruption(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeProtests(Waga) </premise>
+				<conclusion> NOT MuchDisruption(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> ManyVehiclesHQ(Waga) </premise>
+				<conclusion> PlanViolence(Waga) </conclusion>
+			</rule>
+			<level> 0.7 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> PlanViolence(Waga) </premise>
+				<premise> IncrViolence(Waga) </premise>
+				<conclusion> MuchDisruption(Waga) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MilitiaCoopReliefOps(Tapel) </premise>
+				<conclusion> SuspendViolence(Tapel) </conclusion>
+			</rule>
+			<level> 0.5 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SuspendViolence(Tapel) </premise>
+				<conclusion> NOT MostReliefDisruptions(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Tapel) </premise>
+				<premise> NOT MuchDisruption(Sligo) </premise>
+				<premise> NOT MuchDisruption(Waga) </premise>
+				<conclusion> MostReliefDisruptions(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchDisruption(Tapel) </premise>
+				<premise> MuchDisruption(Waga) </premise>
+				<conclusion> NOT MostReliefDisruptions(Tapel) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<!-- Facts -->
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> ManyProtests(Tapel) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> FewProtests(Sligo) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> FewProtests(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Twitter </agent>
+			<fact> ManyProtests(Tapel) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Twitter </agent>
+			<fact> SomeProtests(Sligo) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Twitter </agent>
+			<fact> SomeProtests(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianMilitary </agent>
+			<fact> ManyVehiclesHQ(Sligo) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianMilitary </agent>
+			<fact> ManyVehiclesHQ(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Informant </agent>
+			<fact> IncrViolence(Waga) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianGovt </agent>
+			<fact> MilitiaCoopReliefOps(Tapel) </fact>
+			<level> 1 </level>
+		</belief>
+
+	</beliefbase>
+
+	<query>
+		<agent> Me </agent>
+		<question> MostReliefDisruptions(Tapel) </question>
+	</query>
+
+</argtrust>
