@@ -1,0 +1,213 @@
+<argtrust>
+
+	<domain>
+		<constant> Dragon </constant>
+		<constant> Lion </constant>
+		<constant> Red </constant>
+
+		<predicate> FewIncidents </predicate>
+		<predicate> SomeIncidents </predicate>
+		<predicate> ManyIncidents </predicate>
+		<predicate> ManyVehiclesHQ </predicate>
+		<predicate> IncrViolence </predicate>
+		<predicate> CoopReliefOps </predicate>
+
+		<predicate> PlanViolence </predicate>
+		<predicate> SuspendViolence </predicate>
+		<predicate> MuchViolence </predicate>
+
+		<predicate> MostViolent </predicate>
+
+	</domain>
+
+	<trustnet>
+		<agent> Me </agent>
+		<agent> BricklandMilitary </agent>
+		<agent> GordanianMilitary </agent>
+		<agent> Twitter </agent>
+		<agent> Informants </agent>
+		<agent> GordanianGovt </agent>
+
+		<!-- my trust -->
+		<trust>
+			<truster> Me </truster>
+			<trustee> BricklandMilitary </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> GordanianMilitary </trustee>
+			<level> 1 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Twitter </trustee>
+			<level> 0.6 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Informants </trustee>
+			<level> 0.3 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> GordanianGovt </trustee>
+			<level> 1 </level>
+		</trust>
+	</trustnet>
+
+	<beliefbase>
+
+		<!-- My Beliefs -->
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeIncidents(Dragon) </premise>
+				<conclusion> NOT MuchViolence(Dragon) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SomeIncidents(Lion) </premise>
+				<conclusion> NOT MuchViolence(Lion) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> ManyIncidents(Red) </premise>
+				<conclusion> MuchViolence(Red) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> ManyVehiclesHQ(Lion) </premise>
+				<conclusion> PlanViolence(Lion) </conclusion>
+			</rule>
+			<level> 0.7 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> PlanViolence(Lion) </premise>
+				<premise> IncrViolence(Lion) </premise>
+				<conclusion> MuchViolence(Lion) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> CoopReliefOps(Red) </premise>
+				<conclusion> SuspendViolence(Red) </conclusion>
+			</rule>
+			<level> 0.5 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> SuspendViolence(Red) </premise>
+				<conclusion> NOT MostViolent(Red) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> NOT MuchViolence(Dragon) </premise>
+				<premise> NOT MuchViolence(Lion) </premise>
+				<premise> MuchViolence(Red) </premise>
+				<conclusion> MostViolent(Red) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> MuchViolence(Lion) </premise>
+				<premise> MuchViolence(Red) </premise>
+				<conclusion> NOT MostViolent(Red) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<!-- Facts -->
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> ManyIncidents(Red) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> SomeIncidents(Lion) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> BricklandMilitary </agent>
+			<fact> SomeIncidents(Dragon) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Twitter </agent>
+			<fact> ManyIncidents(Red) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Twitter </agent>
+			<fact> SomeIncidents(Lion) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> Twitter </agent>
+			<fact> SomeIncidents(Dragon) </fact>
+			<level> 1.0 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianMilitary </agent>
+			<fact> ManyVehiclesHQ(Lion) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Informants </agent>
+			<fact> IncrViolence(Lion) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> GordanianGovt </agent>
+			<fact> CoopReliefOps(Red) </fact>
+			<level> 1 </level>
+		</belief>
+
+	</beliefbase>
+
+	<query>
+		<agent> Me </agent>
+		<question> MostViolent(Red) </question>
+	</query>
+
+</argtrust>
