@@ -1,0 +1,13 @@
+digraph g {
+    graph [size="5,5", ratio=fill, overlap=false, splines=true, margin=".10"];
+    node [label="\N"];
+    graph [bb="0 0 3000 3000"];    
+  subgraph cluster_trust_net {
+    graph [bb="", style="filled, rounded", fillcolor=whitesmoke];
+    node [shape=circle,
+      style=filled,
+      fillcolor=lavender,
+      fontname=arial];
+    edge [color=blue];
+}
+}

@@ -4,7 +4,9 @@
 	$timestep = $_GET['timestep'];
 	$timestep2 = $timestep+1;
 	#	echo $node;
-	$link = mysqli_connect('jsalvitdbinstance.cku3opv9prdt.us-east-1.rds.amazonaws.com','trust_user','trust123', 'trust');
+	include 'settings.php';
+	$link = mysqli_connect($dbHost,$dbUser,$dbPass, $dbName);
+
 	if (!$link) {
 		die('Could not connect: ' . mysql_error());
 	}
