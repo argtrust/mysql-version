@@ -4,7 +4,8 @@
 	$timestep = $_GET['timestep'];
 	$timestep2 = $timestep+1;
 	#	echo $node;
-	$link = mysqli_connect('jsalvitdbinstance.cku3opv9prdt.us-east-1.rds.amazonaws.com','trust_user','trust123', 'trust');
+        include 'settings.php';
+        $link = mysqli_connect($dbHost,$dbUser,$dbPass, $dbName);
 	if (!$link) {
 		die('Could not connect: ' . mysql_error());
 	}
@@ -13,26 +14,29 @@
 #		  echo "id is ".substr($_GET['nodeID'],4);
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			if( !$result )
+#    			    echo mysqli_error($link);
+#			mysqli_free_result($result);
 
 			$sql="call copy_beliefs('".$sessionID."',".$timestep.",".$timestep2.",".substr($_GET['nodeID'],4).",-1);";
+#			echo $sql;
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 /*
 			$sql="call copy_fact('".$sessionID."',".$timestep.",".$timestep2.",".substr($_GET['nodeID'],4).");";
 //			$sql="call copy_fact('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
 //			print_r($result);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_rules('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 */
 			$sql="call copy_question('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 			mysqli_close($link);
 			if(!array_key_exists('headless', $_GET)){			
 				header( 'Location: index.php?sessionID='.$sessionID.'&timestep='.$timestep2 );
@@ -41,15 +45,15 @@
  #			echo "" .substr($_GET['nodeID'],5);
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",".substr($_GET['nodeID'],5).");";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_beliefs('".$sessionID."',".$timestep.",".$timestep2.",-1,".substr($_GET['nodeID'],5).");";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_question('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 			mysqli_close($link);
 			
 			if(!array_key_exists('headless', $_GET)){			
@@ -59,15 +63,15 @@
  #			echo "" .substr($_GET['nodeID'],5);
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_beliefs('".$sessionID."',".$timestep.",".$timestep2.",".substr($_GET['nodeID'],4).",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_question('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 			mysqli_close($link);
 			
 			if(!array_key_exists('headless', $_GET)){

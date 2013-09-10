@@ -4,3 +4,9 @@ $dbUser='trust_user';
 $dbPass='trust123';
 $dbName='trust';
 ?>
+<?php
+$dbHost='localhost';
+$dbUser='root';
+$dbPass='';
+$dbName='trust';
+?>

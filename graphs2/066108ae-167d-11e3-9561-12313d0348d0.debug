@@ -1,0 +1,109 @@
+//agents[1] = Me
+//agents[3] = Recon
+//agents[2] = UAV
+//agents[4] = Informant
+//num_agents=4 or 4
+//qagnt_facts_not_end_argument[6]: is_negated=0, pred=InArea, const=Campfires, logic='InArea(Campfires)', is_rule=0, end_argument=0, num_paths=1, levels=(0.50)
+//qagnt_facts[6]: is_negated=0, pred=InArea, const=Campfires, logic='InArea(Campfires)', is_rule=0, end_argument=0, num_paths=1, levels=(0.50)
+//qagnt_beliefs[6]: is_negated=0, pred=InArea, const=Campfires, logic='InArea(Campfires)', is_rule=0, end_argument=0, num_paths=1, levels=(0.50)
+//qagnt_facts_not_end_argument[7]: is_negated=0, pred=Many, const=Enemy, logic='Many(Enemy)', is_rule=0, end_argument=0, num_paths=1, levels=(0.30)
+//qagnt_facts[7]: is_negated=0, pred=Many, const=Enemy, logic='Many(Enemy)', is_rule=0, end_argument=0, num_paths=1, levels=(0.30)
+//qagnt_beliefs[7]: is_negated=0, pred=Many, const=Enemy, logic='Many(Enemy)', is_rule=0, end_argument=0, num_paths=1, levels=(0.30)
+//qagnt_facts_not_end_argument[8]: is_negated=1, pred=InArea, const=Vehicles, logic='NOT(InArea(Vehicles))', is_rule=0, end_argument=0, num_paths=1, levels=(0.95)
+//qagnt_facts[8]: is_negated=1, pred=InArea, const=Vehicles, logic='NOT(InArea(Vehicles))', is_rule=0, end_argument=0, num_paths=1, levels=(0.95)
+//qagnt_beliefs[8]: is_negated=1, pred=InArea, const=Vehicles, logic='NOT(InArea(Vehicles))', is_rule=0, end_argument=0, num_paths=1, levels=(0.95)
+//num_qagnt_facts_not_end_argument=3 or 3
+//num_qagnt_facts=3 or 3
+//num_qagnt_beliefs=3 or 3
+//num_qagnt_facts_end_argument=0 or 0
+//num_qagnt_facts=3 or 3
+//num_qagnt_beliefs=3 or 3
+//agents_assoc_qagnt_facts[6] = (2, 1)
+//agents_assoc_qagnt_facts[7] = (4, 1)
+//agents_assoc_qagnt_facts[8] = (3, 1)
+//qagnt_rules_not_end_argument[88]:, inference(is_negated=0, pred=InArea, const=HVT), num_premises=1, rule_display='InArea(HVT) :- InArea(Enemy)', is_rule=1, end_argument=0, level=1.00
+//qagnt_rules[88]:, inference(is_negated=0, pred=InArea, const=HVT), num_premises=1, rule_display='InArea(HVT) :- InArea(Enemy)', is_rule=1, end_argument=0, level=1.00
+//qagnt_beliefs[88]:, inference(is_negated=0, pred=InArea, const=HVT), num_premises=1, rule_display='InArea(HVT) :- InArea(Enemy)', is_rule=1, end_argument=0, level=1.00
+//num_qagnt_rules_not_end_argument=1 or 1
+//num_qagnt_rules=1 or 1
+//num_qagnt_beliefs=4 or 4
+//qagnt_rules_end_argument[89]: inference(is_negated=1, pred=Proceed, const=Mission), num_premises=1, rule_display='NOT(Proceed(Mission)) :- Many(Enemy)', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(IN)
+//qagnt_rules[89]: inference(is_negated=1, pred=Proceed, const=Mission), num_premises=1, rule_display='NOT(Proceed(Mission)) :- Many(Enemy)', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(IN)
+//qagnt_beliefs[89]: inference(is_negated=1, pred=Proceed, const=Mission), num_premises=1, rule_display='NOT(Proceed(Mission)) :- Many(Enemy)', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(IN)
+//qagnt_rules_end_argument[90]: inference(is_negated=0, pred=Proceed, const=Mission), num_premises=1, rule_display='Proceed(Mission) :- InArea(HVT)', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(OUT)
+//qagnt_rules[90]: inference(is_negated=0, pred=Proceed, const=Mission), num_premises=1, rule_display='Proceed(Mission) :- InArea(HVT)', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(OUT)
+//qagnt_beliefs[90]: inference(is_negated=0, pred=Proceed, const=Mission), num_premises=1, rule_display='Proceed(Mission) :- InArea(HVT)', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(OUT)
+//qagnt_rules_end_argument[91]: inference(is_negated=0, pred=InArea, const=Enemy), num_premises=1, rule_display='InArea(Enemy) :- InArea(Campfires)', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(OUT)
+//qagnt_rules[91]: inference(is_negated=0, pred=InArea, const=Enemy), num_premises=1, rule_display='InArea(Enemy) :- InArea(Campfires)', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(OUT)
+//qagnt_beliefs[91]: inference(is_negated=0, pred=InArea, const=Enemy), num_premises=1, rule_display='InArea(Enemy) :- InArea(Campfires)', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(OUT)
+//qagnt_rules_end_argument[92]: inference(is_negated=1, pred=InArea, const=Enemy), num_premises=1, rule_display='NOT(InArea(Enemy)) :- NOT(InArea(Vehicles))', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(IN)
+//qagnt_rules[92]: inference(is_negated=1, pred=InArea, const=Enemy), num_premises=1, rule_display='NOT(InArea(Enemy)) :- NOT(InArea(Vehicles))', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(IN)
+//qagnt_beliefs[92]: inference(is_negated=1, pred=InArea, const=Enemy), num_premises=1, rule_display='NOT(InArea(Enemy)) :- NOT(InArea(Vehicles))', is_rule=1, end_argument=1, level=1.00, num_statuses=1, statuses=(IN)
+//num_qagnt_rules_end_argument=4 or 4
+//num_qagnt_rules=5 or 5
+//num_qagnt_beliefs=8 or 8
+//88_90: inference88(InArea(HVT)) -> rule90(Proceed(Mission))
+//91_88: inference91(InArea(Enemy)) -> rule88(InArea(HVT))
+//6_91: fact6(InArea(Campfires)) -> rule91(InArea(Enemy))
+//8_92: fact8(NOT(InArea(Vehicles))) -> rule92(NOT(InArea(Enemy)))
+//7_89: fact7(Many(Enemy)) -> rule89(NOT(Proceed(Mission)))
+//num_belief_arrows=5 or 5
+//From(88): (90)
+//From(91): (88)
+//From(6): (91)
+//From(8): (92)
+//From(7): (89)
+//num_belief_arrows_from=5 or 5
+//To(90): (88)
+//To(88): (91)
+//To(91): (6)
+//To(92): (8)
+//To(89): (7)
+//num_belief_arrows_to=5 or 5
+//rebut: inference90(Proceed(Mission)) -> inference89(NOT(Proceed(Mission)))
+//undermine: inference92(NOT(InArea(Enemy))) -> inference90(Proceed(Mission))
+//rebut: inference92(NOT(InArea(Enemy))) -> inference91(InArea(Enemy))
+//rebut: inference91(InArea(Enemy)) -> inference92(NOT(InArea(Enemy)))
+//rebut: inference89(NOT(Proceed(Mission))) -> inference90(Proceed(Mission))
+//num_attack_arrows=5 or 5
+//agent1(1:Me) -> agent3(3:Recon): level=0.95
+//agent1(1:Me) -> agent2(2:UAV): level=0.50
+//agent1(1:Me) -> agent4(4:Informant): level=0.30
+//num_agent_arrows=3 or 3
+//From(1): (3, 2, 4)
+//num_agent_arrows_from=1 or 1
+//To(3): (1)
+//To(2): (1)
+//To(4): (1)
+//num_agent_arrows_to=3 or 3
+//agent2(2:UAV) -> fact6(6:InArea(Campfires)): level=1.00
+//agent4(4:Informant) -> fact7(7:Many(Enemy)): level=1.00
+//agent3(3:Recon) -> fact8(8:NOT(InArea(Vehicles))): level=1.00
+//num_agent_fact_arrows=3 or 3
+//From(2): (6)
+//From(4): (7)
+//From(3): (8)
+//num_agent_fact_arrows_from=3 or 3
+//To(6): (2)
+//To(7): (4)
+//To(8): (3)
+//num_agent_fact_arrows_to=3 or 3
+//agent1(1:Me) -> rule88(88:InArea(HVT)): level=1.00
+//agent1(1:Me) -> rule89(89:NOT(Proceed(Mission))): level=1.00
+//agent1(1:Me) -> rule90(90:Proceed(Mission)): level=1.00
+//agent1(1:Me) -> rule91(91:InArea(Enemy)): level=1.00
+//agent1(1:Me) -> rule92(92:NOT(InArea(Enemy))): level=1.00
+//num_agent_rule_arrows=5 or 5
+//From(1): (88, 89, 90, 91, 92)
+//num_agent_rule_arrows_from=1 or 1
+//To(88): (1)
+//To(89): (1)
+//To(90): (1)
+//To(91): (1)
+//To(92): (1)
+//num_agent_rule_arrows_to=5 or 5
+//argument(7808): level=0.95, status=IN, conclusion_display='NOT(InArea(Enemy))', num_agentIDs=2, agentIDs=(1, 3), num_beliefIDs=2, beliefIDs=(92, 8)
+//argument(7809): level=0.5, status=OUT, conclusion_display='InArea(Enemy)', num_agentIDs=2, agentIDs=(1, 2), num_beliefIDs=2, beliefIDs=(91, 6)
+//argument(7807): level=0.5, status=OUT, conclusion_display='Proceed(Mission)', num_agentIDs=2, agentIDs=(1, 2), num_beliefIDs=4, beliefIDs=(90, 88, 91, 6)
+//argument(7810): level=0.3, status=IN, conclusion_display='NOT(Proceed(Mission))', num_agentIDs=2, agentIDs=(1, 4), num_beliefIDs=2, beliefIDs=(89, 7)
+//num_arguments=4 or 4

@@ -1,0 +1,51 @@
+digraph g {
+    graph [size="5,5", ratio=fill, overlap=false, splines=true, margin=".10"];
+    node [label="\N"];
+    graph [bb="0 0 3000 3000"];    
+  subgraph cluster_trust_net {
+    graph [bb="", style="filled, rounded", fillcolor=whitesmoke];
+    node [shape=circle,
+      style=filled,
+      fillcolor=lavender,
+      fontname=arial];
+    edge [color=blue];
+agent1 [label=Me, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+agent3 [label=Recon, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+agent2 [label=UAV, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+agent4 [label=Informant, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+fact6 [label="InArea(Campfires):0.50", shape=box, fillcolor=lightcyan, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+fact8 [label="NOT(InArea(Vehicles)):0.95", shape=box, fillcolor=lightcyan, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+fact7 [label="Many(Enemy):0.30", shape=box, fillcolor=lightcyan, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule38 [label="InArea(HVT) :- InArea(Enemy):1.00", shape=box3d, fillcolor=lightblue, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference38 [label="InArea(HVT)", shape=box, fillcolor=lightcyan, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule38 -> inference38 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule39 [label="NOT(Proceed(Mission)) :- Many(Enemy):1.00", shape=box3d, fillcolor=lightblue, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule39 -> inference39 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference39 [label="NOT(Proceed(Mission)):1.00 : IN", shape=box, fillcolor=palegreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule40 [label="Proceed(Mission) :- InArea(HVT):1.00", shape=box3d, fillcolor=lightblue, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule40 -> inference40 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference40 [label="Proceed(Mission):1.00 : OUT", style="filled", fillcolor=pink, shape=box, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule41 [label="InArea(Enemy) :- InArea(Campfires):1.00", shape=box3d, fillcolor=lightblue, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule41 -> inference41 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference41 [label="InArea(Enemy):1.00 : OUT", style="filled", fillcolor=pink, shape=box, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule42 [label="NOT(InArea(Enemy)) :- NOT(InArea(Vehicles)):1.00", shape=box3d, fillcolor=lightblue, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+rule42 -> inference42 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference42 [label="NOT(InArea(Enemy)):1.00 : IN", shape=box, fillcolor=palegreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference38 -> rule40 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference41 -> rule38 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+fact6 -> rule41 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+fact8 -> rule42 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+fact7 -> rule39 [color=darkgreen, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference40 -> inference39 [label=rebut color=orange, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference42 -> inference40 [label=undermine color=orange, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference42 -> inference41 [label=rebut color=orange, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference41 -> inference42 [label=rebut color=orange, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+inference39 -> inference40 [label=rebut color=orange, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+agent1 -> agent3 [color=yellow, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+agent1 -> agent2 [color=yellow, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+agent1 -> agent4 [color=yellow, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+agent2 -> fact6 [color=crimson, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+agent3 -> fact8 [color=crimson, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+agent4 -> fact7 [color=crimson, href="javascript:void(0)", onclick="get_id('\L', '\N')"];
+}
+}

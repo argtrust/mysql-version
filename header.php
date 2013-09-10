@@ -1,6 +1,7 @@
 <?php
-$link = mysqli_connect('jsalvitdbinstance.cku3opv9prdt.us-east-1.rds.amazonaws.com','trust_user','trust123', 'trust');
-#$link = mysqli_connect('127.0.0.1','root','', 'trust');
+putenv('PATH=/usr/local/bin:');
+include 'settings.php';
+$link = mysqli_connect($dbHost,$dbUser,$dbPass, $dbName);
 if (!$link) {
 	die('Could not connect: ' . mysql_error());
 }
@@ -8,12 +9,13 @@ if (!$link) {
 //$command = "sh runTrust.sh ". $_GET['xmlfile']." ". $_GET['outputfile'];
 if(array_key_exists('xmlfile', $_GET)){
 	$graphType = 'default';
-	$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile']);
-	//echo "Session ID: (";
-	//echo $sessionID;
-	//echo ") END";
+	$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile'] ."");
+//	$sessionID2=exec("/usr/bin/python2.7 --version 2>&1");
+//	echo "Session ID: (";
+//	echo $sessionID;
+//	echo $sessionID2;
+//	echo ") END";
 	$timestep=1;
-
 	ob_start();
 	include 'datagen_db.php';
 	$contents = ob_get_contents();
@@ -25,7 +27,10 @@ if(array_key_exists('xmlfile', $_GET)){
 	$contents = ob_get_contents();
 	ob_end_clean();
 	$fp = file_put_contents("graphs2/".$sessionID.".dot",$contents);
+//	$output = exec("/usr/local/bin/dot graphs2/".$sessionID.".dot -Txdot -o graphs2/".$sessionID.".gv 2>&1");
 	$output = exec("dot graphs2/".$sessionID.".dot -Txdot -o graphs2/".$sessionID.".gv");
+//	echo $output;
+//	break;
 }else if(array_key_exists('sessionID', $_GET)){
 	$sessionID=$_GET['sessionID'];
 	$timestep=$_GET['timestep'];
