@@ -1,0 +1,187 @@
+<argtrust>
+	
+	<domain>
+		<constant> Campfires </constant>
+		<constant> Fall </constant>
+		<constant> AlQaeda </constant>
+		<constant> Fighters </constant>
+		<constant> Positions </constant>
+		<constant> People </constant>
+		<constant> Mission </constant>
+		<constant> HVT </constant>
+		<constant> Enemy </constant>
+
+		<predicate> InArea </predicate>
+		<predicate> InSeason </predicate>
+		<predicate> WellOrganized </predicate>
+		<predicate> WellEntrenched </predicate>
+		<predicate> Many </predicate>
+		<predicate> Foreign </predicate>
+		<predicate> WellEquipped </predicate>
+		<predicate> Safe </predicate>
+		<predicate> Proceed </predicate>
+	</domain>
+
+	<trustnet>
+		<agent> Me </agent>
+		<agent> UAV </agent>
+		<agent> Informants </agent>
+		<agent> Patrol </agent>
+		<agent> Recon </agent>
+
+		<!--  my trust -->
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> UAV </trustee>
+			<level> 1.0 </level>
+		</trust>
+
+		<trust>
+			<truster> Me </truster>
+			<trustee> Patrol </trustee>
+			<level> 0.8 </level>
+		</trust>
+	
+		<trust>
+			<truster> Me </truster>
+			<trustee> Recon </trustee>
+			<level> 1.0 </level>
+		</trust>
+		
+		<trust>
+			<truster> Me </truster>
+			<trustee> Informants </trustee>
+			<level> 0.4 </level>
+		</trust>
+	</trustnet>
+
+
+	<beliefbase>
+		<!-- facts -->
+		<belief>
+			<agent> Me </agent>
+			<fact> InSeason(Fall) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<fact> WellEquipped(Mission) </fact>
+			<level> 0.9 </level>
+		</belief>
+
+		<belief>
+			<agent> UAV </agent>
+			<fact> InArea(Campfires) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Informants </agent>
+			<fact> InArea(AlQaeda) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Patrol </agent>
+			<fact> WellOrganized(Fighters) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Recon </agent>
+			<fact> WellEntrenched(Positions) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Recon </agent>
+			<fact> Many(People) </fact>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Recon </agent>
+			<fact> Foreign(Fighters) </fact>
+			<level> 1 </level>
+		</belief>
+
+
+		<!--  my beliefs -->
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> InSeason(Fall) </premise>
+				<conclusion> InArea(Enemy) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> InArea(Enemy) </premise>
+				<premise> Many(People) </premise>
+				<conclusion> InArea(HVT) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> InArea(HVT) </premise>
+				<premise> Safe(Mission) </premise>
+				<conclusion> Proceed(Mission) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> InArea(Campfires) </premise>
+				<conclusion> Many(People) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> WellOrganized(Fighters) </premise>
+				<premise> Foreign(Fighters) </premise>
+				<conclusion> InArea(AlQaeda) </conclusion>
+			</rule>
+			<level> 0.7 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> WellEntrenched(Positions) </premise>
+				<premise> InArea(AlQaeda) </premise>
+				<conclusion> NOT Safe(Mission) </conclusion>
+			</rule>
+			<level> 1 </level>
+		</belief>
+
+		<belief>
+			<agent> Me </agent>
+			<rule>
+				<premise> WellEquipped(Mission) </premise>
+				<conclusion> Safe(Mission) </conclusion>
+			</rule>
+			<level> 0.8 </level>
+		</belief>
+
+	</beliefbase>
+
+	<query>
+		<agent> Me </agent>
+		<question> Proceed(Mission) </question>
+	</query>
+
+
+</argtrust>

@@ -1,0 +1,105 @@
+Scenario:
+=========
+If Fall, then enemy fighters will be moving through the valley.
+
+If enemy fighters are moving through the valley, and there are many
+#people in the valley then there may be an HVT with them.
+enemy fighters in the valley then there may be an HVT with them.
+
+If there is an HVT in the valley and it is safe, then carry out the mission
+
+Campfires in the valley indicate many people in the valley.
+
+The UAV sees campfires.
+
+It is Fall.
+
+Paid informants say that there are Al Queda operatives in the valley.
+
+A patrol reports well organised fighters in the valley.
+
+Well organised foreign fighters may be AQ.
+
+The recon team reports well entrenched positions.
+
+The recon team reports many people in the valley.
+
+The recon team reports foreigners in the valley.
+
+If there are well entrenched AQ operatives in the valley it is not
+safe to attack.
+
+If we are well equipped, then it is safe.
+
+We are well equipped.
+
+
+Thoughts:
+========
+So we have something like:
+
+fall => enemy
+
+enemy & many => HVT
+
+HVT & safe => mission
+
+campfires => many
+
+campfires
+
+fall
+
+(all of which gives an argument to carry out the mission based on the UAV
+data and also the data from the recon team).
+
+informants => aq
+
+patrol => well-organised
+
+well-organised & foreign => aq
+
+foreign
+
+well-entrenched
+
+well-entrenched & aq => not safe
+
+(which gives an argument against safety based on data from the informants,
+recon team and patrol)
+
+well-equipped => safe
+
+well-equipped
+
+(which gives an argument for safety)
+
+The two safety arguments will attack each other, and "not safe" will
+attack the "mission" argument.
+
+-----------------
+
+I think that this is much closer to the real situation, where:
+
+1) We trust the UAV a lot.
+
+2) We don't trust the informants much.
+
+3) We trust the recon team a lot.
+
+4) We trust the patrol almost as much as the recon team and UAV.
+
+however, unlike before, not all all the rules are strong.
+
+5) "well-equipped => safe" is middling in strength.
+
+6) "well-organised & foreign => aq" is also middling
+
+(The other rules are all strong, by which I think I mean they have value 1).
+
+My sense is that this comes down to how you weight the two middling
+rules (5 and 6 separately), and the weights and combination of trust
+in patrol and informants (combination of 2, 3 and 4) which will
+provide the strengths of the three interacting arguments.
+
+- Simon
