@@ -17,6 +17,9 @@
 <script src="./jQuery-contextMenu-master/prettify/prettify.js" type="text/javascript"></script>
 <script src="./jQuery-contextMenu-master/screen.js" type="text/javascript"></script>
 
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
 <script type="text/javascript" src="./prototype/prototype.js"></script>
 <script type="text/javascript" src="./path/path.js"></script>
 <script type="text/javascript" src="canviz.js"></script>
@@ -25,6 +28,7 @@
 <script type="text/javascript">
 		var mySessionID = "<?php echo $sessionID;?>";
 		var myTimestep = "<?php echo $timestep;?>";
+		var val = "<?php echo $graphDetail;?>";
 		var myCanviz;
 		var graphScale = .5;
 		document.observe('dom:loaded', function() {
@@ -37,22 +41,61 @@
 			}
 		}); 
 			
-		function updategraph(graphType, graphID){
+		function updategraph(graphType, graphID, graphDetail){
 			url = "index.php?sessionID=<?php echo $sessionID; ?>&timestep=<?php echo $timestep; ?>";
-			if(graphType == 'agent')
-				window.location.href=url+"&agentID="+graphID;
+			if((graphType == 'agent') && (graphDetail==2))
+				window.location.href=url+"&agentID="+graphID+"&graphDetail="+graphDetail;
+			else if((graphType == 'agent') && (graphDetail==1))
+				window.location.href=url+"&agentID="+graphID+"&graphDetail="+graphDetail;
+			else if(graphType == 'agent')
+				window.location.href=url+"&agentID="+graphID+"&graphDetail="+graphDetail;
+			else if((graphType == 'belief') && (graphDetail==2))
+				window.location.href=url+"&beliefID="+graphID+"&graphDetail="+graphDetail;
 			else if(graphType == 'belief')
-				window.location.href=url+"&beliefID="+graphID;
-			else if(graphType == 'rule')
-				window.location.href=url+"&ruleID="+graphID;
+				window.location.href=url+"&beliefID="+graphID+"&graphDetail="+graphDetail;
+			else if(graphType == 'rule') 
+				window.location.href=url+"&ruleID="+graphID+"&graphDetail="+graphDetail;
+			else if((graphType == 'argument') && (graphDetail==2))
+				window.location.href=url+"&argumentID="+graphID+"&graphDetail="+graphDetail;
+			else if((graphType == 'argument') && (graphDetail==1))
+				window.location.href=url+"&argumentID="+graphID+"&graphDetail="+graphDetail;
+			else if((graphType == 'argument') && (graphDetail==0))
+				window.location.href=url+"&argumentID="+graphID+"&graphDetail="+graphDetail;
 			else if(graphType == 'argument')
-				window.location.href=url+"&argumentID="+graphID;
-			else if(graphType == 'conclusion')
-				window.location.href=url+"&conclusionID="+graphID;
+				window.location.href=url+"&argumentID="+graphID+"&graphDetail="+graphDetail;
+			else if((graphType == 'conclusion') && (graphDetail==3))
+				window.location.href=url+"&conclusionID="+graphID+"&graphDetail="+graphDetail;
 			else
-				window.location.href=url;
+				window.location.href=url+"&graphDetail="+graphDetail;
 			
-		}
+		};
+
+		function get_graphType() {
+			var agent = "<?php echo $agentID;?>";
+			var belief = "<?php echo $beliefID;?>";
+			var rule = "<?php echo $ruleID;?>";
+			var argument = "<?php echo $argumentID;?>";
+			var graphType = '';
+			if(argument != '') {
+				graphType = 'argument';
+				return [graphType, argument];
+			}
+			else if (agent != '') {
+				graphType = 'agent';
+				return [graphType, agent];
+			}
+			else if(belief != '') {
+				graphType = 'belief';
+				return [graphType, belief];
+			}
+			else if(rule != '') {
+				graphType = 'rule';
+				return [graphType, rule];
+			}
+			else 
+				return [graphType, ''];
+
+		};
 
 		function load_graph () {
 			myCanviz.load(load_url());
@@ -97,8 +140,31 @@
 			
 			jQuery(window).load(function () {
 			     width= jQuery('#tabContainer').outerWidth();
+			     height = jQuery('.zoom').height();
 			     jQuery(".zoom").css("right", width);
 			     jQuery(".zoom").css("display", "block");
+			     jQuery(".detail").css("right", width);
+			     jQuery(".detail").css("top", height);
+			});
+
+			jQuery(function() {
+				var valMap = ['high-level', 'mid-level', 'low-level', 'expert'];
+			    jQuery( "#slider" ).slider({
+			    	value: Number(val),
+			    	min: 0,
+    				max: valMap.length - 1,
+    				step: 1,
+    				slide: function(event, ui) {
+    					//var detail = valMap[ui.value];
+    					//jQuery('#detail').val(detail);
+    					var graph = get_graphType();
+						var graphType = graph[0];
+						var graphID = graph[1];
+    					updategraph(graphType, graphID, ui.value);
+        			}
+    			});
+    			//alert(val);
+    			jQuery('#detail').val(valMap[jQuery("#slider").slider("value")]);
 			});
 			
 			function get_id(label, name) {
@@ -485,8 +551,15 @@
 		<div class="zoom">
 			<fieldset>
 				<legend>Zoom</legend>
-				<input type="button" class="little_button" value="-" onclick="change_scale(-.05)" />
 				<input type="button" class="little_button" value="+" onclick="change_scale(.05)" />
+				<input type="button" class="little_button" value="-" onclick="change_scale(-.05)" />
+			</fieldset>
+		</div>
+		<div class="detail">
+			<fieldset>
+				<legend>Detail</legend>
+				<input type="text" id="detail" style="border:0; color:#f6931f;" />
+				<div id="slider"></div>
 			</fieldset>
 		</div>
 		<div id="canviz"></div>

@@ -16,6 +16,7 @@ if(array_key_exists('xmlfile', $_GET)){
 //	echo $sessionID2;
 //	echo ") END";
 	$timestep=1;
+
 	ob_start();
 	include 'datagen_db.php';
 	$contents = ob_get_contents();
@@ -27,10 +28,7 @@ if(array_key_exists('xmlfile', $_GET)){
 	$contents = ob_get_contents();
 	ob_end_clean();
 	$fp = file_put_contents("graphs2/".$sessionID.".dot",$contents);
-//	$output = exec("/usr/local/bin/dot graphs2/".$sessionID.".dot -Txdot -o graphs2/".$sessionID.".gv 2>&1");
 	$output = exec("dot graphs2/".$sessionID.".dot -Txdot -o graphs2/".$sessionID.".gv");
-//	echo $output;
-//	break;
 }else if(array_key_exists('sessionID', $_GET)){
 	$sessionID=$_GET['sessionID'];
 	$timestep=$_GET['timestep'];
@@ -41,28 +39,52 @@ if(array_key_exists('xmlfile', $_GET)){
 	// TODO: look at issues with extract - is it bad to use extract?
 	extract($store);
 
+	//FOCUS is 'belief' DETAIL can be 'default' or 'low-level' 
 	if(array_key_exists('beliefID', $_GET)){
 		$beliefID=$_GET['beliefID'];
+		$graphDetail=$_GET['graphDetail'];
 		ob_start();
-		include 'dotgen_observed.php';
+		if($graphDetail=='2'){
+			//include 'belief_low.php';
+		} else {
+			include 'dotgen_observed.php';
+		}
 		$contents = ob_get_contents();
 		ob_end_clean();
+	//FOCUS is 'rule' DETAIL only 'expert'
 	}else if(array_key_exists('ruleID', $_GET)){
 		$ruleID=$_GET['ruleID'];
 		ob_start();
 		include 'dotgen_inferred.php';
 		$contents = ob_get_contents();
 		ob_end_clean();
+	//FOCUS is 'agent' DETAIL can be 'expert', 'low-level', or 'mid-level'	
 	}else if(array_key_exists('agentID', $_GET)){
 		$agentID=$_GET['agentID'];
 		ob_start();
-		include 'dotgen_agent.php';
+		/*if($graphDetail=='2'){
+			include 'agent_low.php';
+		} else if($graphDetail=='1') { 
+			include 'agent_mid.php';
+		} else {*/
+			include 'dotgen_agent.php';
+		//}
 		$contents = ob_get_contents();
 		ob_end_clean();
+	//FOCUS is 'argument' DETAIL can be 'expert', 'low-level', 'mid-level' or 'high-level'	
 	}else if(array_key_exists('argumentID', $_GET)){
 		$argumentID=$_GET['argumentID'];
+		$graphDetail=$_GET['graphDetail'];
 		ob_start();
-		include 'dotgen_argument.php';
+		if($graphDetail=='2'){
+			include 'dotgen_argument_low.php';
+		} else if($graphDetail=='1') { 
+			include 'dotgen_argument_mid.php';
+		} else if($graphDetail=='0') { 
+			include 'dotgen_argument_high.php';	
+		} else {
+			include 'dotgen_argument.php';
+		}
 		$contents = ob_get_contents();
 		ob_end_clean();
 	}else{

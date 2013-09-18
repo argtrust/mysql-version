@@ -18,6 +18,7 @@
 	else {
 		echo "Invalid file";
 	}
+	setcookie("userID", $_POST['userID'], time()+3600);
 	header("Location: index.php?xmlfile=$new_xml");
 
 ?>

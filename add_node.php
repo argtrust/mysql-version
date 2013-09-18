@@ -15,15 +15,15 @@
 #		  echo "id is ".substr($_GET['nodeID'],4);
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_beliefs('".$sessionID."',".$timestep.",".$timestep2.",-1,-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_question('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 			mysqli_close($link);
 			$script = "python addItems.py -s ".$sessionID . " -t ".$timestep2 . " -a ".$_GET['fromAgent'] . " -b ".$_GET['toAgent']. " -l ".$_GET['trust'];
 			exec($script);
@@ -34,15 +34,15 @@
  	}else if($_GET['type'] == 'fact'){
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_beliefs('".$sessionID."',".$timestep.",".$timestep2.",-1,-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_question('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 			mysqli_close($link);
 			$script = "python addItems.py -s ".$sessionID . " -t ".$timestep2 . " -a ".$_GET['agent'] . " -e \"".$_GET['belief']. "\" -l ".$_GET['trust'];
 			$result = exec($script);
@@ -53,15 +53,15 @@
  	}else if($_GET['type'] == 'rule'){
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_beliefs('".$sessionID."',".$timestep.",".$timestep2.",-1,-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_question('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 			mysqli_close($link);
 			$script = "python addItems.py -s ".$sessionID . " -t ".$timestep2 . " -a ".$_GET['agent'] . " -c \"".$_GET['conclusion']. "\" -l ".$_GET['trust']. " -p \"".$_GET['premise']. "\"";
 			$result = exec($script);
@@ -72,11 +72,11 @@
  	}else if($_GET['type'] == 'question'){
 			$sql="call copy_trust('".$sessionID."',".$timestep.",".$timestep2.",-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$sql="call copy_beliefs('".$sessionID."',".$timestep.",".$timestep2.",-1,-1);";
  			$result=mysqli_query($link,$sql);
-			mysqli_free_result($result);
+#			mysqli_free_result($result);
 
 			$script = "python addItems.py -s ".$sessionID . " -t ".$timestep2 . " -a ".$_GET['agent'] . " -q \"".$_GET['question']."\"";
 			$result = exec($script);

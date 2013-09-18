@@ -805,6 +805,7 @@ def parse_args():
 	p.add_argument( '-i', '--input', dest='inputfile',  help="Input XML File", required=False )
 	p.add_argument( '-s', '--session', dest='sessionID',  help="SessionID", required=False )
 	p.add_argument( '-t', '--timestep', dest='timestep',  help="timestep", required=False )
+	p.add_argument( '-u', '--userid', dest='userid',  help="userid", required=False )
 	return p.parse_args()
 	
 
@@ -825,7 +826,9 @@ try:
 			sessionID = uuid[0]
 
 		timestep = 1
-		cursor.execute("insert into user_session(sessionID,date,current_timestep) values (%s,NOW(),%s);",(sessionID,timestep))
+		if(not args.userid)
+			args.userid = 'Anonymous'
+		cursor.execute("insert into user_session(sessionID,date,current_timestep,userid) values (%s,NOW(),%s,%s);",(sessionID,timestep,args.userid))
 		con.commit()
 #		resetDB(con,cursor)
 		loadNewFile(args.inputfile,con,cursor,sessionID,timestep)
