@@ -4,7 +4,7 @@ digraph g {
     graph [bb="0 0 3000 3000"];    
   subgraph cluster_trust_net {
     graph [bb="", style="filled, rounded", fillcolor=whitesmoke];
-    node [shape=circle,
+    node [shape=oval,
       style=filled,
       fillcolor=lavender,
       fontname=arial];
@@ -26,14 +26,7 @@ digraph g {
  * * Create agents nodes
  */
 foreach ($agents as $agent_id => $agent_info) {
-    printf("%s [label=%s, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-           $agent_info["dot_label"], $agent_info["name"]);
-}
-
-/** @page dotgen_hw_impl
- *
- * * Create fact nodes for agentID posing question that aren't ends of
- * arguments
+    printf("%s [label=%s, href=\"javascript:void(0)\", oncliggvvvvvvvvbvhr
  */
 foreach ($qagnt_facts_not_end_argument as $id => $info) {
     printf("%s [label=\"%s:%s\", shape=box, fillcolor=lightcyan, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",

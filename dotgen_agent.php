@@ -4,7 +4,7 @@ digraph g {
 	graph [bb="0 0 3000 3000"];	
 	subgraph cluster_trust_net {
 		graph [bb=""];
-		node [shape=circle,
+		node [shape=oval,
 			style=filled,
 			fillcolor=lavender,
 			fontname=arial];
