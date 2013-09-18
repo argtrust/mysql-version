@@ -826,7 +826,7 @@ try:
 			sessionID = uuid[0]
 
 		timestep = 1
-		if(not args.userid)
+		if(not args.userid):
 			args.userid = 'Anonymous'
 		cursor.execute("insert into user_session(sessionID,date,current_timestep,userid) values (%s,NOW(),%s,%s);",(sessionID,timestep,args.userid))
 		con.commit()
