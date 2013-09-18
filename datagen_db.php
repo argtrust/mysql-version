@@ -493,7 +493,7 @@ if ($debug) {
  */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, ab.level, max(pa.status), count(distinct pa.status) as argStatus,
+        ELSE concat(p.name,'(',c.name,')') END predicate, pa.level, max(pa.status), count(distinct pa.status) as argStatus,
         p.name, c.name, b.isNegated
         from beliefs b
         inner join agent_has_beliefs ab on b.beliefID = ab.beliefID
@@ -749,7 +749,7 @@ if ($debug) {
  */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, ab.level,
+        ELSE concat(p.name,'(',c.name,')') END predicate, pa.level,
         max(pa.status), count(distinct pa.status) as argStatus,
         p.name, c.name, b.isNegated
         from beliefs b
@@ -762,7 +762,7 @@ $sql="select distinct b.beliefID, CASE
         inner join parent_argument pa on pa.argumentID = a.argumentID and pa.sessionID = a.sessionID and pa.timestep = a.timestep 
         where ab.agentID = q.agentID and b.isRule = 1 and a.isSupported = 1
         and ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep."
-        group by b.beliefID, b.isNegated, p.name, c.name, ab.level";
+        group by b.beliefID, b.isNegated, p.name, c.name, pa.level";
 $result=mysqli_query($link,$sql);
 if ($result) {
     while ($row = mysqli_fetch_array($result)) {
