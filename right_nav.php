@@ -17,7 +17,7 @@
 		<table>
 			<tr>
 				<td><h3>Default:</td>
-				<td><p><input type="radio" name="focus" value="outcome1" onClick="updategraph('default',0,0)" 
+				<td><p><input type="radio" name="focus" value="outcome1" onClick="updategraph('default',0,<?php if(array_key_exists('graphDetail', $_GET)) {echo $_GET['graphDetail'];}else{echo 0;}?>)" 
 					<?php
 						if($graphType == 'default'){
 							echo "checked";
