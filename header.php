@@ -28,7 +28,7 @@ if(array_key_exists('xmlfile', $_GET)){
 	$fp = file_put_contents("graphs2/".$sessionID.".debug",$contents);
 
 	ob_start();
-	include 'dotgen_hw.php';
+	include 'dotgen_high.php';
 	$contents = ob_get_contents();
 	ob_end_clean();
 	$fp = file_put_contents("graphs2/".$sessionID.".dot",$contents);
