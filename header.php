@@ -5,10 +5,15 @@ $link = mysqli_connect($dbHost,$dbUser,$dbPass, $dbName);
 if (!$link) {
 	die('Could not connect: ' . mysql_error());
 }
+if(!array_key_exists('graphDetail', $_GET)){
+	$graphDetail=0;		
+}else{
+	$graphDetail=$_GET['graphDetail'];
+}
+$graphType = 'default';
 
 //$command = "sh runTrust.sh ". $_GET['xmlfile']." ". $_GET['outputfile'];
 if(array_key_exists('xmlfile', $_GET)){
-	$graphType = 'default';
 	$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile'] ."");
 //	$sessionID2=exec("/usr/bin/python2.7 --version 2>&1");
 //	echo "Session ID: (";
@@ -32,7 +37,6 @@ if(array_key_exists('xmlfile', $_GET)){
 }else if(array_key_exists('sessionID', $_GET)){
 	$sessionID=$_GET['sessionID'];
 	$timestep=$_GET['timestep'];
-	$graphType = 'anythingelse';
 
 	$contents = file_get_contents("graphs2/".$sessionID.".vars");
 	$store = unserialize($contents);
@@ -41,6 +45,7 @@ if(array_key_exists('xmlfile', $_GET)){
 
 	//FOCUS is 'belief' DETAIL can be 'default' or 'low-level' 
 	if(array_key_exists('beliefID', $_GET)){
+		$graphType = 'belief';
 		$beliefID=$_GET['beliefID'];
 		$graphDetail=$_GET['graphDetail'];
 		ob_start();
@@ -53,6 +58,7 @@ if(array_key_exists('xmlfile', $_GET)){
 		ob_end_clean();
 	//FOCUS is 'rule' DETAIL only 'expert'
 	}else if(array_key_exists('ruleID', $_GET)){
+		$graphType = 'rule';
 		$ruleID=$_GET['ruleID'];
 		ob_start();
 		include 'dotgen_inferred.php';
@@ -60,6 +66,7 @@ if(array_key_exists('xmlfile', $_GET)){
 		ob_end_clean();
 	//FOCUS is 'agent' DETAIL can be 'expert', 'low-level', or 'mid-level'	
 	}else if(array_key_exists('agentID', $_GET)){
+		$graphType = 'agent';
 		$agentID=$_GET['agentID'];
 		ob_start();
 		/*if($graphDetail=='2'){
@@ -73,15 +80,16 @@ if(array_key_exists('xmlfile', $_GET)){
 		ob_end_clean();
 	//FOCUS is 'argument' DETAIL can be 'expert', 'low-level', 'mid-level' or 'high-level'	
 	}else if(array_key_exists('argumentID', $_GET)){
+		$graphType = 'argument';
 		$argumentID=$_GET['argumentID'];
 		$graphDetail=$_GET['graphDetail'];
 		ob_start();
-		if($graphDetail=='2'){
-			include 'dotgen_argument_low.php';
+		if($graphDetail=='0'){
+			include 'dotgen_argument_high.php';
 		} else if($graphDetail=='1') { 
 			include 'dotgen_argument_mid.php';
-		} else if($graphDetail=='0') { 
-			include 'dotgen_argument_high.php';	
+		} else if($graphDetail=='2') { 
+			include 'dotgen_argument_low.php';	
 		} else {
 			include 'dotgen_argument.php';
 		}
@@ -98,7 +106,15 @@ if(array_key_exists('xmlfile', $_GET)){
 		$fp = file_put_contents("graphs2/".$sessionID.".debug",$contents);
 
 		ob_start();
-		include 'dotgen_hw.php';
+		if($graphDetail=='0'){
+			include 'dotgen_high.php';
+		}else if($graphDetail=='1'){
+			include 'dotgen_mid.php';
+		}else if($graphDetail=='2'){
+			include 'dotgen_low.php';
+		} else { 
+			include 'dotgen_hw.php';
+		}
 		$contents = ob_get_contents();
 		ob_end_clean();
 	}
