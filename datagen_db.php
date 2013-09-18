@@ -9,7 +9,7 @@
 /** @brief int \$debug: Output debug information (=1) or not (=0) into file
 *          $sessionID".debug"
 */
-$debug = 1;
+$debug = 0;
 
 /** @brief array $agents: key=id_val contains array of scenario agent info.
  * 
@@ -338,6 +338,16 @@ $agent_rule_arrows_to = array();
  *         $agent_rule_arrows_to. NOTE: not used and can be removed.
  */
 $num_agent_rule_arrows_to = 0;
+
+/** @brief array agent_argument_arrows:  
+ */
+$agent_argument_arrows = array();
+
+/** @brief array fact_argument_arrows:  
+ */
+$fact_argument_arrows = array();
+
+
 
 /** @brief array $arguments: key=argument_id stores array of argument
  *         information.
@@ -967,10 +977,11 @@ if ($debug) {
  * * Create data structure for arrows that denote attacks (rebut and undermine)
  * between beliefs. Fill in $attack_arrows and $num_attack_arrows.
  */
+//Made attack type static to 'attack' should be paa.attackType
 $sql="select distinct case when b.isRule = 1 then concat('inference',b.beliefID)
                   else concat('fact',b.beliefID) END fromID,
              case when b2.isRule = 1 then concat('inference',b2.beliefID)
-                  else concat('fact',b2.beliefID) END toID, paa.attackType, 
+                  else concat('fact',b2.beliefID) END toID, 'attack' as attackType, 
              case when b.isRule = 1 and b2.isRule = 1 then 'rebut'
                    when b.isRule = 1 and b2.isRule = 0 then 'undermine'
                    when b.isRule = 0 and b2.isRule = 0 then 'undermine'
@@ -1357,6 +1368,112 @@ if ($debug) {
     printf("//num_arguments=%d or %d\n", $num_arguments, count($arguments));
 }
 
+
+/** @page datagen_db_impl
+ *
+ * * Create data structure for arrows between agents and their direct facts that are argument ends:
+ * Fill in $agent_fact_arrows, $num_agent_fact_arrows,
+ * $agent_fact_arrows_from, $num_agent_fact_arrows_from,
+ * $agent_fact_arrows_to, and $num_agent_fact_arrows_to.
+ */
+$sql="select distinct concat('agent',ab.agentID),
+    case when b2.isRule = 1 then concat('inference',b2.beliefID) else concat('fact',b2.beliefID) end l2,
+    ab.agentID, b2.isRule, b.beliefID, ab.level
+    from agent_has_beliefs ab
+    inner join beliefs b on ab.beliefID = b.beliefID 
+    inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
+    inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
+    inner join parent_argument_has_argument paa on a.argumentID = paa.argumentID -- and a.sessionID = paa.sessionID and a.timestep = paa.timestep
+    inner join parent_argument pa on paa.parentArgumentID = pa.parentArgumentID and a.sessionID = pa.sessionID and a.timestep = pa.timestep
+    inner join arguments a2 on a2.argumentID = pa.argumentID and a2.sessionID = pa.sessionID and a2.timestep = pa.timestep
+    inner join beliefs b2 on b2.beliefID = a2.beliefID
+    where isInferred = 0 and a.isSupported = 1 and b.isRule = 0
+    and a.sessionID = '".$sessionID."' and a.timestep=".$timestep;
+$result=mysqli_query($link,$sql);
+if ($result) {
+    while ($row = mysqli_fetch_array($result)) {
+        $from_to = $row[2]."_".$row[4];
+        $agent_argument_arrows[$from_to]["from_dot_label"] = $row[0];
+        $agent_argument_arrows[$from_to]["to_dot_label"] = $row[1];
+        $agent_argument_arrows[$from_to]["from_id"] = $row[2];
+        $agent_argument_arrows[$from_to]["to_rule"] = $row[3];
+        $agent_argument_arrows[$from_to]["to_id"] = $row[4];
+        $agent_argument_arrows[$from_to]["level"] = $row[5];
+        if (array_key_exists($row[2], $agents)) {
+            $agent_argument_arrows[$from_to]["from_ref"] = & $agents[$row[2]];    
+        } else {
+            printf("//ERROR: cannot find agent %s\n", $row[2]);
+            // TODO: else exit???
+        }
+        // TODO: just use qagnt_beliefs
+        if ($row[3] == 1) {
+            if (array_key_exists($row[4], $qagnt_rules)) {
+                $agent_argument_arrows[$from_to]["to_ref"] = & $qagnt_rules[$row[4]];    
+            }
+            // TODO: else exit???
+        } else {
+            if (array_key_exists($row[4], $qagnt_facts)) {
+                $agent_argument_arrows[$from_to]["to_ref"] = & $qagnt_facts[$row[4]];    
+            }
+            // TODO: else exit???
+        }
+    }
+}
+mysqli_free_result($result);
+
+/** @page datagen_db_impl
+ *
+ * * Create data structure for arrows between agents and their direct facts that are argument ends:
+ * Fill in $agent_fact_arrows, $num_agent_fact_arrows,
+ * $agent_fact_arrows_from, $num_agent_fact_arrows_from,
+ * $agent_fact_arrows_to, and $num_agent_fact_arrows_to.
+ */
+$sql="select distinct 
+    case when b.isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l,
+    case when b2.isRule = 1 then concat('inference',b2.beliefID) else concat('fact',b2.beliefID) end l2,
+    ab.agentID, b2.isRule, b.beliefID, ab.level
+    from agent_has_beliefs ab
+    inner join beliefs b on ab.beliefID = b.beliefID 
+    inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
+    inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
+    inner join parent_argument_has_argument paa on a.argumentID = paa.argumentID -- and a.sessionID = paa.sessionID and a.timestep = paa.timestep
+    inner join parent_argument pa on paa.parentArgumentID = pa.parentArgumentID and a.sessionID = pa.sessionID and a.timestep = pa.timestep
+    inner join arguments a2 on a2.argumentID = pa.argumentID and a2.sessionID = pa.sessionID and a2.timestep = pa.timestep
+    inner join beliefs b2 on b2.beliefID = a2.beliefID
+    where isInferred = 0 and a.isSupported = 1 and b.isRule = 0
+    and a.sessionID = '".$sessionID."' and a.timestep=".$timestep;
+$result=mysqli_query($link,$sql);
+if ($result) {
+    while ($row = mysqli_fetch_array($result)) {
+        $from_to = $row[2]."_".$row[4];
+        $fact_argument_arrows[$from_to]["from_dot_label"] = $row[0];
+        $fact_argument_arrows[$from_to]["to_dot_label"] = $row[1];
+        $fact_argument_arrows[$from_to]["from_id"] = $row[2];
+        $fact_argument_arrows[$from_to]["to_rule"] = $row[3];
+        $fact_argument_arrows[$from_to]["to_id"] = $row[4];
+        $fact_argument_arrows[$from_to]["level"] = $row[5];
+        if (array_key_exists($row[2], $agents)) {
+            $fact_argument_arrows[$from_to]["from_ref"] = & $agents[$row[2]];    
+        } else {
+            printf("//ERROR: cannot find agent %s\n", $row[2]);
+            // TODO: else exit???
+        }
+        // TODO: just use qagnt_beliefs
+        if ($row[3] == 1) {
+            if (array_key_exists($row[4], $qagnt_rules)) {
+                $fact_argument_arrows[$from_to]["to_ref"] = & $qagnt_rules[$row[4]];    
+            }
+            // TODO: else exit???
+        } else {
+            if (array_key_exists($row[4], $qagnt_facts)) {
+                $fact_argument_arrows[$from_to]["to_ref"] = & $qagnt_facts[$row[4]];    
+            }
+            // TODO: else exit???
+        }
+    }
+}
+mysqli_free_result($result);
+
 /** @var $store
  * @brief array $store: associative array that stores all the variables that
  *         need to be exported to dotgen files. 
@@ -1412,6 +1529,8 @@ $store["agent_rule_arrows_from"] = & $agent_rule_arrows_from;
 $store["num_agent_rule_arrows_from"] = $num_agent_rule_arrows_from;
 $store["agent_rule_arrows_to"] = & $agent_rule_arrows_to;
 $store["num_agent_rule_arrows_to"] = $num_agent_rule_arrows_to;
+$store["agent_argument_arrows"] = $agent_argument_arrows;
+$store["fact_argument_arrows"] = $fact_argument_arrows;
 $store["arguments"] = & $arguments; $store["num_arguments"] = $num_arguments;
 
 $fp = file_put_contents("graphs2/".$sessionID.".vars",  serialize($store));
