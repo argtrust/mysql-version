@@ -17,7 +17,7 @@
 		<table>
 			<tr>
 				<td><h3>Default:</td>
-				<td><p><input type="radio" name="focus" value="outcome1" onClick="updategraph('default')" 
+				<td><p><input type="radio" name="focus" value="outcome1" onClick="updategraph('default',0,0)" 
 					<?php
 						if($graphType == 'default'){
 							echo "checked";
@@ -46,7 +46,10 @@ where pa.sessionID = '".$sessionID."' and pa.timestep=".$timestep." and a.isSupp
   	?>
 			<tr>
 				<td></td>
-				<td><input type="radio" name="focus" value="outcome" onClick="updategraph('argument',<?php echo $row[0]; ?>)"> <?php echo $row[3]; ?>: <?php echo $row[1]; ?></td>
+				<td><input type="radio" name="focus" value="outcome" onClick="updategraph('argument',<?php echo $row[0]; ?>, 
+          <?php if(array_key_exists('graphDetail', $_GET)) {echo $_GET['graphDetail'];}else{echo 0;}?>)" 
+          <?php if((array_key_exists('argumentID', $_GET))&&($row[0]==$_GET['argumentID'])) {?> checked <?php }?>> 
+          <?php echo $row[3]; ?>: <?php echo $row[1]; ?></input></td>
 			</tr>		
 	<?php
   }
@@ -129,6 +132,7 @@ if (mysqli_multi_query($link,$sql)) {
 }
 
 ?> -->
+<?php if ($graphDetail > 1){ ?>
 				<tr>
 					<td width="30%"><h3> Observed Knowledge:</td>
 					<td valign="bottom"></td>
@@ -145,8 +149,10 @@ if (mysqli_multi_query($link,$sql)) {
   	?>
 				<tr>
 					<td></td>
-					<td><input type="radio" name="focus" value="<?php echo $row[1]; ?>" onClick="updategraph('belief',<?php echo $row[0]; ?>)"> <?php echo $row[1]; ?></td>
-				</tr>  	
+					<td><input type="radio" name="focus" value="<?php echo $row[1]; ?>" onClick="updategraph('belief',<?php echo $row[0]; ?>,3)" 
+          <?php if((array_key_exists('beliefID', $_GET))&&($row[0]==$_GET['beliefID'])) {?> checked <?php }?>> 
+          <?php echo $row[1]; ?></input></td>				
+        </tr>  	
   	<?php
             }
             $result->free();
@@ -156,6 +162,8 @@ if (mysqli_multi_query($link,$sql)) {
 	echo "error running agents query";
 	
 }
+}//close if statement
+if ($graphDetail > 2){ 
 
 ?>
 				<tr>
@@ -174,7 +182,9 @@ if (mysqli_multi_query($link,$sql)) {
   	?>
 				<tr>
 					<td></td>
-					<td><input type="radio" name="focus" value="<?php echo $row[1]; ?>" onClick="updategraph('rule',<?php echo $row[0]; ?>)"> <?php echo $row[1]; ?></td>
+          <td><input type="radio" name="focus" value="<?php echo $row[1]; ?>" onClick="updategraph('rule',<?php echo $row[0]; ?>,3)" 
+          <?php if((array_key_exists('ruleID', $_GET))&&($row[0]==$_GET['ruleID'])) {?> checked <?php }?>> 
+          <?php echo $row[1]; ?></input></td>       
 				</tr>  	
   	<?php
             }
@@ -185,7 +195,7 @@ if (mysqli_multi_query($link,$sql)) {
 	echo "error running agents query";
 	
 }
-
+}//close if statement
 ?>
 			</table><br><br>
 			</form>
