@@ -63,8 +63,8 @@
 		}); 
 			
 		function updategraph(graphType, graphID, graphDetail){
-			_gaq.push(['_trackEvent', 'UpdateGraph', graphType, <?php echo $sessionID; ?>, <?php echo $timestep; ?>]);
-			_gaq.push(['_trackEvent', 'UpdateGraph_'+graphType, graphDetail, <?php echo $sessionID; ?>, <?php echo $timestep; ?>]);
+			_gaq.push(['_trackEvent', 'UpdateGraph', graphType, '<?php echo $sessionID; ?>', <?php echo $timestep; ?>]);
+			_gaq.push(['_trackEvent', 'UpdateGraph_'+graphType, graphDetail, '<?php echo $sessionID; ?>', <?php echo $timestep; ?>]);
 			url = "index.php?sessionID=<?php echo $sessionID; ?>&timestep=<?php echo $timestep; ?>";
 			if((graphType == 'agent') && (graphDetail==2))
 				window.location.href=url+"&agentID="+graphID+"&graphDetail="+graphDetail;
