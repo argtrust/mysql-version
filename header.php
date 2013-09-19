@@ -15,11 +15,12 @@ $graphType = 'default';
 //$command = "sh runTrust.sh ". $_GET['xmlfile']." ". $_GET['outputfile'];
 if(array_key_exists('xmlfile', $_GET)){
 	if (isset($_COOKIE["userID"])){
-		echo "james said so";
-		echo "python testZML_C.py -i ".$_GET['xmlfile'] ." -u ".$_COOKIE['userID'];
+//		echo "james said so";
+//		echo "python testZML_C.py -i ".$_GET['xmlfile'] ." -u ".$_COOKIE['userID'];
 		$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile'] ." -u ".$_COOKIE['userID']);
+		setcookie("sessionID", $sessionID, time()+3600);
 	}else{
-		echo "james missed it so";
+//		echo "james missed it so";
 		$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile'] ."");		
 	}
 //	$sessionID2=exec("/usr/bin/python2.7 --version 2>&1");
