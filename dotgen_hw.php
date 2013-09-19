@@ -26,8 +26,14 @@ digraph g {
  * * Create agents nodes
  */
 foreach ($agents as $agent_id => $agent_info) {
-    printf("%s [label=%s, href=\"javascript:void(0)\", oncliggvvvvvvvvbvhr
- */
+  printf("%s [label=%s, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n", 
+    $agent_info["dot_label"], $agent_info["name"]);
+}
+/** @page dotgen_hw_impl
+*
+* * Create fact nodes for agentID posing question that aren't ends of
+* arguments
+*/
 foreach ($qagnt_facts_not_end_argument as $id => $info) {
     printf("%s [label=\"%s:%s\", shape=box, fillcolor=lightcyan, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["dot_label"], $info["logic_display"], min($info["levels"]));
