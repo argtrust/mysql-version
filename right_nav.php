@@ -204,7 +204,7 @@ if (mysqli_multi_query($link,$sql)) {
       		<form action="upload.php" method="post" enctype="multipart/form-data">
 			<label for="file">Filename:</label>
 			<input type="file" name="file" id="file"><br>
-      <input type="text" name="userid" id="userid"><br>
+      userid: &nbsp;<input type="text" name="userid" id="userid"><br>
 			<input type="submit" name="submit" value="Submit">
 			</form>
       </div>
