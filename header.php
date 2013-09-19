@@ -14,8 +14,8 @@ $graphType = 'default';
 
 //$command = "sh runTrust.sh ". $_GET['xmlfile']." ". $_GET['outputfile'];
 if(array_key_exists('xmlfile', $_GET)){
-	if (isset($_COOKIE["userid"])){
-		$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile'] ." -u ".$_COOKIE['userid']);
+	if (isset($_COOKIE["userID"])){
+		$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile'] ." -u ".$_COOKIE['userID']);
 	}else{
 		$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile'] ."");		
 	}
