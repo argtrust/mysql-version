@@ -1,5 +1,5 @@
 <?php
-//putenv('PATH=/usr/local/bin:');
+putenv('PATH=/usr/local/bin:');
 include 'settings.php';
 $link = mysqli_connect($dbHost,$dbUser,$dbPass, $dbName);
 if (!$link) {
@@ -14,7 +14,7 @@ $graphType = 'default';
 
 //$command = "sh runTrust.sh ". $_GET['xmlfile']." ". $_GET['outputfile'];
 if(array_key_exists('xmlfile', $_GET)){
-	if(array_key_exists('userid', $_COOKIE)){
+	if (isset($_COOKIE["userid"])){
 		$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile'] ." -u ".$_COOKIE['userid']);
 	}else{
 		$sessionID=exec("python testZML_C.py -i ".$_GET['xmlfile'] ."");		
