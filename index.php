@@ -18,6 +18,14 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 
+  <?php
+	if (isset($_COOKIE["userID"])){
+		?>
+		_gaq.push(['_trackEvent', 'PageLoad', <?php echo $sessionID; ?>, <?php echo $timestep; ?>]);
+		<?php
+	}
+  ?>
+
 </script>
 
 <link href="./jQuery-contextMenu-master/src/jquery.contextMenu.css" rel="stylesheet" type="text/css" />
@@ -55,6 +63,8 @@
 		}); 
 			
 		function updategraph(graphType, graphID, graphDetail){
+			_gaq.push(['_trackEvent', 'UpdateGraph', graphType, <?php echo $sessionID; ?>, <?php echo $timestep; ?>]);
+			_gaq.push(['_trackEvent', 'UpdateGraph_'+graphType, graphDetail, <?php echo $sessionID; ?>, <?php echo $timestep; ?>]);
 			url = "index.php?sessionID=<?php echo $sessionID; ?>&timestep=<?php echo $timestep; ?>";
 			if((graphType == 'agent') && (graphDetail==2))
 				window.location.href=url+"&agentID="+graphID+"&graphDetail="+graphDetail;
@@ -224,6 +234,7 @@
 								                var label = document.getElementsByName("context-menu-input-addAgentLabel")[0].value.toString();
 												var toTrust = document.getElementsByName("context-menu-input-addAgentLabel2")[0].value.toString();
 												var trust = document.getElementsByName("context-menu-input-addAgentTrust")[0].value.toString();
+												_gaq.push(['_trackEvent', 'AddAgent', <?php echo $sessionID; ?>, label, trust);
 								                window.location.assign("add_node.php?type=agent&fromAgent=" + label + "&toAgent=" + toTrust + "&trust=" + trust+"&sessionID="+mySessionID+"&timestep="+myTimestep);
 							            	}
 		            					}
@@ -264,6 +275,7 @@
 							                	var agent = document.getElementsByName("context-menu-input-addFactAgent")[0].value.toString();
 								                var label = document.getElementsByName("context-menu-input-addFactLabel")[0].value.toString();
 												var trust = document.getElementsByName("context-menu-input-addFactTrust")[0].value.toString();
+												_gaq.push(['_trackEvent', 'AddFact', <?php echo $sessionID; ?>, label, trust);
 								                window.location.assign("add_node.php?type=fact&agent=" + agent + "&belief=" + label + "&trust=" + trust+"&sessionID="+mySessionID+"&timestep="+myTimestep);
 							            	}
 
@@ -309,6 +321,7 @@
 								                var premise = document.getElementsByName("context-menu-input-addRulePremise")[0].value.toString();
 												var conclusion = document.getElementsByName("context-menu-input-addRuleConclusion")[0].value.toString();
 												var trust = document.getElementsByName("context-menu-input-addRuleTrust")[0].value.toString();
+												_gaq.push(['_trackEvent', 'AddRule', <?php echo $sessionID; ?>, conclusion, trust);
 								                window.location.assign("add_node.php?type=rule&agent=" + agent + "&premise=" + premise + "&conclusion=" + conclusion + "&trust=" + trust+"&sessionID="+mySessionID+"&timestep="+myTimestep);
 		            						}
 		            					}
@@ -334,6 +347,7 @@
 							                	//var id = jQuery(this).attr('id');
 								                var agent = document.getElementsByName("context-menu-input-addQuestionAgent")[0].value.toString();
 												var question = document.getElementsByName("context-menu-input-addQuestion")[0].value.toString();
+												_gaq.push(['_trackEvent', 'AddQuestion', <?php echo $sessionID; ?>, question, 1);
 								                window.location.assign("add_node.php?type=question&agent=" + agent + "&question=" + question+"&sessionID="+mySessionID+"&timestep="+myTimestep);
 							            	}
 		            					}
@@ -367,6 +381,7 @@
 						                    //var m = "delete was clicked";
 						                    //window.console && console.log(m) || alert(m); 
 						                    var id = jQuery(this).attr('id');
+											_gaq.push(['_trackEvent', 'DeleteNode', mySessionID, id);
 						                    window.location.assign("delete_node.php?nodeID=" + id+"&sessionID="+mySessionID+"&timestep="+myTimestep);
 						                }},
 /*			            "fold1": {
@@ -427,6 +442,7 @@
 								                var label = document.getElementsByName("context-menu-input-addAgentLabelNode")[0].value.toString();
 												var toTrust = document.getElementsByName("context-menu-input-addAgentLabel2Node")[0].value.toString();
 												var trust = document.getElementsByName("context-menu-input-addAgentTrustNode")[0].value.toString();
+												_gaq.push(['_trackEvent', 'AddAgent', <?php echo $sessionID; ?>, label, trust);
 								                window.location.assign("add_node.php?type=agent&fromAgent=" + label + "&toAgent=" + toTrust + "&trust=" + trust+"&sessionID="+mySessionID+"&timestep="+myTimestep);
 							            	}
 		            					}
@@ -467,6 +483,7 @@
 							                	var agent = document.getElementsByName("context-menu-input-addFactAgentNode")[0].value.toString();
 								                var label = document.getElementsByName("context-menu-input-addFactLabelNode")[0].value.toString();
 												var trust = document.getElementsByName("context-menu-input-addFactTrustNode")[0].value.toString();
+												_gaq.push(['_trackEvent', 'AddFact', <?php echo $sessionID; ?>, label, trust);
 								                window.location.assign("add_node.php?type=fact&agent=" + agent + "&belief=" + label + "&trust=" + trust+"&sessionID="+mySessionID+"&timestep="+myTimestep);
 							            	}
 
@@ -512,6 +529,7 @@
 								                var premise = document.getElementsByName("context-menu-input-addRulePremiseNode")[0].value.toString();
 												var conclusion = document.getElementsByName("context-menu-input-addRuleConclusionNode")[0].value.toString();
 												var trust = document.getElementsByName("context-menu-input-addRuleTrustNode")[0].value.toString();
+												_gaq.push(['_trackEvent', 'AddRule', <?php echo $sessionID; ?>, conclusion, trust);
 								                window.location.assign("add_node.php?type=rule&agent=" + agent + "&premise=" + premise + "&conclusion=" + conclusion + "&trust=" + trust+"&sessionID="+mySessionID+"&timestep="+myTimestep);
 		            						}
 		            					}
@@ -537,6 +555,7 @@
 							                	//var id = jQuery(this).attr('id');
 								                var agent = document.getElementsByName("context-menu-input-addQuestionAgentNode")[0].value.toString();
 												var question = document.getElementsByName("context-menu-input-addQuestionNode")[0].value.toString();
+												_gaq.push(['_trackEvent', 'AddQuestion', <?php echo $sessionID; ?>, question, 1);
 								                window.location.assign("add_node.php?type=question&agent=" + agent + "&question=" + question+"&sessionID="+mySessionID+"&timestep="+myTimestep);
 							            	}
 		            					}
