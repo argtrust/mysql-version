@@ -20,6 +20,6 @@
 	}
 	setcookie("userID", $_POST['userid'], time()+3600);
 	$userID = $_POST['userid'];
-	header("Location: index.php?xmlfile=$new_xml&userID=$userID");
+	header("Location: review1Scenario.php?xmlfile=$new_xml&userID=$userID");
 
 ?>

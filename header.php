@@ -1,5 +1,5 @@
 <?php
-//putenv('PATH=/usr/local/bin:');
+putenv('PATH=/usr/local/bin:');
 include 'settings.php';
 $link = mysqli_connect($dbHost,$dbUser,$dbPass, $dbName);
 if (!$link) {
@@ -11,7 +11,8 @@ if(!array_key_exists('graphDetail', $_GET)){
 	$graphDetail=$_GET['graphDetail'];
 }
 $graphType = 'default';
-
+$sessionID = 'startup';
+$timestep = 0;
 //$command = "sh runTrust.sh ". $_GET['xmlfile']." ". $_GET['outputfile'];
 if(array_key_exists('xmlfile', $_GET)){
 	if (isset($_COOKIE["userID"])){
@@ -37,7 +38,7 @@ if(array_key_exists('xmlfile', $_GET)){
 	$fp = file_put_contents("graphs2/".$sessionID.".debug",$contents);
 
 	ob_start();
-	include 'dotgen_high.php';
+	include 'views/dotgen_high.php';
 	$contents = ob_get_contents();
 	ob_end_clean();
 	$fp = file_put_contents("graphs2/".$sessionID.".dot",$contents);
@@ -58,9 +59,9 @@ if(array_key_exists('xmlfile', $_GET)){
 		$graphDetail=$_GET['graphDetail'];
 		ob_start();
 		if($graphDetail=='2'){
-			//include 'belief_low.php';
+			//include 'views/belief_low.php';
 		} else {
-			include 'dotgen_observed.php';
+			include 'views/dotgen_observed.php';
 		}
 		$contents = ob_get_contents();
 		ob_end_clean();
@@ -69,7 +70,7 @@ if(array_key_exists('xmlfile', $_GET)){
 		$graphType = 'rule';
 		$ruleID=$_GET['ruleID'];
 		ob_start();
-		include 'dotgen_inferred.php';
+		include 'views/dotgen_inferred.php';
 		$contents = ob_get_contents();
 		ob_end_clean();
 	//FOCUS is 'agent' DETAIL can be 'expert', 'low-level', or 'mid-level'	
@@ -78,11 +79,11 @@ if(array_key_exists('xmlfile', $_GET)){
 		$agentID=$_GET['agentID'];
 		ob_start();
 		/*if($graphDetail=='2'){
-			include 'agent_low.php';
+			include 'views/agent_low.php';
 		} else if($graphDetail=='1') { 
-			include 'agent_mid.php';
+			include 'views/agent_mid.php';
 		} else {*/
-			include 'dotgen_agent.php';
+			include 'views/dotgen_agent.php';
 		//}
 		$contents = ob_get_contents();
 		ob_end_clean();
@@ -93,13 +94,13 @@ if(array_key_exists('xmlfile', $_GET)){
 		$graphDetail=$_GET['graphDetail'];
 		ob_start();
 		if($graphDetail=='0'){
-			include 'dotgen_argument_high.php';
+			include 'views/dotgen_argument_high.php';
 		} else if($graphDetail=='1') { 
-			include 'dotgen_argument_mid.php';
+			include 'views/dotgen_argument_mid.php';
 		} else if($graphDetail=='2') { 
-			include 'dotgen_argument_low.php';	
+			include 'views/dotgen_argument_low.php';
 		} else {
-			include 'dotgen_argument.php';
+			include 'views/dotgen_argument.php';
 		}
 		$contents = ob_get_contents();
 		ob_end_clean();
@@ -115,13 +116,13 @@ if(array_key_exists('xmlfile', $_GET)){
 
 		ob_start();
 		if($graphDetail=='0'){
-			include 'dotgen_high.php';
+			include 'views/dotgen_high.php';
 		}else if($graphDetail=='1'){
-			include 'dotgen_mid.php';
+			include 'views/dotgen_mid.php';
 		}else if($graphDetail=='2'){
-			include 'dotgen_low.php';
+			include 'views/dotgen_low.php';
 		} else { 
-			include 'dotgen_hw.php';
+			include 'views/dotgen_hw.php';
 		}
 		$contents = ob_get_contents();
 		ob_end_clean();

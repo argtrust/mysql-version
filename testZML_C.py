@@ -132,6 +132,7 @@ def removeArguments(connection,cursor):
 			connection.rollback()
 
 def clearSessionToReargue(connection, cursor, sessionID, timestep):
+
 		try:
 			cursor.execute("delete from arguments where sessionID = %s and timestep = %s;", (sessionID, timestep))
 			connection.commit()
@@ -298,6 +299,14 @@ def getAgentHasBeliefsID(con,cursor,agentID,beliefID,level,isInferred,sessionID,
 	except:
 		con.rollback()
 
+def getAgentBeliefsText(con,cursor,agentID,beliefID,sessionID,timestep,scenariotext):
+	try:
+		cursor.execute("Insert INTO agent_belief_text (agentID,beliefID,sessionID,timestep,scenario_text) values(%s,%s,%s,%s,%s);", (agentID,beliefID,sessionID,timestep,scenariotext))
+		con.commit()
+		return cursor.lastrowid
+	except:
+		con.rollback()
+
 def getPremiseID(con,cursor,beliefID,isNegated,premiseID):
 	try:
 		cursor.execute("Insert INTO belief_has_premises (beliefID,premiseID,isNegated) values(%s,%s,%s);", (beliefID,premiseID,isNegated))
@@ -374,7 +383,7 @@ def inferBeliefs(connection,cursor,agentID,sessionID,timestep):
 			cursor.execute("insert into agent_has_beliefs (agentID,beliefID,level,isInferred,sessionID,timestep) values(%s,%s,%s,%s,%s,%s);", (agentID,belief[2],inferredLevel,1,sessionID,timestep))
 			agentBeliefID = cursor.lastrowid
 			connection.commit()
-			cursor.execute("insert into inferred_beliefs (inferredBeliefID,appliedBeliefID,sessionID,timestep) values(%s,%s,%s,%s);", (agentBeliefID,belief[0],sessionID,timestep))
+    			cursor.execute("insert into inferred_beliefs (inferredBeliefID,appliedBeliefID,sessionID,timestep) values(%s,%s,%s,%s);", (agentBeliefID,belief[0],sessionID,timestep))
 			connection.commit()
 		except mdb.Error, e:
 			print "Error %d: %s" % (e.args[0], e.args[1])
@@ -698,18 +707,33 @@ def loadNewFile(inputfile,con,cursor,sessionID,timestep):
 	for el in tree.findall('trustnet/agent'):
 		getAgentID(con,cursor,el.text)
 		
+	for el in tree.findall('scenario'):
+		try:
+			cursor.execute("Insert INTO scenarios (sessionID,timestep,scenario_text) values(%s,%s,%s);", (sessionID,timestep,el.text))
+			con.commit()
+		except:
+			con.rollback()
+
 	for el in tree.findall('trustnet/trust'):
 		trusterID = -1
 		trustedID = -1
 		level = -1
+		textAboutTrust=''
 		for t in el.findall('truster'):
 			trusterID = getAgentID(con,cursor,t.text)
 		for t in el.findall('trustee'):
 			trustedID = getAgentID(con,cursor,t.text)
 		for t in el.findall('level'):
 			level = t.text
+		for t in el.findall('scenarioText'):
+			textAboutTrust = t.text
 		try:
 			cursor.execute("Insert INTO agent_trust (trustingAgent,trustedAgent,level,isInferred,sessionID,timestep) values(%s,%s,%s,%s,%s,%s);", (trusterID,trustedID,level,0,sessionID,timestep))
+			con.commit()
+		except:
+			con.rollback()
+		try:
+			cursor.execute("Insert INTO agent_trust_text (trustingAgent,trustedAgent,sessionID,timestep,scenario_text) values(%s,%s,%s,%s,%s);", (trusterID,trustedID,sessionID,timestep,textAboutTrust))
 			con.commit()
 		except:
 			con.rollback()
@@ -746,6 +770,8 @@ def loadNewFile(inputfile,con,cursor,sessionID,timestep):
 			for p in t.findall('premise'):
 				predicateHasConstant = getPredicateHasConstantID(con,cursor,p.text)
 				getPremiseID(con,cursor,beliefID,predicateHasConstant[0],predicateHasConstant[1])
+		for t in el.findall('scenarioText'):
+		    getAgentBeliefsText(con,cursor,agentID,beliefID,sessionID,timestep,t.text)
 
 	for el in tree.findall('query'):
 		agentID = -1

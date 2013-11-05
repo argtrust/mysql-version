@@ -1,0 +1,128 @@
+/* May 7, 2013 3_37p*/
+
+
+#graphContainer {
+	width: 100%;
+	height: 100%;
+/* 	overflow:auto;
+    border:1px solid #000000;*/
+}
+
+.graph {
+	width:75%;
+	height:100%;
+	margin:0px;
+	padding:0px;
+	float:left;	
+}
+
+.zoom {
+	display:none;
+	position: fixed;
+	top: 0;
+	width:10%;
+	background: #fff;
+	border: solid #ccc;
+	border-width: 0 1px 1px 0;
+}
+
+.detail{
+	position:absolute;
+	width:10%;
+	background: #fff;
+	border: solid #ccc;
+	border-width: 0 1px 1px 0;
+}
+
+fieldset {
+	font-size: 1em;
+	margin: 0.5em;
+	padding: 0.5em;
+	text-align: center;
+	border: solid #ccc;
+	border-width: 1px 1px 1px 1px;
+}
+
+
+
+#tabContainer {
+	width:25%;
+	padding:10px;
+	margin:0px;
+	float: right;
+	background-color:#2e2e2e;
+}
+
+
+
+#tabscontent {
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 4px;
+	-moz-border-radius-bottomright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+	padding:10px 10px 25px;
+	background: #FFFFFF;
+	background: -moz-linear-gradient(top, #FFFFFF 0%, #FFFFFF 90%, #e4e9ed 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(90%,#FFFFFF), color-stop(100%,#e4e9ed)); /* webkit */
+	margin:0;
+	color:#333;
+	height:90%;
+/* 	overflow:auto; */
+}
+
+.checkbox, .radio {
+	width: 19px;
+	height: 25px;
+	padding: 0 5px 0 0;
+	background: url(checkbox.png) no-repeat;
+	display: block;
+	clear: left;
+	float: left;
+}
+
+.radio {
+	background: url(radio.png) no-repeat;
+}
+
+.select {
+	position: absolute;
+	width: 158px;
+	height: 21px;
+	padding: 0 24px 0 8px;
+	color: #fff;
+	font: 12px/21px arial,sans-serif;
+	background: url(select.png) no-repeat;
+}
+
+input.little_button
+{
+    z-index: 100;
+}
+
+#rightNav li{
+    list-style: none;
+    padding-left: 0px;
+    margin-left: 0px;
+
+}
+#rightNav ul{
+    list-style: none;
+    padding-left: 20px;
+}
+
+.individualGraphs{
+
+}
+
+.debug_output{
+    visibility: hidden;
+
+}
+#mainContainerUL{
+    list-style: none;
+    margin:20px;
+}
