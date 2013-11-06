@@ -1,4 +1,9 @@
 <?php
+/* Redirect browser */
+header("Location: index_new.php");
+exit;
+?>
+<?php
 	include 'header.php';
 ?>
 <!DOCTYPE html>

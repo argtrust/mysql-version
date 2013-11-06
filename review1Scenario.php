@@ -5,7 +5,7 @@
         die('Could not connect: ' . mysql_error());
     }
     if(!array_key_exists('sessionID', $_GET)){
-        die('Did not find session ID');
+        include 'header.php';
     }else{
         $sessionID=$_GET['sessionID'];
     }
