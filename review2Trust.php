@@ -205,7 +205,7 @@ foreach ($agents as $agent_id => $agent_info) {
                            $row[0], $row[5]);
                         printf("%s [label=%s];",
                            $row[1], $row[6]);
-                        printf("%s -> %s [color=yellow, label=\"%s\"];\n",
+                        printf("%s -> %s [color=yellow];\n",
                            $row[0], $row[1],$newLevel);
                         echo "}";
                         $contents = ob_get_contents();

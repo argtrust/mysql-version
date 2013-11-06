@@ -193,7 +193,7 @@
                         $newLevel = $row[2] * 100;
                         printf("%s [label=%s];",
                            $row[7], $row[6]);
-                        printf("%s -> %s [label=\"%s\"];\n",
+                        printf("%s -> %s \n",
                            $row[7], $row[0],$newLevel);
                         printf("%s [label=\"%s\", shape=box, fillcolor=lightcyan ];\n",
                               $row[0], $row[1]);
