@@ -1,5 +1,5 @@
 <?php
-putenv('PATH=/usr/local/bin:');
+//putenv('PATH=/usr/local/bin:');
 include 'settings.php';
 $link = mysqli_connect($dbHost,$dbUser,$dbPass, $dbName);
 if (!$link) {

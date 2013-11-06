@@ -285,7 +285,8 @@ try:
    	args = parse_args()	
 #   	inputfile = parseArgs(sys.argv[1:])
 #	con = mdb.connect('jsalvitdbinstance.cku3opv9prdt.us-east-1.rds.amazonaws.com', 'jsalvit', 'c00l2heads', 'trust',charset='utf8')
-        con = mdb.connect('localhost', 'root', '', 'trust',charset='utf8')
+#        con = mdb.connect('localhost', 'root', '', 'trust',charset='utf8')
+        con = mdb.connect('localhost', 'trust_user', 'trust1234', 'trust',charset='utf8')
 #	print inputfile
 	cursor = con.cursor()
 

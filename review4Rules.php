@@ -1,5 +1,5 @@
 <?php
-    putenv('PATH=/usr/local/bin:');
+//    putenv('PATH=/usr/local/bin:');
     include 'settings.php';
     $link = mysqli_connect($dbHost,$dbUser,$dbPass, $dbName);
     if (!$link) {
@@ -126,6 +126,7 @@
     <script type="text/javascript" src="./prototype/prototype.js"></script>
     <script type="text/javascript" src="./path/path.js"></script>
     <script type="text/javascript" src="canviz.js"></script>
+   <script type="text/javascript" src="x11colors.js"></script>
     <script type="text/javascript" src="scripts_common.js"></script>
 
     <script>
