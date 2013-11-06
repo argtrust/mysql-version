@@ -46,12 +46,12 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="index_new.php">Begin</a></li>
-            <li>Review Scenario</li>
-            <li>Review Trust</li>
-            <li>Review Beliefs</li>
-            <li>Review Rules</li>
-            <li>Trust + Beliefs</li>
-            <li>Complete Graph</li>
+            <li><a href="#">Review Scenario</a></li>
+            <li><a href="#">Review Trust</a></li>
+            <li><a href="#">Review Beliefs</a></li>
+            <li><a href="#>">Review Rules</a></li>
+            <li><a href="#">Trust + Beliefs</a></li>
+            <li><a href="#">Complete Graph</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
