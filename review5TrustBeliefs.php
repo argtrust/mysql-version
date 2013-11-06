@@ -181,8 +181,8 @@
                         concat('agent',ab2.agentID) as parentAgentID,
                         att.level as trustLevel
                         from agent_trust att
-                        inner join agent_has_beliefs ab on ab.agentID = att.trustedAgent and att.sessionID = ab.sessionID and att.timestep = ab.timestep
-                        inner join agent_has_beliefs ab2 on ab2.agentID = att.trustingAgent and att.sessionID = ab2.sessionID and att.timestep = ab2.timestep and ab.beliefID = ab2.beliefID
+                        inner join agent_has_beliefs ab on ab.agentID = att.trustingAgent and att.sessionID = ab.sessionID and att.timestep = ab.timestep
+                        inner join agent_has_beliefs ab2 on ab2.agentID = att.trustedAgent and att.sessionID = ab2.sessionID and att.timestep = ab2.timestep and ab.beliefID = ab2.beliefID
                         inner join beliefs b on b.beliefID = ab2.beliefID
                         inner join predicate_has_constant pc on pc.predicateConstantID = b.conclusionID
                         inner join predicates p on p.predicateID = pc.predicateID
