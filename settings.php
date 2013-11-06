@@ -10,3 +10,11 @@ $dbUser='root';
 $dbPass='';
 $dbName='trust';
 ?>
+
+<?php
+//parker settings
+$dbHost='localhost';
+$dbUser='trust_user';
+$dbPass='trust1234';
+$dbName='trust';
+?>
