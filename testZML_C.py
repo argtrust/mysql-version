@@ -184,6 +184,11 @@ def clearSessionToReargue(connection, cursor, sessionID, timestep):
 		except:
 			connection.rollback()
 		try:
+			cursor.execute("delete from agent_trust where isInferred = 1 and sessionID = %s and timestep = %s;", (sessionID, timestep))
+			connection.commit()
+		except:
+			connection.rollback()
+		try:
 			sql = "delete paa.* "
 			sql =+ " from parent_argument_attacks_argument paa "
 			sql =+ "inner join parent_argument pa on fromParentArgID = parentArgumentID " 

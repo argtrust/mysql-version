@@ -64,9 +64,9 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index_new.php">Begin</a></li>
-            <li><a href="review1Scenario.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Read Scenario</a></li>
-            <li><a href="review2Trust.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Trust Network</a></li>
+            <li><a href="index_new.php">Reset</a></li>
+            <li><a href="review1Scenario.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Scenario</a></li>
+            <li><a href="review2Trust.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Trust</a></li>
             <li><a href="review3Beliefs.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Beliefs</a></li>
             <li class="active"><a href="review4Rules.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Rules</a></li>
             <li><a href="review5TrustBeliefs.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Trust + Beliefs</a></li>
@@ -218,7 +218,7 @@
                                $row[7], $row[6]);
                             printf("%s -> %s [label=\"%s\"];\n",
                                $row[7], $row[0],$newLevel);
-                            printf("%s [label=\"%s:%s\", shape=box3d, fillcolor=lightblue ];\n",
+                            printf("%s [label=\"%s<=%s\", shape=box3d, fillcolor=lightblue ];\n",
                                   $row[0], $row[1],$premises);
                             echo "}";
                             $contents = ob_get_contents();

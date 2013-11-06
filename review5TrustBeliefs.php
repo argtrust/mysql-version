@@ -67,9 +67,9 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index_new.php">Begin</a></li>
-            <li><a href="review1Scenario.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Read Scenario</a></li>
-            <li><a href="review2Trust.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Trust Network</a></li>
+            <li><a href="index_new.php">Reset</a></li>
+            <li><a href="review1Scenario.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Scenario</a></li>
+            <li><a href="review2Trust.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Trust</a></li>
             <li><a href="review3Beliefs.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Beliefs</a></li>
             <li><a href="review4Rules.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Rules</a></li>
             <li class="active"><a href="review5TrustBeliefs.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Trust + Beliefs</a></li>
@@ -168,22 +168,27 @@
 		document.observe('dom:loaded', function() {
             <?php
 
-                $sql = "select distinct concat('belief',b.beliefID) as beliefName, CASE
-                        WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))')
-                        ELSE concat(p.name,'(',c.name,')') END predicate,
-                        ab.level as currentLevel, ab2.level as parentLevel,
-                        p.name, c.name, b.isNegated,
-                        a.agentName as currentAgentName, concat('agent',ab.agentID) as currentAgentID, a2.agentName as parentAgentName, concat('agent',ab2.agentID) as parentAgentID, att.level as trustLevel
-                        from beliefs b
-                        inner join agent_has_beliefs ab on b.beliefID = ab.beliefID
+                $sql = "select distinct concat('belief',b.beliefID) as beliefName,
+                        CASE WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') ELSE concat(p.name,'(',c.name,')') END predicate,
+                        ab.level as currentLevel,
+                        ab2.level as parentLevel,
+                        p.name,
+                        c.name,
+                        b.isNegated,
+                        a.agentName as currentAgentName,
+                        concat('agent',ab.agentID) as currentAgentID,
+                        a2.agentName as parentAgentName,
+                        concat('agent',ab2.agentID) as parentAgentID,
+                        att.level as trustLevel
+                        from agent_trust att
+                        inner join agent_has_beliefs ab on ab.agentID = att.trustedAgent and att.sessionID = ab.sessionID and att.timestep = ab.timestep
+                        inner join agent_has_beliefs ab2 on ab2.agentID = att.trustingAgent and att.sessionID = ab2.sessionID and att.timestep = ab2.timestep and ab.beliefID = ab2.beliefID
+                        inner join beliefs b on b.beliefID = ab2.beliefID
                         inner join predicate_has_constant pc on pc.predicateConstantID = b.conclusionID
                         inner join predicates p on p.predicateID = pc.predicateID
                         inner join constants c on pc.constantID = c.constantID
-                        inner join inferred_beliefs ib on ab.agentBeliefID = ib.inferredBeliefID
-                        inner join agent_has_beliefs ab2 on ib.appliedBeliefID = ab2.agentBeliefID
                         inner join agents a on a.agentID = ab.agentID
                         inner join agents a2 on a2.agentID = ab2.agentID
-                        inner join agent_trust att on trustingAgent = a.agentID and trustedAgent = a2.agentID
                         where ab.sessionID = '".$sessionID."' and ab.timestep=".$timestep.";
                 ";
 
