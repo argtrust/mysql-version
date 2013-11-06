@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.47, for redhat-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.13, for osx10.7 (x86_64)
 --
--- Host: jsalvitdbinstance.cku3opv9prdt.us-east-1.rds.amazonaws.com    Database: trust
+-- Host: localhost    Database: trust
 -- ------------------------------------------------------
--- Server version	5.5.27-log
+-- Server version	5.6.13
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,23 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `agent_belief_text`
+--
+
+DROP TABLE IF EXISTS `agent_belief_text`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `agent_belief_text` (
+  `beliefID` int(11) NOT NULL,
+  `agentID` int(11) NOT NULL,
+  `sessionID` varchar(45) NOT NULL,
+  `timestep` int(11) NOT NULL,
+  `scenario_text` text,
+  PRIMARY KEY (`timestep`,`sessionID`,`agentID`,`beliefID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `agent_has_beliefs`
@@ -30,8 +47,9 @@ CREATE TABLE `agent_has_beliefs` (
   `isInferred` smallint(6) NOT NULL,
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
+  `scenario_text` text,
   PRIMARY KEY (`agentBeliefID`,`timestep`,`sessionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=433 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1460 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,8 +67,26 @@ CREATE TABLE `agent_trust` (
   `isInferred` smallint(6) NOT NULL,
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
+  `scenario_text` text,
   PRIMARY KEY (`trustID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=149 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `agent_trust_text`
+--
+
+DROP TABLE IF EXISTS `agent_trust_text`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `agent_trust_text` (
+  `trustingAgent` int(11) NOT NULL,
+  `trustedAgent` int(11) NOT NULL,
+  `sessionID` varchar(45) NOT NULL,
+  `timestep` int(11) NOT NULL,
+  `scenario_text` text,
+  PRIMARY KEY (`timestep`,`sessionID`,`trustingAgent`,`trustedAgent`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +100,7 @@ CREATE TABLE `agents` (
   `agentID` int(11) NOT NULL AUTO_INCREMENT,
   `agentName` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`agentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +142,7 @@ CREATE TABLE `arguments` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`argumentID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=701 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2881 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +158,7 @@ CREATE TABLE `belief_has_premises` (
   `premiseID` int(11) NOT NULL,
   `isNegated` smallint(6) NOT NULL,
   PRIMARY KEY (`beliefPremiseID`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=322 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,9 +170,9 @@ DROP TABLE IF EXISTS `belief_names`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 /*!50001 CREATE TABLE `belief_names` (
-  `beliefID` int(11),
-  `beliefName` varchar(106),
-  `isRule` smallint(6)
+  `beliefID` tinyint NOT NULL,
+  `beliefName` tinyint NOT NULL,
+  `isRule` tinyint NOT NULL
 ) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
@@ -153,7 +189,25 @@ CREATE TABLE `beliefs` (
   `isNegated` smallint(6) NOT NULL,
   `isRule` smallint(6) NOT NULL,
   PRIMARY KEY (`beliefID`)
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `click_tracking`
+--
+
+DROP TABLE IF EXISTS `click_tracking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `click_tracking` (
+  `id` int(11) NOT NULL,
+  `session_id` varchar(45) DEFAULT NULL,
+  `user_id` varchar(45) DEFAULT NULL,
+  `action_type` varchar(45) DEFAULT NULL,
+  `action_id` varchar(45) DEFAULT NULL,
+  `timestep` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +221,7 @@ CREATE TABLE `constants` (
   `constantID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(55) NOT NULL,
   PRIMARY KEY (`constantID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +238,7 @@ CREATE TABLE `inferred_beliefs` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`inferenceID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=261 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=919 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -220,7 +274,7 @@ CREATE TABLE `parent_argument` (
   `sessionID` varchar(45) DEFAULT NULL,
   `timestep` int(11) DEFAULT NULL,
   PRIMARY KEY (`parentArgumentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10104 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11995 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -264,8 +318,9 @@ CREATE TABLE `predicate_has_constant` (
   `predicateConstantID` int(11) NOT NULL AUTO_INCREMENT,
   `predicateID` int(11) NOT NULL,
   `constantID` int(11) NOT NULL,
+  `scenario_text` text,
   PRIMARY KEY (`predicateConstantID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -277,9 +332,9 @@ DROP TABLE IF EXISTS `predicate_has_constant_names`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 /*!50001 CREATE TABLE `predicate_has_constant_names` (
-  `predicateConstantID` int(11),
-  `predicateName` varchar(45),
-  `constantName` varchar(55)
+  `predicateConstantID` tinyint NOT NULL,
+  `predicateName` tinyint NOT NULL,
+  `constantName` tinyint NOT NULL
 ) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
 
@@ -294,7 +349,7 @@ CREATE TABLE `predicates` (
   `predicateID` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`predicateID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -311,7 +366,7 @@ CREATE TABLE `question_attacks_arguments` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`questionArgumentID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=701 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2881 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -350,7 +405,22 @@ CREATE TABLE `questions` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`questionID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=471 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1805 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `scenarios`
+--
+
+DROP TABLE IF EXISTS `scenarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `scenarios` (
+  `sessionID` varchar(45) NOT NULL,
+  `timestep` int(11) NOT NULL,
+  `scenario_text` text,
+  PRIMARY KEY (`timestep`,`sessionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -381,9 +451,10 @@ CREATE TABLE `user_session` (
   `date` datetime DEFAULT NULL,
   `current_timestep` int(11) DEFAULT '1',
   `userid` varchar(45) DEFAULT NULL,
+  `scenario_text` text,
   PRIMARY KEY (`id`),
   KEY `Secondary` (`sessionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1006 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=867 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -399,7 +470,7 @@ CREATE TABLE `user_session` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`trust_user`@`%`*/ /*!50003 PROCEDURE `copy_beliefs`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeFactID int, IN excludeAgentID int)
+CREATE DEFINER=`trust_user`@`%` PROCEDURE `copy_beliefs`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeFactID int, IN excludeAgentID int)
 BEGIN
 insert into agent_has_beliefs (agentID, beliefID, level, isInferred,sessionID,timestep)
 select ab.agentID, b.beliefID, ab.level,ab.isInferred,userSessionID,toStep
@@ -416,7 +487,7 @@ where ab.sessionID = userSessionID and ab.timestep = fromStep and ab.isInferred 
 and not b.beliefID in (excludeFactID) and not ab.agentID in (excludeAgentID);
 
 
-END */;;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -432,7 +503,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`trust_user`@`%`*/ /*!50003 PROCEDURE `copy_fact`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeFactID int)
+CREATE DEFINER=`trust_user`@`%` PROCEDURE `copy_fact`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeFactID int)
 BEGIN
 insert into agent_has_beliefs (agentID, beliefID, level, isInferred,sessionID,timestep)
 select ab.agentID, b.beliefID, ab.level,ab.isInferred,userSessionID,toStep
@@ -442,7 +513,7 @@ select ab.agentID, b.beliefID, ab.level,ab.isInferred,userSessionID,toStep
 where ab.sessionID = userSessionID and ab.timestep = fromStep and b.isRule = 0  and ab.isInferred = 0
 and not b.beliefID in (excludeFactID);
 
-END */;;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -458,14 +529,14 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`trust_user`@`%`*/ /*!50003 PROCEDURE `copy_question`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeQuestionID int)
+CREATE DEFINER=`trust_user`@`%` PROCEDURE `copy_question`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeQuestionID int)
 BEGIN
 INSERT INTO questions (agentID, conclusionID, isNegated, isAttack, isProcessed, isSupported, attackType, sessionID, timestep)
 SELECT agentID, conclusionID, isNegated, isAttack, 0, 0, NULL, userSessionID, toStep
 from questions
 where sessionID = userSessionID and timestep = fromStep and isAttack = 0
 and not questionID in (excludeQuestionID);
-END */;;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -481,7 +552,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`trust_user`@`%`*/ /*!50003 PROCEDURE `copy_rules`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeRuleID int)
+CREATE DEFINER=`trust_user`@`%` PROCEDURE `copy_rules`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeRuleID int)
 BEGIN
 insert into agent_has_beliefs (agentID, beliefID, level, isInferred,sessionID,timestep)
 select ab.agentID, b.beliefID, ab.level,isInferred,userSessionID,toStep
@@ -491,7 +562,7 @@ where ab.sessionID = userSessionID and ab.timestep = fromStep and b.isRule = 1  
 and not b.beliefID in (excludeRuleID);
 
 
-END */;;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -507,7 +578,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`trust_user`@`%`*/ /*!50003 PROCEDURE `copy_trust`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeTrustID int)
+CREATE DEFINER=`trust_user`@`%` PROCEDURE `copy_trust`(IN userSessionID varchar(55), IN fromStep INT, IN toStep int, IN excludeTrustID int)
 BEGIN
 insert into agent_trust (trustingAgent, trustedAgent, level, isInferred, sessionID, timestep)
 select trustingAgent, trustedAgent, level, 0, userSessionID, toStep
@@ -516,7 +587,7 @@ where sessionID = userSessionID and timestep = fromStep and isInferred = 0
 and not trustingAgent in (excludeTrustID)
 and not trustedAgent in (excludeTrustID);
 
-END */;;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -532,12 +603,12 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`trust_user`@`%`*/ /*!50003 PROCEDURE `delete_fact`(IN userSessionID varchar(55),IN factID int)
+CREATE DEFINER=`trust_user`@`%` PROCEDURE `delete_fact`(IN userSessionID varchar(55),IN factID int)
 BEGIN
   DECLARE timestep int;
   SELECT current_timestep INTO timestep FROM user_session WHERE sessionID = userSessionID;
   UPDATE user_session SET current_timestep = timestep+1 WHERE sessionID = userSessionID;
-END */;;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -553,14 +624,14 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`trust_user`@`%`*/ /*!50003 PROCEDURE `getAgents`(IN sessionIDParam varchar(55), IN timestepParam int)
+CREATE DEFINER=`trust_user`@`%` PROCEDURE `getAgents`(IN sessionIDParam varchar(55), IN timestepParam int)
 BEGIN
 
 SELECT DISTINCT agentID, agentName FROM agents 
 INNER JOIN agent_trust on (trustingAgent = agentID or trustedAgent = agentID) 
 where sessionID = sessionIDParam and timestep=timestepParam;
 
-END */;;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -576,7 +647,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`trust_user`@`%`*/ /*!50003 PROCEDURE `getFacts`(IN sessionIDParam varchar(55), IN timestepParam int, IN includeConclusions int, IN onlyConclusions int)
+CREATE DEFINER=`trust_user`@`%` PROCEDURE `getFacts`(IN sessionIDParam varchar(55), IN timestepParam int, IN includeConclusions int, IN onlyConclusions int)
 BEGIN
 IF onlyConclusions = 1 THEN 
 
@@ -629,7 +700,7 @@ ELSE
 											and pa.timestep = a.timestep 
 								where a.sessionID = sessionIDParam and a.timestep=timestepParam);
 END IF;
-END */;;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -645,7 +716,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50020 DEFINER=`trust_user`@`%`*/ /*!50003 PROCEDURE `getRules`(IN sessionIDParam varchar(55), IN timestepParam int, IN includeConclusions int, IN onlyConclusions int)
+CREATE DEFINER=`trust_user`@`%` PROCEDURE `getRules`(IN sessionIDParam varchar(55), IN timestepParam int, IN includeConclusions int, IN onlyConclusions int)
 BEGIN
 IF onlyConclusions = 1 THEN 
     select distinct b.beliefID, CASE               
@@ -697,7 +768,7 @@ ELSE
 											and pa.timestep = a.timestep 
 								where a.sessionID = sessionIDParam and a.timestep=timestepParam);
 END IF;
-END */;;
+END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -751,4 +822,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-09-27 14:02:10
+-- Dump completed on 2013-11-06  0:47:32
