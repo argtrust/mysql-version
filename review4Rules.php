@@ -218,7 +218,7 @@
                                $row[7], $row[6]);
                             printf("%s -> %s ;\n",
                                $row[7], $row[0],$newLevel);
-                            printf("%s [label=\"%s<=%s\", shape=box3d, fillcolor=lightblue ];\n",
+                            printf("%s [label=\"%s <= %s\", shape=box3d, fillcolor=lightblue ];\n",
                                   $row[0], $row[1],$premises);
                             echo "}";
                             $contents = ob_get_contents();
