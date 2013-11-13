@@ -11,6 +11,11 @@ import re
 import itertools
 from decimal import *
 
+def node_text(n):
+	try:
+            return et.tostring(n, method='html', with_tail=False)
+        except TypeError:
+            return str(n)
 
 def resetDB(connection,cursor):
 		try:
@@ -712,9 +717,15 @@ def loadNewFile(inputfile,con,cursor,sessionID,timestep):
 	for el in tree.findall('trustnet/agent'):
 		getAgentID(con,cursor,el.text)
 		
+
 	for el in tree.findall('scenario'):
+#		print et.tostring(el)
+#		print el
+#		print '------------------------------'
+#		print el.text
+#		''.join(node_text(n) for n in el.xpath('/node()'))
 		try:
-			cursor.execute("Insert INTO scenarios (sessionID,timestep,scenario_text) values(%s,%s,%s);", (sessionID,timestep,el.text))
+			cursor.execute("Insert INTO scenarios (sessionID,timestep,scenario_text) values(%s,%s,%s);", (sessionID,timestep,et.tostring(el)))
 			con.commit()
 		except:
 			con.rollback()
