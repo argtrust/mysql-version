@@ -180,8 +180,10 @@ foreach ($agent_arrows as $id=>$info) {
 }
 
 foreach ($fact_argument_arrows as $id=>$info) {
-    printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-           $info["from_dot_label"], $info["to_dot_label"]);
+    if($info["from_dot_label"] != $info["to_dot_label"]){
+	    printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+        	   $info["from_dot_label"], $info["to_dot_label"]);
+    }
 }
 /** @page dotgen_hw_impl
  *
