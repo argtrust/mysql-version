@@ -1428,19 +1428,18 @@ mysqli_free_result($result);
  * $agent_fact_arrows_from, $num_agent_fact_arrows_from,
  * $agent_fact_arrows_to, and $num_agent_fact_arrows_to.
  */
-$sql="select distinct 
-    case when b.isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l,
-    case when b2.isRule = 1 then concat('inference',b2.beliefID) else concat('fact',b2.beliefID) end l2,
-    ab.agentID, b2.isRule, b.beliefID, round(ab.level*100)
-    from agent_has_beliefs ab
-    inner join beliefs b on ab.beliefID = b.beliefID 
-    inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
-    inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-    inner join parent_argument_has_argument paa on a.argumentID = paa.argumentID -- and a.sessionID = paa.sessionID and a.timestep = paa.timestep
-    inner join parent_argument pa on paa.parentArgumentID = pa.parentArgumentID and a.sessionID = pa.sessionID and a.timestep = pa.timestep
-    inner join arguments a2 on a2.argumentID = pa.argumentID and a2.sessionID = pa.sessionID and a2.timestep = pa.timestep
-    inner join beliefs b2 on b2.beliefID = a2.beliefID
-    where isInferred = 0 and a.isSupported = 1 and b.isRule = 0
+$sql="select distinct concat('fact',b.beliefID),
+          case when b2.isRule = 1 then concat('inference',b2.beliefID) else concat('fact',b2.beliefID) end l2,
+          ab.agentID, b2.isRule, b.beliefID, round(ab.level*100)
+          from agent_has_beliefs ab
+          inner join beliefs b on ab.beliefID = b.beliefID
+          inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
+          inner join parent_argument_has_argument paa on a.argumentID = paa.argumentID
+          inner join parent_argument pa on paa.parentArgumentID = pa.parentArgumentID and a.sessionID = pa.sessionID and a.timestep = pa.timestep
+          inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported and q.questionID = pa.questionID
+          inner join arguments a2 on a2.argumentID = pa.argumentID and a2.sessionID = pa.sessionID and a2.timestep = pa.timestep
+          inner join beliefs b2 on b2.beliefID = a2.beliefID
+          where isInferred = 0 and a.isSupported = 1 and b.isRule = 0
     and a.sessionID = '".$sessionID."' and a.timestep=".$timestep;
 $result=mysqli_query($link,$sql);
 if ($result) {

@@ -261,7 +261,7 @@ $result=mysqli_query($link,$sql);
 if ($result) {
     while ($row = mysqli_fetch_array($result)) {
         printf("%s -> %s [label=%s color=orange, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-               $row[0],$row[1],$row[3]);
+               $row[0],$row[1],$row[2]);
     }
 }
 ?>
