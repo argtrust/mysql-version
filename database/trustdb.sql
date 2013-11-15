@@ -49,7 +49,7 @@ CREATE TABLE `agent_has_beliefs` (
   `timestep` int(11) NOT NULL,
   `scenario_text` text,
   PRIMARY KEY (`agentBeliefID`,`timestep`,`sessionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1545 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1592 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,7 +69,7 @@ CREATE TABLE `agent_trust` (
   `timestep` int(11) NOT NULL,
   `scenario_text` text,
   PRIMARY KEY (`trustID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +142,7 @@ CREATE TABLE `arguments` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`argumentID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=3256 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3391 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +158,7 @@ CREATE TABLE `belief_has_premises` (
   `premiseID` int(11) NOT NULL,
   `isNegated` smallint(6) NOT NULL,
   PRIMARY KEY (`beliefPremiseID`)
-) ENGINE=InnoDB AUTO_INCREMENT=330 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=346 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +189,7 @@ CREATE TABLE `beliefs` (
   `isNegated` smallint(6) NOT NULL,
   `isRule` smallint(6) NOT NULL,
   PRIMARY KEY (`beliefID`)
-) ENGINE=InnoDB AUTO_INCREMENT=277 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=289 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +238,7 @@ CREATE TABLE `inferred_beliefs` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`inferenceID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=994 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1021 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,7 +274,7 @@ CREATE TABLE `parent_argument` (
   `sessionID` varchar(45) DEFAULT NULL,
   `timestep` int(11) DEFAULT NULL,
   PRIMARY KEY (`parentArgumentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12095 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12131 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,7 +366,7 @@ CREATE TABLE `question_attacks_arguments` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`questionArgumentID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=3256 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3391 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -405,7 +405,7 @@ CREATE TABLE `questions` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`questionID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=2031 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2114 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -454,7 +454,7 @@ CREATE TABLE `user_session` (
   `scenario_text` text,
   PRIMARY KEY (`id`),
   KEY `Secondary` (`sessionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=868 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=870 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -660,9 +660,9 @@ IF onlyConclusions = 1 THEN
 		inner join predicates p on p.predicateID = pc.predicateID
 		inner join constants c on pc.constantID = c.constantID 
 		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
+		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported and ab.agentID = q.agentID
 		inner join parent_argument pa on pa.argumentID = a.argumentID and pa.sessionID = a.sessionID and pa.timestep = a.timestep 
-		where ab.agentID = 1 and b.isRule = 0 and a.isSupported = 1
+		where b.isRule = 0 and a.isSupported = 1
 		and ab.sessionID = sessionIDParam and ab.timestep=timestepParam
 		group by b.beliefID, b.isNegated, p.name, c.name, ab.level;
 
@@ -676,8 +676,8 @@ ELSEIF includeConclusions = 1 THEN
 		inner join predicates p on p.predicateID = pc.predicateID
 		inner join constants c on pc.constantID = c.constantID 
 		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-		where ab.agentID = 1 and b.isRule = 0 and a.isSupported = 1
+		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported  and ab.agentID = q.agentID
+		where b.isRule = 0 and a.isSupported = 1
 		and ab.sessionID = sessionIDParam and ab.timestep=timestepParam;
 ELSE
 		select distinct b.beliefID, CASE               
@@ -689,8 +689,8 @@ ELSE
 		inner join predicates p on p.predicateID = pc.predicateID
 		inner join constants c on pc.constantID = c.constantID 
 		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-		where ab.agentID = 1 and b.isRule = 0 and a.isSupported = 1
+		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported  and ab.agentID = q.agentID
+		where b.isRule = 0 and a.isSupported = 1
 		and ab.sessionID = sessionIDParam and ab.timestep=timestepParam
 		and b.beliefID NOT IN (select distinct b.beliefID 
 								from arguments a 
@@ -728,9 +728,9 @@ IF onlyConclusions = 1 THEN
 		inner join predicates p on p.predicateID = pc.predicateID
 		inner join constants c on pc.constantID = c.constantID 
 		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
+		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported  and ab.agentID = q.agentID
 		inner join parent_argument pa on pa.argumentID = a.argumentID and pa.sessionID = a.sessionID and pa.timestep = a.timestep 
-		where ab.agentID = 1 and b.isRule = 1 and a.isSupported = 1
+		where b.isRule = 1 and a.isSupported = 1
 		and ab.sessionID = sessionIDParam and ab.timestep=timestepParam
 		group by b.beliefID, b.isNegated, p.name, c.name, ab.level;
 
@@ -744,8 +744,8 @@ ELSEIF includeConclusions = 1 THEN
 		inner join predicates p on p.predicateID = pc.predicateID
 		inner join constants c on pc.constantID = c.constantID 
 		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-		where ab.agentID = 1 and b.isRule = 1 and a.isSupported=1
+		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported  and ab.agentID = q.agentID
+		where b.isRule = 1 and a.isSupported=1
 		and ab.sessionID = sessionIDParam and ab.timestep=timestepParam;
 ELSE
   select distinct b.beliefID, CASE 
@@ -757,8 +757,8 @@ ELSE
 		inner join predicates p on p.predicateID = pc.predicateID
 		inner join constants c on pc.constantID = c.constantID 
 		inner join arguments a on a.beliefID = b.beliefID and ab.sessionID = a.sessionID and ab.timestep=a.timestep
-		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
-		where ab.agentID = 1 and b.isRule = 1 and a.isSupported=1
+		inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported  and ab.agentID = q.agentID
+		where b.isRule = 1 and a.isSupported=1
 		and ab.sessionID = sessionIDParam and ab.timestep=timestepParam
 		and b.beliefID NOT IN (select distinct b.beliefID 
 								from arguments a 
@@ -822,4 +822,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-11-15 12:55:32
+-- Dump completed on 2013-11-15 14:11:37
