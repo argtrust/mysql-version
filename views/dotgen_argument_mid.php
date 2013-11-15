@@ -90,48 +90,41 @@ foreach ($arg_agentIDs as $id1) {
  *
  * * Create node for this argument ($argumentID) conclusions/outcomes
  */
-$disp_arguments = array ();
-
-$id = $argumentID;
-$info = $arguments[$argumentID];
-if ($info["status"] == "IN") {
-    printf("%s [label=\"%s : %s\", fontsize=35, shape=box, fillcolor=palegreen, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-           "outcome".$id, $info["conclusion_display"],
-           $info["status"]);
-}else if($info["status"] == "OUT") {
-    printf("%s [label=\"%s : %s\", fontsize=35, style=\"filled\", fillcolor=pink, shape=box, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-           "outcome".$id, $info["conclusion_display"],
-           $info["status"]);
-}else if($info["status"] == "UNDEC") {
-    printf("%s [label=\"%s : %s\", fontsize=35, shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-           "outcome".$id, $info["conclusion_display"],
-           $info["status"]);
-}
-$disp_arguments[] = $id;
-
-/** @page dotgen_argument_mid_impl
- *
- * * Create arrows between this outcome ($argumentID) and agents that
- * contribute to the outcome
- */
-$disp_agent_arg_arrows = array ();
-
-$disp_argid = $argumentID;
-$arg_agentIDs = $info["agentIDs"];
-$arg_beliefIDs = $info["beliefIDs"];
-foreach ($arg_agentIDs as $agentID) {
-    foreach ($arg_beliefIDs as $beliefID) {
-        $from_to = $agentID."_".$beliefID;
-        if (array_key_exists($from_to, $agent_fact_arrows)) {
-            // If not in $disp_agent_arg_arrows, draw and add to array.
-            $agent_disparg = $agentID."_".$disp_argid;
-            if (array_key_exists($agent_disparg, $disp_agent_arg_arrows)
-                == FALSE) {
-                printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-                       $agents[$agentID]["dot_label"],
-                       "outcome".$disp_argid);
-                $disp_agent_arg_arrows[$agent_disparg] = 1;
-            }
+//Arguments in current argument
+$argumentsInArg = array();
+$sql="select pa.argumentID, max(pa.level), UPPER(ltrim(rtrim(pa.status))), CASE
+        WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))')
+        ELSE concat(p.name,'(',c.name,')') END predicate
+from parent_argument pa
+inner join arguments a on a.argumentID = pa.argumentID and a.timestep = pa.timestep and pa.sessionID = a.sessionID
+inner join beliefs b on b.beliefID = a.beliefID
+inner join predicate_has_constant pc on pc.predicateConstantID = b.conclusionID
+inner join predicates p on p.predicateID = pc.predicateID
+inner join constants c on pc.constantID = c.constantID
+where pa.sessionID = '".$sessionID."' and pa.timestep=".$timestep." and a.isSupported = 1
+    and pa.parentArgumentID = ".$argumentID."
+group by a.argumentID, pa.status, b.isNEgated, p.name, c.name
+;";
+$result=mysqli_query($link,$sql);
+if ($result) {
+    while ($row = mysqli_fetch_array($result)) {
+        array_push($argumentsInArg, $row[0]);
+        if ($row[2] == "IN") {
+            printf("%s [label=\"%s : %s : %s\", fontsize=35, shape=box, fillcolor=palegreen, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   "outcome".$row[0], $row[3], $row[1],
+                   $row[2]);
+        }else if ($row[2] == "OUT") {
+            printf("%s [label=\"%s : %s\", fontsize=35, shape=box, fillcolor=pink, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   "outcome".$row[0], $row[3], $row[1],
+                   $row[2]);
+        }else if ($row[2] == "UNDEC") {
+            printf("%s [label=\"%s : %s\", fontsize=35, shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   "outcome".$row[0], $row[3], $row[1],
+                   $row[2]);
+        }else{
+            printf("%s [label=\"%s : %s\", fontsize=35, shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   "outcome".$row[0], $row[3], $row[1],
+                   $row[2]);
         }
     }
 }
@@ -171,75 +164,106 @@ foreach ($agent_arrows as $id=>$info) {
     }
 }
 
-/** @page dotgen_argument_mid_impl
- *
- * * Create nodes for argument conclusions/outcomes that are NOT this
- * argument ($argumentID)
- */
-foreach ($arguments as $id => $info) {
-    $displayed = 0;
-    foreach ($disp_arguments as $argid) {
-        if ($info["conclusion_display"] ==
-            $arguments[$argid]["conclusion_display"]) {
-            $displayed = 1;
-            break;
-        }
-    }
-    if ($displayed == 0) {
-        if ($info["status"] == "IN") {
-            printf("%s [label=\"%s : %s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-                   "outcome".$id, $info["conclusion_display"],
-                   $info["status"]);
-        }else if($info["status"] == "OUT") {
-            printf("%s [label=\"%s : %s\", style=\"filled\", fillcolor=grey, shape=box, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-                   "outcome".$id, $info["conclusion_display"],
-                   $info["status"]);
-        }else if($info["status"] == "UNDEC") {
-            printf("%s [label=\"%s : %s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-                   "outcome".$id, $info["conclusion_display"],
-                   $info["status"]);
-        }
+//Arguments not in current argument
+$sql="select a.argumentID, max(pa.level), pa.status, CASE
+        WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))')
+        ELSE concat(p.name,'(',c.name,')') END predicate
+from parent_argument pa
+inner join arguments a on a.argumentID = pa.argumentID and a.timestep = pa.timestep and pa.sessionID = a.sessionID
+inner join beliefs b on b.beliefID = a.beliefID
+inner join predicate_has_constant pc on pc.predicateConstantID = b.conclusionID
+inner join predicates p on p.predicateID = pc.predicateID
+inner join constants c on pc.constantID = c.constantID
+where pa.sessionID = '".$sessionID."' and pa.timestep=".$timestep." and a.isSupported = 1
+    and pa.parentArgumentID != ".$argumentID."
+    and not a.argumentID in (select argumentID from parent_argument where parentArgumentID = ".$argumentID.")
+group by a.argumentID, pa.status, b.isNEgated, p.name, c.name
+;";
+$result=mysqli_query($link,$sql);
+if ($result) {
+    while ($row = mysqli_fetch_array($result)) {
+        printf("%s [label=\"%s : %s\", shape=box, fillcolor=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+               "outcome".$row[0], $row[3],
+               $row[1]);
 
-        $disp_arguments[] = $id;
     }
 }
 
-/** @page dotgen_argument_mid_impl
- *
- * * Create arrows between outcomes and agents that contribute to the outcome
- * for arguments NOT $argumentID
- */
-foreach ($arguments as $id => $info) {
-    $disp_argid = -1;
-    foreach ($disp_arguments as $argid) {
-        if ($info["conclusion_display"] ==
-            $arguments[$argid]["conclusion_display"]) {
-            $disp_argid = $argid;
-            break;
-        }
+//Arrows for agents to conclusions in the current argument
+$sql="select distinct concat('agent',ab.agentID),
+    concat('outcome',pa.argumentID)
+    from agent_has_beliefs ab
+    inner join beliefs b on ab.beliefID = b.beliefID
+    inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
+    inner join parent_argument_has_argument paa on a.argumentID = paa.argumentID
+    inner join parent_argument pa on paa.parentArgumentID = pa.parentArgumentID and a.sessionID = pa.sessionID and a.timestep = pa.timestep
+    inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported and q.questionID = pa.questionID
+    inner join arguments a2 on a2.argumentID = pa.argumentID and a2.sessionID = pa.sessionID and a2.timestep = pa.timestep
+    inner join beliefs b2 on b2.beliefID = a2.beliefID
+    where isInferred = 0 and a.isSupported = 1 and b.isRule = 0
+    and pa.parentArgumentID = ".$argumentID."
+	and a.sessionID = '".$sessionID."' and a.timestep=".$timestep;
+$result=mysqli_query($link,$sql);
+if ($result) {
+    while ($row = mysqli_fetch_array($result)) {
+        printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+               $row[0], $row[1]);
+
     }
-    $arg_agentIDs = $info["agentIDs"];
-    $arg_beliefIDs = $info["beliefIDs"];
-    foreach ($arg_agentIDs as $agentID) {
-        foreach ($arg_beliefIDs as $beliefID) {
-            $from_to = $agentID."_".$beliefID;
-            if (array_key_exists($from_to, $agent_fact_arrows)) {
-                // If not in $disp_agent_arg_arrows, draw and add to array.
-                $agent_disparg = $agentID."_".$disp_argid;
-                if (array_key_exists($agent_disparg, $disp_agent_arg_arrows)
-                    == FALSE) {
-                    printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
-                           $agents[$agentID]["dot_label"],
-                           "outcome".$disp_argid);
-                    $disp_agent_arg_arrows[$agent_disparg] = 1;
-                }
-            }
+}
+
+//Arrows for agents to conclusions not in the current argument
+$sql="select distinct concat('agent',ab.agentID),
+    concat('outcome',pa.argumentID), pa.argumentID, ab.agentID
+    from agent_has_beliefs ab
+    inner join beliefs b on ab.beliefID = b.beliefID
+    inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
+    inner join parent_argument_has_argument paa on a.argumentID = paa.argumentID
+    inner join parent_argument pa on paa.parentArgumentID = pa.parentArgumentID and a.sessionID = pa.sessionID and a.timestep = pa.timestep
+    inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported and q.questionID = pa.questionID
+    inner join arguments a2 on a2.argumentID = pa.argumentID and a2.sessionID = pa.sessionID and a2.timestep = pa.timestep
+    inner join beliefs b2 on b2.beliefID = a2.beliefID
+    where isInferred = 0 and a.isSupported = 1 and b.isRule = 0
+    and pa.parentArgumentID != ".$argumentID."
+	and a.sessionID = '".$sessionID."' and a.timestep=".$timestep;
+$result=mysqli_query($link,$sql);
+if ($result) {
+    while ($row = mysqli_fetch_array($result)) {
+        if(in_array($row[2],$argumentsInArg) && in_array($row[3], $arg_agentIDs)){
+            //Can't figure out right converse
+        }else{
+            printf("%s -> %s [color=grey, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                   $row[0], $row[1]);
         }
     }
 }
 
-
-
+//Attack Arrows
+//Made attack type static to 'attack' should be paa.attackType
+$sql="select distinct case when b.isRule = 1 then concat('outcome',pa1.argumentID)
+                  else concat('outcome',pa1.argumentID) END fromID,
+             case when b2.isRule = 1 then concat('outcome',pa2.argumentID)
+                  else concat('outcome',pa2.argumentID) END toID, 'attack' as attackType,
+             case when b.isRule = 1 and b2.isRule = 1 then 'rebut'
+                   when b.isRule = 1 and b2.isRule = 0 then 'undermine'
+                   when b.isRule = 0 and b2.isRule = 0 then 'undermine'
+                   ELSE 'rebut' END attackTypeOld,
+              b.isRule, b.beliefID, b2.isRule, b2.beliefID
+              from parent_argument_attacks_argument paa
+        inner join parent_argument pa1 on pa1.parentArgumentID = paa.fromParentArgID
+        inner join arguments a on a.argumentID = pa1.argumentID and a.sessionID = pa1.sessionID and a.timestep = pa1.timestep
+        inner join beliefs b on b.beliefID = a.beliefID
+        inner join parent_argument pa2 on pa2.parentArgumentID = paa.toParentArgID
+        inner join arguments a2 on a2.argumentID = pa2.argumentID and a2.sessionID = pa2.sessionID and a2.timestep = pa2.timestep
+        inner join beliefs b2 on b2.beliefID = a2.beliefID
+        where a.sessionID = '".$sessionID."' and a.timestep = ".$timestep;
+$result=mysqli_query($link,$sql);
+if ($result) {
+    while ($row = mysqli_fetch_array($result)) {
+        printf("%s -> %s [label=%s color=orange, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+               $row[0],$row[1],$row[3]);
+    }
+}
 ?>
     }
 }

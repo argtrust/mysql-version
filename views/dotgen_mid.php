@@ -179,10 +179,12 @@ foreach ($agent_arrows as $id=>$info) {
            $info["from_dot_label"], $info["to_dot_label"]);
 }
 
+/*
 foreach ($agent_argument_arrows as $id=>$info) {
     printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"], $info["to_dot_label"]);
 }
+*/
 /** @page dotgen_hw_impl
  *
  * * Create arrows between agents and their direct facts
@@ -193,7 +195,30 @@ foreach ($agent_fact_arrows as $id=>$info) {
     $num_agent_fact_arrows++;
 }
  */
- 
+
+
+
+$sql="select distinct concat('agent',ab.agentID),
+    case when b2.isRule = 1 then concat('inference',b2.beliefID) else concat('fact',b2.beliefID) end l2
+    from agent_has_beliefs ab
+    inner join beliefs b on ab.beliefID = b.beliefID
+    inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
+    inner join parent_argument_has_argument paa on a.argumentID = paa.argumentID
+    inner join parent_argument pa on paa.parentArgumentID = pa.parentArgumentID and a.sessionID = pa.sessionID and a.timestep = pa.timestep
+    inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported and q.questionID = pa.questionID
+    inner join arguments a2 on a2.argumentID = pa.argumentID and a2.sessionID = pa.sessionID and a2.timestep = pa.timestep
+    inner join beliefs b2 on b2.beliefID = a2.beliefID
+    where isInferred = 0 and a.isSupported = 1 and b.isRule = 0
+	and a.sessionID = '".$sessionID."' and a.timestep=".$timestep;
+$result=mysqli_query($link,$sql);
+if ($result) {
+    while ($row = mysqli_fetch_array($result)) {
+        printf("%s -> %s [color=crimson, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+               $row[0], $row[1]);
+
+    }
+}
+
 ?>
 }
 }
