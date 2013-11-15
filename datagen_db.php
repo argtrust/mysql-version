@@ -396,7 +396,7 @@ if ($debug == 1) {
  */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, level,
+        ELSE concat(p.name,'(',c.name,')') END predicate, round(level*100),
         p.name, c.name, b.isNegated
         from beliefs b
         inner join agent_has_beliefs ab on b.beliefID = ab.beliefID
@@ -493,7 +493,7 @@ if ($debug) {
  */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, pa.level, max(pa.status), count(distinct pa.status) as argStatus,
+        ELSE concat(p.name,'(',c.name,')') END predicate, round(pa.level*100), max(pa.status), count(distinct pa.status) as argStatus,
         p.name, c.name, b.isNegated
         from beliefs b
         inner join agent_has_beliefs ab on b.beliefID = ab.beliefID
@@ -632,7 +632,7 @@ foreach ($qagnt_facts as $id=>$info) {
  */
 $sql="select distinct b.beliefID, CASE 
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, level,
+        ELSE concat(p.name,'(',c.name,')') END predicate, round(level*100),
         p.name, c.name, b.isNegated
         from beliefs b
         inner join agent_has_beliefs ab on b.beliefID = ab.beliefID  
@@ -749,7 +749,7 @@ if ($debug) {
  */
 $sql="select distinct b.beliefID, CASE               
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
-        ELSE concat(p.name,'(',c.name,')') END predicate, pa.level,
+        ELSE concat(p.name,'(',c.name,')') END predicate, round(pa.level*100),
         max(pa.status), count(distinct pa.status) as argStatus,
         p.name, c.name, b.isNegated
         from beliefs b
@@ -1052,7 +1052,7 @@ if ($debug) {
  * $agent_arrows_to, and $num_agent_arrows_to.
  */
 $sql="select concat('agent',trustingAgent), concat('agent',trustedAgent),
-          trustingAgent, trustedAgent, level
+          trustingAgent, trustedAgent, round(level*100)
           from agent_trust where sessionID = '".$sessionID."' and timestep=".$timestep;
 $result=mysqli_query($link,$sql);
 if ($result) {
@@ -1121,7 +1121,7 @@ if ($debug) {
  */
 $sql="select distinct concat('agent',ab.agentID),
     case when isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l,
-    ab.agentID, isRule, b.beliefID, ab.level
+    ab.agentID, isRule, b.beliefID, round(ab.level*100)
     from agent_has_beliefs ab
     inner join beliefs b on ab.beliefID = b.beliefID 
     inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
@@ -1206,7 +1206,7 @@ if ($debug) {
  */
 $sql="select distinct concat('agent',ab.agentID),
     case when isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l,
-    ab.agentID, isRule, b.beliefID, ab.level
+    ab.agentID, isRule, b.beliefID, round(ab.level*100)
     from agent_has_beliefs ab
     inner join beliefs b on ab.beliefID = b.beliefID 
     inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
@@ -1288,7 +1288,7 @@ if ($debug) {
  * Find agentIDs and beliefIDs for arguments. Fill in $arguments and
  * $num_arguments.
  */
-$sql = "select pa.parentArgumentID, pa.level, pa.status, CASE               
+$sql = "select pa.parentArgumentID, round(pa.level*100), pa.status, CASE
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))') 
         ELSE concat(p.name,'(',c.name,')') END predicate
 from parent_argument pa
@@ -1378,9 +1378,9 @@ if ($debug) {
  */
 $sql="select distinct concat('agent',ab.agentID),
     case when b2.isRule = 1 then concat('inference',b2.beliefID) else concat('fact',b2.beliefID) end l2,
-    ab.agentID, b2.isRule, b.beliefID, ab.level
+    ab.agentID, b2.isRule, b.beliefID, round(ab.level*100)
     from agent_has_beliefs ab
-    inner join beliefs b on ab.beliefID = b.beliefID 
+    inner join beliefs b on ab.beliefID = b.beliefID
     inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep
     inner join questions q on q.sessionID = a.sessionID and q.timestep = a.timestep and q.isSupported = a.isSupported
     inner join parent_argument_has_argument paa on a.argumentID = paa.argumentID -- and a.sessionID = paa.sessionID and a.timestep = paa.timestep
@@ -1431,7 +1431,7 @@ mysqli_free_result($result);
 $sql="select distinct 
     case when b.isRule = 1 then concat('rule',b.beliefID) else concat('fact',b.beliefID) end l,
     case when b2.isRule = 1 then concat('inference',b2.beliefID) else concat('fact',b2.beliefID) end l2,
-    ab.agentID, b2.isRule, b.beliefID, ab.level
+    ab.agentID, b2.isRule, b.beliefID, round(ab.level*100)
     from agent_has_beliefs ab
     inner join beliefs b on ab.beliefID = b.beliefID 
     inner join arguments a on a.beliefID = b.beliefID  and a.sessionID = ab.sessionID and a.timestep=ab.timestep

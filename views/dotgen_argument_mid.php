@@ -92,7 +92,7 @@ foreach ($arg_agentIDs as $id1) {
  */
 //Arguments in current argument
 $argumentsInArg = array();
-$sql="select pa.argumentID, max(pa.level), UPPER(ltrim(rtrim(pa.status))), CASE
+$sql="select pa.argumentID, round(max(pa.level)*100), UPPER(ltrim(rtrim(pa.status))), CASE
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))')
         ELSE concat(p.name,'(',c.name,')') END predicate
 from parent_argument pa
@@ -165,7 +165,7 @@ foreach ($agent_arrows as $id=>$info) {
 }
 
 //Arguments not in current argument
-$sql="select a.argumentID, max(pa.level), pa.status, CASE
+$sql="select a.argumentID, round(max(pa.level)*100), pa.status, CASE
         WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))')
         ELSE concat(p.name,'(',c.name,')') END predicate
 from parent_argument pa

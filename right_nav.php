@@ -28,7 +28,7 @@
                 <h3>Outcomes:</h3>
                 <ul>
                 <?php
-                    $sql = "select pa.parentArgumentID, pa.level, pa.status, CASE
+                    $sql = "select pa.parentArgumentID, round(pa.level*100), pa.status, CASE
                     WHEN b.isNegated=1 THEN concat('NOT(',p.name,'(',c.name,'))')
                     ELSE concat(p.name,'(',c.name,')') END predicate
                     from parent_argument pa
