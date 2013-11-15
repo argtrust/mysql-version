@@ -689,7 +689,7 @@ if ($result) {
         mysqli_free_result($return);
         $qagnt_rules_not_end_argument[$row[0]]["num_premises"] = $count;
         $qagnt_rules_not_end_argument[$row[0]]["premises_display"] = $premise;
-        $qagnt_rules_not_end_argument[$row[0]]["rule_display"] = $row[1]." :- ".$premise;
+        $qagnt_rules_not_end_argument[$row[0]]["rule_display"] = $row[1]." <= ".$premise;
         $qagnt_rules[$row[0]] = & $qagnt_rules_not_end_argument[$row[0]];
         $qagnt_beliefs[$row[0]] = & $qagnt_rules_not_end_argument[$row[0]];
         if ($debug) {
@@ -804,7 +804,7 @@ if ($result) {
         mysqli_free_result($return);
         $qagnt_rules_end_argument[$row[0]]["num_premises"] = $count;
         $qagnt_rules_end_argument[$row[0]]["premises_display"] = $premise;
-        $qagnt_rules_end_argument[$row[0]]["rule_display"] = $row[1]." :- ".$premise;
+        $qagnt_rules_end_argument[$row[0]]["rule_display"] = $row[1]." <= ".$premise;
           
         if($row[4] > 1) {
             $count = 0;
