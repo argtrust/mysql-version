@@ -1,6 +1,8 @@
 <?php
-//    putenv('PATH=/usr/local/bin:');
     include 'settings.php';
+    if($isLocal == 1){
+        putenv('PATH=/usr/local/bin:');
+    }
     $link = mysqli_connect($dbHost,$dbUser,$dbPass, $dbName);
     if (!$link) {
         die('Could not connect: ' . mysql_error());
