@@ -55,7 +55,7 @@
                     mysqli_free_result($result);
                 ?>
                 </ul>
-                <?php if ($graphDetail > 1){ ?>
+                <?php if ($graphDetail > 2){ ?>
                     <h3> Observed Knowledge:</h3>
                 <ul>
                 <?php
