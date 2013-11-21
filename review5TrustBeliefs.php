@@ -181,7 +181,7 @@
                         concat('agent',ab.agentID) as currentAgentID,
                         a2.agentName as parentAgentName,
                         concat('agent',ab2.agentID) as parentAgentID,
-                        att.level as trustLevel
+                        att.level as trustLevel, ab.agentBeliefID
                         from agent_trust att
                         inner join agent_has_beliefs ab on ab.agentID = att.trustingAgent and att.sessionID = ab.sessionID and att.timestep = ab.timestep
                         inner join agent_has_beliefs ab2 on ab2.agentID = att.trustedAgent and att.sessionID = ab2.sessionID and att.timestep = ab2.timestep and ab.beliefID = ab2.beliefID
@@ -222,16 +222,16 @@
                         echo "}";
                         $contents = ob_get_contents();
                         ob_end_clean();
-                        $fp = file_put_contents("graphs2/trustbelief_".$sessionID."_".$row[0].".dot",$contents);
-                        $output = exec("dot graphs2/trustbelief_".$sessionID."_".$row[0].".dot -Txdot -o graphs2/trustbelief_".$sessionID."_".$row[0].".gv");
+                        $fp = file_put_contents("graphs2/trustbelief_".$sessionID."_".$row[12]."_".$row[10]."_".$row[8].".dot",$contents);
+                        $output = exec("dot graphs2/trustbelief_".$sessionID."_".$row[12]."_".$row[10]."_".$row[8].".dot -Txdot -o graphs2/trustbelief_".$sessionID."_".$row[12]."_".$row[10]."_".$row[8].".gv");
                     //add div object to the document using JS
                     //load graphviz
                         $sessionIDNoDash = str_replace("-", "", $sessionID);
-                        echo "jQuery('#mainContainer').append('<div  class=jumbotron><table width=100%><tr><td>Since <b>".$row[7]."</b> trusts <b>".$row[9]."</b> with level <b>".$trustLevel."</b>, and <b>".$row[9]."</b> believes <b>".$row[1]."</b> with level <b>".$parentBLevel."</b>, <b>".$row[7]."</b> believes <b>".$row[1]."</b> with level <b>".$childBLevel."</b>.</td><td><div class=individualGraphs id=belief_".$sessionIDNoDash."_".$row[0]." ></div><br /><br /><br /></td></tr>";
+                        echo "jQuery('#mainContainer').append('<div  class=jumbotron><table width=100%><tr><td>Since <b>".$row[7]."</b> trusts <b>".$row[9]."</b> with level <b>".$trustLevel."</b>, and <b>".$row[9]."</b> believes <b>".$row[1]."</b> with level <b>".$parentBLevel."</b>, <b>".$row[7]."</b> believes <b>".$row[1]."</b> with level <b>".$childBLevel."</b>.</td><td><div class=individualGraphs id=belief_".$sessionIDNoDash."_".$row[12]."_".$row[10]."_".$row[8]." ></div><br /><br /><br /></td></tr>";
                         echo "</table></div>');\n";
-                        echo "myBeliefGraph_".$sessionIDNoDash."_".$row[0]." = new Canviz('belief_".$sessionIDNoDash."_".$row[0]."');";
-                        echo "myBeliefGraph_".$sessionIDNoDash."_".$row[0].".setScale(1);";
-                        echo "myBeliefGraph_".$sessionIDNoDash."_".$row[0].".load('graphs2/trustbelief_".$sessionID."_".$row[0].".gv');";
+                        echo "myBeliefGraph_".$sessionIDNoDash."_".$row[12]."_".$row[10]."_".$row[8]." = new Canviz('belief_".$sessionIDNoDash."_".$row[12]."_".$row[10]."_".$row[8]."');";
+                        echo "myBeliefGraph_".$sessionIDNoDash."_".$row[12]."_".$row[10]."_".$row[8].".setScale(1);";
+                        echo "myBeliefGraph_".$sessionIDNoDash."_".$row[12]."_".$row[10]."_".$row[8].".load('graphs2/trustbelief_".$sessionID."_".$row[12]."_".$row[10]."_".$row[8].".gv');";
                 }
                }
             ?>

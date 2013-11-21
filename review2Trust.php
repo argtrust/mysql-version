@@ -185,7 +185,7 @@ foreach ($agents as $agent_id => $agent_info) {
                     inner join agents a on a.agentID =  atu.trustingAgent
                     inner join agents a2 on a2.agentID =  atu.trustedAgent
                     left outer join agent_trust_text att on att.trustingAgent = atu.trustingAgent and att.trustedAgent = atu.trustedAgent and atu.sessionID = att.sessionID and atu.timestep = att.timestep
-                    where atu.sessionID = '".$sessionID."' and atu.timestep=".$timestep.";
+                    where atu.isInferred = 0 and atu.sessionID = '".$sessionID."' and atu.timestep=".$timestep.";
             ";
             echo "\n";
 //            echo $sql;
