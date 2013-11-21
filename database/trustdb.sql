@@ -49,7 +49,7 @@ CREATE TABLE `agent_has_beliefs` (
   `timestep` int(11) NOT NULL,
   `scenario_text` text,
   PRIMARY KEY (`agentBeliefID`,`timestep`,`sessionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1592 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2535 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,8 +68,25 @@ CREATE TABLE `agent_trust` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   `scenario_text` text,
+  `bfs_status` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`trustID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=346 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `agent_trust_bfs`
+--
+
+DROP TABLE IF EXISTS `agent_trust_bfs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `agent_trust_bfs` (
+  `agentID` int(11) NOT NULL,
+  `sessionID` varchar(45) NOT NULL,
+  `timestep` int(11) NOT NULL,
+  `bfs_state` tinyint(4) DEFAULT '0',
+  PRIMARY KEY (`agentID`,`sessionID`,`timestep`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +159,7 @@ CREATE TABLE `arguments` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`argumentID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=3391 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5554 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +175,7 @@ CREATE TABLE `belief_has_premises` (
   `premiseID` int(11) NOT NULL,
   `isNegated` smallint(6) NOT NULL,
   PRIMARY KEY (`beliefPremiseID`)
-) ENGINE=InnoDB AUTO_INCREMENT=346 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=594 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +206,7 @@ CREATE TABLE `beliefs` (
   `isNegated` smallint(6) NOT NULL,
   `isRule` smallint(6) NOT NULL,
   PRIMARY KEY (`beliefID`)
-) ENGINE=InnoDB AUTO_INCREMENT=289 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=476 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,7 +255,7 @@ CREATE TABLE `inferred_beliefs` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`inferenceID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=1021 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1531 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -255,7 +272,7 @@ CREATE TABLE `inferred_trust` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`inferenceID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,7 +291,7 @@ CREATE TABLE `parent_argument` (
   `sessionID` varchar(45) DEFAULT NULL,
   `timestep` int(11) DEFAULT NULL,
   PRIMARY KEY (`parentArgumentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12131 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12787 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,7 +383,7 @@ CREATE TABLE `question_attacks_arguments` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`questionArgumentID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=3391 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5554 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -405,7 +422,7 @@ CREATE TABLE `questions` (
   `sessionID` varchar(45) NOT NULL,
   `timestep` int(11) NOT NULL,
   PRIMARY KEY (`questionID`,`sessionID`,`timestep`)
-) ENGINE=InnoDB AUTO_INCREMENT=2114 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3427 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -454,7 +471,7 @@ CREATE TABLE `user_session` (
   `scenario_text` text,
   PRIMARY KEY (`id`),
   KEY `Secondary` (`sessionID`)
-) ENGINE=InnoDB AUTO_INCREMENT=870 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=901 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -822,4 +839,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-11-15 14:11:37
+-- Dump completed on 2013-11-21 17:19:54
