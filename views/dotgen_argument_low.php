@@ -207,7 +207,7 @@ foreach ($arg_agentIDs as $id1) {
             $from_to = $id1."_".$id2;
             if (array_key_exists($from_to, $agent_arrows)) {
                 $arg_agent_arrows[$from_to] = "Yes";
-                printf("%s -> %s [color=yellow, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+                printf("%s -> %s [color=blue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
                        $agent_arrows[$from_to]["from_dot_label"],
                        $agent_arrows[$from_to]["to_dot_label"]);
             }

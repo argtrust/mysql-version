@@ -60,7 +60,7 @@ foreach ($agents_assoc_qagnt_facts[$beliefID] as $id) {
 foreach ($agent_arrows_to as $to=>$info) {
     if (in_array($to, $agents_assoc_qagnt_facts[$beliefID])) {
         foreach ($info as $from => $from_to_arrow) {
-            printf("%s -> %s [color=yellow, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n", 
+            printf("%s -> %s [color=blue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n", 
                    $from_to_arrow["from_dot_label"],
                    $from_to_arrow["to_dot_label"]);
         }

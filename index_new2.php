@@ -137,8 +137,7 @@
 			myCanviz.setScale(graphScale);
 			if(mySessionID.length > 0){
 				myCanviz.load("graphs2/<?php echo $sessionID; ?>.gv");
-				//alert("canviz height= "+ document.getElementById('canviz_canvas_1').height + " window height =" + window.innerHeight);
-
+        myCanviz.resize();
 			}
 		});
 
@@ -206,6 +205,11 @@
 			myCanviz.draw()
 		};
 
+    function resize() {
+        var maxWidth = document.getElementById('graphContainer').width - document.getElementById('tabContainer').innerWidth;
+        change_scale((1-document.getElementById('canviz_canvas_1').width/maxWidth)/2);
+    }
+
 
         jQuery.noConflict();
 
@@ -226,6 +230,8 @@
                 }
             });
             jQuery('#detail').val(valMap[jQuery("#slider").slider("value")]);
+
+
         });
 
         function get_id(label, name) {
