@@ -467,6 +467,7 @@ var Canviz = Class.create({
 			parameters: urlParams,
 			onComplete: function(response) {
 				this.parse(response.responseText);
+                resize();
 			}.bind(this)
 		});
 	},

@@ -58,7 +58,7 @@
     </div>
 
     <div id="graphContainer" class="container">
-        <div class="graph">
+        <div class="graph" id="innerGraphContainer">
             <div id="canviz"></div>
         </div>
         <div id="rightNav">
@@ -71,28 +71,6 @@
 
 
 
-<!-- Google Analytics -->
-<script>
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-43820596-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-  <?php
-	if (isset($_COOKIE["userID"])){
-		?>
-		_gaq.push(['_trackEvent', 'PageLoad', '<?php echo $sessionID; ?>', <?php echo $timestep; ?>]);
-		<?php
-	}
-  ?>
-
-</script>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -118,14 +96,13 @@
 		var myTimestep = "<?php echo $timestep;?>";
 		var val = "<?php echo $graphDetail;?>";
 		var myCanviz;
-		var graphScale = .5;
+		var graphScale = 1;
 		document.observe('dom:loaded', function() {
 			myCanviz = new Canviz('canviz');
 			myCanviz.setScale(graphScale);
 			if(mySessionID.length > 0){
 				myCanviz.load("graphs2/<?php echo $sessionID; ?>.gv");
-				//alert("canviz height= "+ document.getElementById('canviz_canvas_1').height + " window height =" + window.innerHeight);
-
+//                alert('loaded?');
 			}
 		});
 
@@ -190,12 +167,29 @@
 		function change_scale(inc) {
 			graphScale+=inc;
 			myCanviz.setScale(graphScale);
-			myCanviz.draw()
+			myCanviz.draw();
 		};
 
+        function resize() {
+//            var maxWidth = document.getElementById('innerGraphContainer').width - document.getElementById('tabContainer').innerWidth;
+//            alert((1-document.getElementById('canviz_canvas_1').width/jQuery('#innerGraphContainer').width())/2);
+//            alert(jQuery('#canviz_canvas_1').width());
+//            alert(jQuery('#canviz').width());
+//            alert(jQuery('#innerGraphContainer').width());
+//            alert(jQuery('#innerGraphContainer').width()/jQuery('#canviz_canvas_1').width());
+            //change_scale((1-document.getElementById('canviz_canvas_1').width/document.getElementById('innerGraphContainer').width)/2);
+            theNewScale = (jQuery('#graphContainer').width()-jQuery('#tabContainer').width()-50)/jQuery('#canviz_canvas_1').width();
+//            alert(jQuery('#graphContainer').width());
+            if(theNewScale > 1){
+                theNewScale = 1;
+            }
+//            alert(theNewScale);
+//            alert(jQuery('#rightNav').position().left)
+			myCanviz.setScale(theNewScale);
+			myCanviz.draw();
+        };
 
         jQuery.noConflict();
-
         jQuery(function() {
             var valMap = ['high-level', 'mid-level', 'low-level', 'expert'];
             jQuery( "#slider" ).slider({
@@ -219,8 +213,30 @@
             jQuery("a[title='"+label+"']").attr('id', name);
         };
 
-
     </script>
     <script type="text/javascript" src="menu.js"></script>
+    <!-- Google Analytics -->
+    <script>
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-43820596-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+      <?php
+        if (isset($_COOKIE["userID"])){
+            ?>
+            _gaq.push(['_trackEvent', 'PageLoad', '<?php echo $sessionID; ?>', <?php echo $timestep; ?>]);
+            <?php
+        }
+      ?>
+
+    </script>
+
   </body>
 </html>

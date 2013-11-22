@@ -142,7 +142,7 @@
 		var val = "<?php echo $graphDetail;?>";
 		var myCanviz;
 		var graphScale = .5;
-
+        function resize(){}
 
         jQuery.noConflict();
 
@@ -207,7 +207,7 @@ foreach ($agents as $agent_id => $agent_info) {
                            $row[0], $row[5]);
                         printf("%s [label=%s];",
                            $row[1], $row[6]);
-                        printf("%s -> %s [color=yellow];\n",
+                        printf("%s -> %s [color=blue];\n",
                            $row[0], $row[1],$newLevel);
                         echo "}";
                         $contents = ob_get_contents();

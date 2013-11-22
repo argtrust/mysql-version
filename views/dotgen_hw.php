@@ -144,7 +144,7 @@ foreach ($attack_arrows as $id=>$info) {
  * * Create arrows between agents
  */
 foreach ($agent_arrows as $id=>$info) {
-    printf("%s -> %s [color=yellow, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
+    printf("%s -> %s [color=blue, href=\"javascript:void(0)\", onclick=\"get_id('\L', '\N')\"];\n",
            $info["from_dot_label"], $info["to_dot_label"]);
 }
 

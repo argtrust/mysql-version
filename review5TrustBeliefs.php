@@ -140,7 +140,7 @@
 		var val = "<?php echo $graphDetail;?>";
 		var myCanviz;
 		var graphScale = .5;
-
+        function resize(){}
 
         jQuery.noConflict();
 
@@ -208,12 +208,12 @@
                         echo "  style=filled, ";
                         echo "  fillcolor=lavender, ";
                         echo "  fontname=arial]; ";
-                        echo "edge [color=blue]; ";
+                        echo "edge [color=darkgreen]; ";
                         printf("%s [label=%s];",
                            $row[8], $row[7]);
                         printf("%s [label=%s];",
                            $row[10], $row[9]);
-                        printf("%s -> %s [color=yellow, label=\"%s\"];\n",
+                        printf("%s -> %s [color=blue, label=\"%s\"];\n",
                            $row[8], $row[10],$trustLevel);
                         printf("%s -> %s [label=\"%s\"];\n",
                            $row[10], $row[0],$parentBLevel);
