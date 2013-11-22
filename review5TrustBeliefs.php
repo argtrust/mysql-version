@@ -208,7 +208,7 @@
                         echo "  style=filled, ";
                         echo "  fillcolor=lavender, ";
                         echo "  fontname=arial]; ";
-                        echo "edge [color=darkgreen]; ";
+                        echo "edge [color=red]; ";
                         printf("%s [label=%s];",
                            $row[8], $row[7]);
                         printf("%s [label=%s];",
