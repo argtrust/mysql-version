@@ -80,7 +80,7 @@
 
             if ($result) {
                 while ($row = mysqli_fetch_array($result)) {
-                    echo "<h1>Read Scenario</h1>";
+                    echo "<h1>The Scenario</h1>";
                     echo $row[0];
                 }
                 mysqli_free_result($result);
