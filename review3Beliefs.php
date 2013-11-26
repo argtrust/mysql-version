@@ -62,7 +62,7 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index_new.php">Reset</a></li>
+            <li><a href="index_new.php" onclick="return confirm('Resetting will cause the scenario to be cleared, which includes the text of the scenario as well as the trust and belief levels you have entered. Are you sure you want to reset the scenario?');">Reset</a></li>
             <li><a href="review1Scenario.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Scenario</a></li>
             <li><a href="review2Trust.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Trust</a></li>
             <li class="active"><a href="review3Beliefs.php?sessionID=<?php echo $sessionID;?>&timestep=<?php echo $timestep;?>">Review Beliefs</a></li>
