@@ -185,6 +185,7 @@
             }
 //            alert(theNewScale);
 //            alert(jQuery('#rightNav').position().left)
+	    graphScale = theNewScale;
 			myCanviz.setScale(theNewScale);
 			myCanviz.draw();
         };
