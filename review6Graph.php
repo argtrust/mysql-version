@@ -179,6 +179,7 @@
 //            alert(jQuery('#innerGraphContainer').width()/jQuery('#canviz_canvas_1').width());
             //change_scale((1-document.getElementById('canviz_canvas_1').width/document.getElementById('innerGraphContainer').width)/2);
             theNewScale = (jQuery('#graphContainer').width()-jQuery('#tabContainer').width()-50)/jQuery('#canviz_canvas_1').width();
+	    theNewScale = theNewScale - .1;
 //            alert(jQuery('#graphContainer').width());
             if(theNewScale > 1){
                 theNewScale = 1;
